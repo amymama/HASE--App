@@ -1,0 +1,128 @@
+{
+  "id": "2370100",
+  "name": "GTM3",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "24850",
+      "name": "二维码",
+      "font_class": "share",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "7551419",
+      "name": "证件类型",
+      "font_class": "type",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "7656067",
+      "name": "ios-git-branch",
+      "font_class": "branch",
+      "unicode": "e736",
+      "unicode_decimal": 59190
+    },
+    {
+      "icon_id": "17250795",
+      "name": "供应商管理02",
+      "font_class": "dealer",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "18000234",
+      "name": "身份卡",
+      "font_class": "cnic",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "18311748",
+      "name": "电 话",
+      "font_class": "tel",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "18477088",
+      "name": "channel",
+      "font_class": "channel",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
+      "icon_id": "19911505",
+      "name": "用户",
+      "font_class": "user",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "22564514",
+      "name": "版本号",
+      "font_class": "version",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "1042863",
+      "name": "首页",
+      "font_class": "home",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "1160226",
+      "name": "shop",
+      "font_class": "shop",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "5809207",
+      "name": "提交订单",
+      "font_class": "retail",
+      "unicode": "e696",
+      "unicode_decimal": 59030
+    },
+    {
+      "icon_id": "9509941",
+      "name": "销售员",
+      "font_class": "pmt",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "19449155",
+      "name": "我的",
+      "font_class": "me",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "12729948",
+      "name": "语言",
+      "font_class": "lang",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "7533277",
+      "name": "密码",
+      "font_class": "password",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "10939120",
+      "name": "用户名",
+      "font_class": "username",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    }
+  ]
+}

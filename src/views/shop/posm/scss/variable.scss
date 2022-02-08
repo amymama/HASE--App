@@ -1,0 +1,44 @@
+.filter-sort {
+  position: relative;
+  padding-right: 40px;
+  &::after {
+    content: "";
+    right: 15px;
+    top: 50%;
+    margin-top: -12px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 10px 8px;
+  }
+  &::before {
+    content: "";
+    right: 15px;
+    bottom: 50%;
+    margin-bottom: -12px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 8px 0 8px;
+  }
+  &.desc::after {
+    border-color: transparent transparent #007bff transparent;
+  }
+  &.desc::before {
+    border-color: #aaa transparent transparent transparent;
+  }
+  &.asc::after {
+    border-color: transparent transparent #aaa transparent;
+  }
+  &.asc::before {
+    border-color: #007bff transparent transparent transparent;
+  }
+}
+.filter-icon {
+  padding: 0 14px;
+  i {
+    font-size: $font32;
+  }
+}

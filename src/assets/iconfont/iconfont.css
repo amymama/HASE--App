@@ -1,0 +1,83 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2370100 */
+  src: url('iconfont.woff2?t=1631668826455') format('woff2'),
+       url('iconfont.woff?t=1631668826455') format('woff'),
+       url('iconfont.ttf?t=1631668826455') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-share:before {
+  content: "\e600";
+}
+
+.icon-type:before {
+  content: "\e68a";
+}
+
+.icon-branch:before {
+  content: "\e736";
+}
+
+.icon-dealer:before {
+  content: "\e61b";
+}
+
+.icon-cnic:before {
+  content: "\e698";
+}
+
+.icon-tel:before {
+  content: "\e660";
+}
+
+.icon-channel:before {
+  content: "\e64f";
+}
+
+.icon-user:before {
+  content: "\e608";
+}
+
+.icon-version:before {
+  content: "\e673";
+}
+
+.icon-home:before {
+  content: "\e638";
+}
+
+.icon-shop:before {
+  content: "\e69f";
+}
+
+.icon-retail:before {
+  content: "\e696";
+}
+
+.icon-pmt:before {
+  content: "\e60b";
+}
+
+.icon-me:before {
+  content: "\e630";
+}
+
+.icon-lang:before {
+  content: "\e611";
+}
+
+.icon-password:before {
+  content: "\e601";
+}
+
+.icon-username:before {
+  content: "\e60e";
+}
+

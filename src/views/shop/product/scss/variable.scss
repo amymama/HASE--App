@@ -1,0 +1,14 @@
+$icon: "cate-icon";
+$categorys: "AC", "CA", "CAC", "FRZ", "LED", "MW", "REF", "SA", "WM";
+.#{$icon} {
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+@each $cate in $categorys {
+    .#{$icon}_#{$cate} {
+        background-image: url("../../../../assets/images/shop/product_cates/#{$cate}.png");
+    }
+}

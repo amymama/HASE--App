@@ -1,0 +1,81 @@
+$prefix: "color";
+.#{$prefix}-default {
+    background: transparent;
+    color: #4761d5;
+    &::after {
+        border-color: transparent transparent transparent transparent;
+    }
+}
+.#{$prefix}-ff4100 {
+    background: #ff4100;
+    color: #fff;
+    &::after {
+        border-color: transparent transparent transparent #ff4100;
+    }
+}
+.#{$prefix}-36d982 {
+    background: #36d982;
+    color: #fff;
+    &::after {
+        border-color: transparent transparent transparent #36d982;
+    }
+}
+.#{$prefix}-476dd5 {
+    background: #476dd5;
+    color: #fff;
+    &::after {
+        border-color: transparent transparent transparent #476dd5;
+    }
+}
+.#{$prefix}-ff4940 {
+    background: #ff4940;
+    color: #fff;
+    &::after {
+        border-color: transparent transparent transparent #ff4940;
+    }
+}
+.#{$prefix}-a65900 {
+    background: #a65900;
+    color: #fff;
+    &::after {
+        border-color: transparent transparent transparent #a65900;
+    }
+}
+.#{$prefix}-40a9ff {
+    background: #40a9ff;
+    color: #fff;
+    &::after {
+        border-color: transparent transparent transparent #40a9ff;
+    }
+}
+
+
+$action: "action-btn";
+.#{$action}_primary {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+}
+.#{$action}_draft {
+    background-color: #476dd5;
+    border-color: #6d89d5;
+}
+.#{$action}_approved {
+    background-color: #36da82;
+    border-color: #62da9a;
+}
+.#{$action}_rejected {
+    background-color: #ff4940;
+    border-color: #ff7a73;
+}
+.#{$action}_cs {
+    background-color: #a65900;
+    border-color: #bf7d30;
+}
+.#{$action}_ca {
+    background-color: #ffcb40;
+    border-color: #ffd973;
+}
+.#{$action}_cr {
+    background-color: #0d8800;
+    border-color: #329d27;
+}

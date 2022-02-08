@@ -1,0 +1,46 @@
+# just a flag
+ENV = 'test'
+
+# base api
+VUE_APP_BASE_API = 'https://tgtmaevportal.haier.net:8405/'
+VUE_APP_HIL_API = 'https://tgtmhqportal.haier.net:8605/'
+VUE_APP_WGT_URL = 'https://tgtmaev.haier.net:8182/isv/AEV/AppUpgradePackage.wgt'
+VUE_APP_DOWNLOAD_URL = 'https://tgtmaev.haier.net:8182/isv/AEV/Index.html'
+
+module.exports = {
+  presets: [
+    '@vue/cli-plugin-babel/preset'
+  ],
+  plugins: [
+    [
+      'import',
+      {
+        libraryName: 'vant',
+        libraryDirectory: 'es',
+        style: (name) => `${name}/style/less`
+      },
+      'vant'
+    ]
+  ]
+}
+
+assetsDir: 'static',
+  lintOnSave: process.env.NODE_ENV === 'development',
+  productionSourceMap: false,
+  devServer: {
+    disableHostCheck: true,
+    port: 8000,
+    open: false,
+    overlay: {
+      warnings: false,
+      errors: true
+    },
+    proxy: {
+      '/api': {
+        target: 'https://tgtmaevportal.haier.net:8405/',
+        ws: false,
+        changeOrigin: true
+      }
+    },
+  }
+
