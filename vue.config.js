@@ -36,7 +36,7 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'https://tgtmaevportal.haier.net:8405/',
+        target: 'https://tgtmhaseportal.haier.net:9665/',
         ws: false,
         changeOrigin: true
       }

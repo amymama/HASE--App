@@ -59,14 +59,6 @@
             {{ $t("uLogin.Login") }}
           </van-button>
         </div>
-        <!-- <div class="register">
-          //<a @click="onRegister()">{{ $t("user.login.Register") }}</a>
-        </div> -->
-        <div class="foget_pass">
-          <a @click="onForgetPassword()">{{
-            $t("user.login.forget_password")
-          }}</a>
-        </div>
       </van-form>
     </div>
 
@@ -78,20 +70,6 @@
     <change-lang ref="changeLang" />
     <!-- edite pwd -->
     <change-pwd ref="changePwd" />
-
-    <div class="tab-bar">
-      <van-tabbar route>
-        <van-button
-          block
-          :loading="submitLoading"
-          type="default"
-          size="large"
-          @click="onRegister()"
-        >
-          {{ $t("user.login.Register") }}
-        </van-button>
-      </van-tabbar>
-    </div>
   </div>
 </template>
 <script>
@@ -163,15 +141,7 @@ export default {
           this.submitLoading = false;
           this.$toast.fail("Netwoke error");
         });
-    },
-
-    onForgetPassword() {
-      this.$router.push({ name: "ForgetPassword" });
-    },
-
-    onRegister() {
-      this.$router.push({ name: "Register" });
-    },
+    }
   },
 };
 </script>

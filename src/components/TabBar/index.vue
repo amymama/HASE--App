@@ -43,13 +43,6 @@ export default {
           replace: true
         },
         {
-          title: "FF",
-          path: "/pmt",
-          icon: "icon-pmt",
-          permission: "tabBar:PMT",
-          replace: true
-        },
-        {
           title: "HISHOP",
           path: "/shop",
           icon: "icon-shop",

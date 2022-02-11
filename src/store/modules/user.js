@@ -67,7 +67,7 @@ const actions = {
   Logout() {
     return new Promise((resolve) => {
       localStorage.clear()
-      window.location.reload()
+      // window.location.reload()
       resolve()
     })
   }

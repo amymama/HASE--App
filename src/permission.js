@@ -13,7 +13,7 @@ router.beforeEach(async (to, from, next) => {
   const { token, auths, userInfo } = store.getters
   if (userInfo && userInfo.username) {
     getUserMonitor({
-      country: 'AVE',
+      country: 'HASE',
       terminal: 'App',
       visitnode: to.name || '',
       visitname: userInfo.realname || '',
