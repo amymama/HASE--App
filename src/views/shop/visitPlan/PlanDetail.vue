@@ -357,14 +357,10 @@ export default {
           shopname, // shop
           region, // shop
           branch, //shop
-          area,
-          district,
         } = this.queryParam;
         const shopList = await this.initShopList({
           region,
           branch,
-          area,
-          district,
           shopname,
           ...shopParam,
         });
@@ -694,8 +690,6 @@ export default {
           new_shopId,
           branch_id,
           region_id,
-          province_id,
-          district_id,
         } = shop;
         const param = {
           new_shop_code: shopcode,
@@ -704,8 +698,6 @@ export default {
           new_customer_id: shop.customerId,
           branch_id,
           region_id,
-          province_id,
-          district_id,
         };
         const tempItem = this.tempParam.find(
           (item) =>

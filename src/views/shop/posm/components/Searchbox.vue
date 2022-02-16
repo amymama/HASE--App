@@ -2,7 +2,9 @@
   <div style="margin-bottom: 10px">
     <van-row class="search-container" :gutter="12" type="flex" align="center">
       <van-col :span="4" class="shop-common word-limit-row_2">
-        <p class="word-limit-row_1" @click="showPopup('area')">{{ areaText }}</p>
+        <p class="word-limit-row_1" @click="showPopup('branch')">
+          {{ branchText }}
+        </p>
       </van-col>
       <van-col :span="16">
         <van-search
@@ -10,7 +12,9 @@
           background="transparent"
           shape="round"
           v-model="queryParam.shopname"
-          :placeholder="`${$t('shopFA.ShopName')} / ${$t('shopFA.ShopCode')} / ${$t('shopPosm.POSMCode')}`"
+          :placeholder="`${$t('shopFA.ShopName')} / ${$t(
+            'shopFA.ShopCode'
+          )} / ${$t('shopPosm.POSMCode')}`"
           @search="handleSearch"
         />
       </van-col>
@@ -24,7 +28,10 @@
         />
       </van-col>
       <van-col :span="2" class="shop-common">
-        <van-icon name="more-o" @click="moreSearchVisible = !moreSearchVisible" />
+        <van-icon
+          name="more-o"
+          @click="moreSearchVisible = !moreSearchVisible"
+        />
       </van-col>
     </van-row>
     <div v-show="moreSearchVisible">
@@ -33,10 +40,14 @@
         <van-col :span="queryParam.role_name ? 15 : 16" class="search-item_res">
           {{
             queryParam.role_name ||
-              $t("select.SelectTip") + " " + $t("shopPosm.Role")
+            $t("select.SelectTip") + " " + $t("shopPosm.Role")
           }}
         </van-col>
-        <van-icon v-show="queryParam.role_name" name="cross" @click.stop="reset('role_name')"></van-icon>
+        <van-icon
+          v-show="queryParam.role_name"
+          name="cross"
+          @click.stop="reset('role_name')"
+        ></van-icon>
       </van-row>
       <!-- <van-row class="search-item" @click="showPopup('person')">
       <van-col :span="8">Person</van-col>
@@ -47,20 +58,28 @@
       <van-row class="search-item" @click="showPopup('date')">
         <van-col :span="8">{{ $t("shopPosm.CreateDate") }}</van-col>
         <van-col :span="dateRange ? 15 : 16" class="search-item_res">
-          {{
-            dateRange || $t("select.SelectDate")
-          }}
+          {{ dateRange || $t("select.SelectDate") }}
         </van-col>
-        <van-icon v-show="dateRange" name="cross" @click.stop="reset('range')"></van-icon>
+        <van-icon
+          v-show="dateRange"
+          name="cross"
+          @click.stop="reset('range')"
+        ></van-icon>
       </van-row>
-      <van-row class="search-item" @click="showPopup('forecast')" v-if="isForecast">
+      <van-row
+        class="search-item"
+        @click="showPopup('forecast')"
+        v-if="isForecast"
+      >
         <van-col :span="8">{{ $t("shopPosm.ForecastDate") }}</van-col>
         <van-col :span="forecastDate ? 15 : 16" class="search-item_res">
-          {{
-            forecastDate || $t("select.SelectDate")
-          }}
+          {{ forecastDate || $t("select.SelectDate") }}
         </van-col>
-        <van-icon v-show="forecastDate" name="cross" @click.stop="reset('forecast')"></van-icon>
+        <van-icon
+          v-show="forecastDate"
+          name="cross"
+          @click.stop="reset('forecast')"
+        ></van-icon>
       </van-row>
     </div>
 
@@ -87,15 +106,15 @@
       />
     </van-dropdown-menu>
     <!-- 以下为弹框部分 -->
-    <van-popup v-model="areaVisible" round position="bottom">
+    <van-popup v-model="branchVisible" round position="bottom">
       <van-cascader
         v-model="region"
         :title="$t('select.SelectRegion')"
         :placeholder="$t('select.SelectTip')"
         active-color="#40a9ff"
-        :options="areaOpts"
-        @close="areaVisible = false"
-        @finish="(data) => onFinish(data, 'area')"
+        :options="branchOpts"
+        @close="branchVisible = false"
+        @finish="(data) => onFinish(data, 'branch')"
       />
     </van-popup>
     <van-popup v-model="channelVisible" round position="bottom">
@@ -157,7 +176,7 @@ export default {
       region: "",
       channel: "",
       currentDate: new Date(),
-      areaVisible: false, // 选择地区弹出层
+      branchVisible: false, // 选择地区弹出层
       roleVisible: false, // role弹出层
       // personVisible: false, // person弹出层
       dateVisible: false, // 时间范围弹出层
@@ -171,19 +190,19 @@ export default {
       statusOpts: [], // {text,value}
       filterOpts: [
         {
-          text: 'All',
-          value: void 0
+          text: "All",
+          value: void 0,
         },
         {
-          text: this.$t('shopVisitPlan.Submitted'),
-          value: 0
+          text: this.$t("shopVisitPlan.Submitted"),
+          value: 0,
         },
         {
-          text: this.$t('shopVisitPlan.Draft'),
-          value: 2
-        }
+          text: this.$t("shopVisitPlan.Draft"),
+          value: 2,
+        },
       ],
-      areaOpts: [
+      branchOpts: [
         {
           text: "All",
           value: 0,
@@ -197,7 +216,7 @@ export default {
           children: [{ text: "All", value: 0 }],
         },
       ],
-      area: "",
+      branch: "",
       queryParam: {
         // name: "",
         role_name: void 0,
@@ -227,8 +246,8 @@ export default {
     },
   },
   computed: {
-    areaText() {
-      return this.area || this.$t("shopCommon.All");
+    branchText() {
+      return this.branch || this.$t("shopCommon.All");
     },
     dateRange() {
       const { start_time, end_time } = this.queryParam;
@@ -348,29 +367,18 @@ export default {
         .then((res) => {
           const { data, success } = res;
           if (success) {
-            this.areaOpts = formatData(data.Items, {
+            this.branchOpts = formatData(data.Items, {
               text: "new_name",
               value: "new_sale_regionid",
             });
-            this.areaOpts.unshift({
+            this.branchOpts.unshift({
               text: this.$t("shopCommon.All"),
               value: 0,
               children: [
                 {
                   text: this.$t("shopCommon.All"),
                   value: 0,
-                  children: [
-                    {
-                      text: this.$t("shopCommon.All"),
-                      value: 0,
-                      children: [
-                        {
-                          text: this.$t("shopCommon.All"),
-                          value: 0,
-                        },
-                      ],
-                    },
-                  ],
+                  
                 },
               ],
             });
@@ -488,34 +496,26 @@ export default {
     onFinish({ selectedOptions }, type) {
       this[`${type}Visible`] = false;
       const { length } = selectedOptions;
-      if (type === "area")
-        this.area = selectedOptions[length - 1].value
+      if (type === "branch")
+        this.branch = selectedOptions[length - 1].value
           ? selectedOptions[length - 1].text // region
           : selectedOptions[0].text; // branch
       let select1st = selectedOptions[0];
       let select2nd = selectedOptions[1];
-      let select3rd = selectedOptions[2]; // province
-      let select4th = selectedOptions[3]; // district
-      if (type === "area") {
+      if (type === "branch") {
         this.queryParam.new_region_id = select1st.value
           ? select1st.value
           : void 0;
         this.queryParam.new_branch_id = select2nd.value
           ? select2nd.value
           : void 0;
-        this.queryParam.new_province_id = select3rd.value
-          ? select3rd.value
-          : void 0;
-        this.queryParam.new_district_id = select4th.value
-          ? select4th.value
-          : void 0;
       }
       if (type === "channel") {
         this.queryParam.new_channel_id = select2nd.value
           ? select2nd.value
           : select1st.value
-            ? select1st.value
-            : void 0;
+          ? select1st.value
+          : void 0;
         /* this.queryParam.new_sub_channel_name =  */
       }
       this.handleSearch();

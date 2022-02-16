@@ -2,8 +2,8 @@
   <div>
     <van-row class="search-container" :gutter="12" type="flex" align="center">
       <van-col :span="4" class="shop-common word-limit-row_2">
-        <p class="word-limit-row_1" @click="showPopup('area')">
-          {{ areaText }}
+        <p class="word-limit-row_1" @click="showPopup('branch')">
+          {{ branchText }}
         </p>
       </van-col>
       <van-col :span="16">
@@ -86,7 +86,7 @@
 
     <van-popup
       get-container="#app"
-      v-model="areaVisible"
+      v-model="branchVisible"
       round
       position="bottom"
     >
@@ -95,9 +95,9 @@
         :title="$t('select.SelectRegion')"
         :placeholder="$t('select.SelectTip')"
         active-color="#40a9ff"
-        :options="areaOpts"
-        @close="areaVisible = false"
-        @finish="(data) => onFinish(data, 'area')"
+        :options="branchOpts"
+        @close="branchVisible = false"
+        @finish="(data) => onFinish(data, 'branch')"
       />
     </van-popup>
     <van-popup
@@ -195,7 +195,7 @@ export default {
   },
   data() {
     return {
-      areaVisible: false, // 选择地区弹出层
+      branchVisible: false, // 选择地区弹出层
       subVisible: false, // sub Category弹出层
       assetVisible: false, // Asset Type 弹出层
       inspectionVisible: false, // inspection 弹出层
@@ -206,7 +206,7 @@ export default {
       subOpts: [], // {name,value}
       assetOpts: [], // {name,value}
       inspectionOpts: [], // {name,value}
-      areaOpts: [],
+      branchOpts: [],
       channelOpts: [
         {
           text: this.$t("shopCommon.All"),
@@ -214,7 +214,7 @@ export default {
           children: [{ text: this.$t("shopCommon.All"), value: 0 }],
         },
       ],
-      area: "",
+      branch: "",
       queryParam: {
         new_shopname: "",
         new_asset_sub_category_name: "",
@@ -240,8 +240,8 @@ export default {
     ...mapState({
       query: (state) => state.query,
     }),
-    areaText() {
-      return this.area || this.$t("shopCommon.All");
+    branchText() {
+      return this.branch || this.$t("shopCommon.All");
     },
     inspectText() {
       const { new_fa_status } = this.queryParam;
@@ -316,29 +316,17 @@ export default {
         .then((res) => {
           const { data, success } = res;
           if (success) {
-            this.areaOpts = formatData(data.Items, {
+            this.branchOpts = formatData(data.Items, {
               text: "new_name",
               value: "new_sale_regionid",
             });
-            this.areaOpts.unshift({
+            this.branchOpts.unshift({
               text: this.$t("shopCommon.All"),
               value: 0,
               children: [
                 {
                   text: this.$t("shopCommon.All"),
                   value: 0,
-                  children: [
-                    {
-                      text: this.$t("shopCommon.All"),
-                      value: 0,
-                      children: [
-                        {
-                          text: this.$t("shopCommon.All"),
-                          value: 0,
-                        },
-                      ],
-                    },
-                  ],
                 },
               ],
             });
@@ -469,21 +457,17 @@ export default {
     onFinish({ selectedOptions }, type) {
       this[`${type}Visible`] = false;
       const { length } = selectedOptions;
-      if (type === "area")
-        this.area = selectedOptions[length - 1].value
+      if (type === "branch")
+        this.branch = selectedOptions[length - 1].value
           ? selectedOptions[length - 1].text // region
           : selectedOptions[0].text; // branch
       let select1st = selectedOptions[0]; // region channel
-      let select2nd = selectedOptions[1]; // area subchannel
-      let select3rd = selectedOptions[2]; // province
-      let select4th = selectedOptions[3]; // district
-      if (type === "area") {
+      let select2nd = selectedOptions[1]; // branch subchannel
+      if (type === "branch") {
         this.queryParam.new_region_name = select1st.value
           ? select1st.text
           : void 0;
-        this.queryParam.area = select2nd.value ? select2nd.text : void 0;
-        this.queryParam.province = select3rd.value ? select3rd.text : void 0;
-        this.queryParam.district = select4th.value ? select4th.text : void 0;
+        this.queryParam.branch = select2nd.value ? select2nd.text : void 0;
       }
       if (type === "channel") {
         this.queryParam.new_channel_name = select1st.value

@@ -11,9 +11,7 @@
         <van-cell :title="i18n.t('shopFA.ShopName')" :value="shop.shopname" />
         <van-cell :title="i18n.t('shopFA.ShopCode')" :value="shop.shopcode" />
         <van-cell :title="i18n.t('shopPosm.Region')" :value="shop.region" />
-        <van-cell :title="i18n.t('shopFA.Area')" :value="shop.branch" />
-        <van-cell :title="i18n.t('shopFA.Province')" :value="shop.province" />
-        <van-cell :title="i18n.t('shopFA.District')" :value="shop.district" />
+        <van-cell :title="i18n.t('shopFA.Branch')" :value="shop.branch" />
         <van-cell :title="i18n.t('shopVisitPlan.Employee')" value="内容" />
       </van-cell-group>
     </div>

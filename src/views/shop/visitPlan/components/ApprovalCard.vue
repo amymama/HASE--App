@@ -71,8 +71,7 @@
               >{{ $t("shopFA.ShopAddress") }}:</span
             >
             <span class="plan-item-body_value">{{
-              `${detail.region_name}/${detail.area_name}/${detail.province_name}/${detail.district_name}` ||
-              "Null"
+              `${detail.region_name}/${detail.branch_name}`
             }}</span>
           </p>
           <p>

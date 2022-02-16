@@ -181,10 +181,8 @@ export default {
     handleSearch(params) {
       const {
         new_shop_code,
-        new_area_id,
+        new_branch_id,
         new_region_id,
-        new_province_id,
-        new_district_id,
         user_role,
         new_plan_date_start,
         new_plan_date_end,
@@ -193,10 +191,8 @@ export default {
       } = params;
       const result = {
         shop_code: new_shop_code,
-        new_area_id,
+        new_branch_id,
         new_region_id,
-        new_province_id,
-        new_district_id,
         user_role,
         new_plan_date_start,
         new_plan_date_end,

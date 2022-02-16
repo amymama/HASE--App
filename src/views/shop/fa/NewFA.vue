@@ -40,16 +40,8 @@
           :value="shopItem.regionname"
         ></van-cell>
         <van-cell
-          :title="$t('shopFA.Area')"
-          :value="shopItem.areaname"
-        ></van-cell>
-        <van-cell
-          :title="$t('shopFA.Province')"
-          :value="shopItem.provincename"
-        ></van-cell>
-        <van-cell
-          :title="$t('shopFA.District')"
-          :value="shopItem.districtname"
+          :title="$t('shopFA.Branch')"
+          :value="shopItem.branchname"
         ></van-cell>
         <van-cell
           :title="$t('shopFA.CustomerCode')"
@@ -401,9 +393,7 @@ export default {
           new_name,
           new_channel_name,
           regionname,
-          areaname,
-          provincename,
-          districtname,
+          branchname,
           new_customer_code,
           customername,
         } = this.$route.query;
@@ -416,9 +406,7 @@ export default {
             new_name,
             new_channel_name,
             regionname,
-            areaname,
-            provincename,
-            districtname,
+            branchname,
             new_customer_code,
             customername,
           };
@@ -491,9 +479,7 @@ export default {
               new_customer_code: data.customercode,
               customername: data.customername,
               regionname: data.new_region_name,
-              areaname: data.area,
-              provincename: data.province,
-              districtname: data.district,
+              branchname: data.branch,
               new_channel_name: data.new_channel_name,
               subchannel: data.new_sub_channel_name,
             });
@@ -647,9 +633,7 @@ export default {
         new_name,
         new_channel_name,
         regionname,
-        areaname,
-        provincename,
-        districtname,
+        branchname,
         new_customer_code,
         customername,
       } = this.shopItem;
@@ -661,9 +645,7 @@ export default {
         shopname: new_name,
         new_channel_name,
         new_region_name: regionname,
-        area: areaname,
-        province: provincename,
-        district: districtname,
+        branch: branchname,
         customercode: new_customer_code,
         customername,
       };
