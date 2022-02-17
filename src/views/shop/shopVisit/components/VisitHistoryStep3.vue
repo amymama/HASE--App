@@ -115,7 +115,7 @@ export default {
         if (values.competitorList.length > 0) {
           this.chartData = [
             {
-              name: "AQUA",
+              name: "HAIER",
               value: values.new_aqua_quantity || 0,
             },
           ];

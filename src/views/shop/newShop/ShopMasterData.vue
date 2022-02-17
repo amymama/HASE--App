@@ -22,7 +22,7 @@
               />
               <van-cell :title="$t('shopMaster.LocalShopName')" :value="form.new_local_shop_name" />
               <van-cell :title="$t('shopMaster.LocalShopCode')" :value="form.new_local_shop_code" />
-              <van-field required input-align="right" label="Whether AQUA Joined In This Shop">
+              <van-field required input-align="right" label="Whether Haier Joined In This Shop">
                 <template #input>
                   <van-radio-group
                     style="margin-right: -0.3rem"
@@ -184,6 +184,17 @@
                 clickable
                 :value="saleRegion"
                 :label="$t('shopMaster.ShopSaleRegion')"
+                :placeholder="$t('shopCommon.PleaseSelect')"
+                :rules="[{ required: true }]"
+              />
+              <van-field
+                input-align="right"
+                clearable
+                required
+                readonly
+                clickable
+                :value="saleNetwork"
+                :label="$t('shopMaster.ShopNetwork')"
                 :placeholder="$t('shopCommon.PleaseSelect')"
                 :rules="[{ required: true }]"
               />
@@ -401,6 +412,10 @@ export default {
       showSaleRegion: false,
       saleRegionTree: [],
       saleRegion: "",
+      // select salenetwork
+      showSaleNetwork: false,
+      saleNetworkTree: [],
+      saleNetwork: "",
       // select shop location
       showLocation: false,
       new_shop_location: "",
@@ -651,9 +666,11 @@ export default {
             new_shop_location: item.new_shop_location_name,
             new_region_id: item.new_region_id,
             new_region_short_name: item.new_region_short_name,
-            new_area_id: item.new_area_id,
-            new_province_id: item.new_province_id,
-            new_district_id: item.new_district_id,
+            new_branch_id: item.new_branch_id,
+            new_salenetwork_region_id: item.new_salenetwork_region_id,
+            new_salenetwork_province_id: item.new_salenetwork_province_id,
+            new_salenetwork_city_id: item.new_salenetwork_city_id,
+            new_salenetwork_district_id: item.new_salenetwork_district_id,
             new_address_detail: item.new_address_detail,
             new_whether_visit: item.new_whether_visit,
             new_joinin_date: item.new_joinin_date,
@@ -693,11 +710,17 @@ export default {
           // SET SALE REGION
           var saleRegionArr = [
             item.new_region_name,
-            item.new_area_name || null,
-            item.new_province_name || null,
-            item.new_district_name || null,
+            item.new_branch_name || null
           ];
           this.saleRegion = saleRegionArr.join("/");
+          // SET SALE  NETWORK
+          var saleNetworkArr = [
+            item.new_salenetwork_region_name,
+            item.new_salenetwork_province_name || null,
+            item.new_salenetwork_city_name || null,
+            item.new_salenetwork_district_name || null,
+          ];
+          this.saleNetwork = saleNetworkArr.join("/");
           this.contactList = item.new_contactlist || [];
         }
       });

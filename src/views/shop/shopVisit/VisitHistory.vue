@@ -107,12 +107,8 @@ export default {
       if (selectedOptions.length > 0) {
         this.queryParams.new_region_id =
           tabIndex >= 0 ? selectedOptions[0].new_sale_regionid : "";
-        this.queryParams.new_area_id =
+        this.queryParams.new_branch_id =
           tabIndex >= 1 ? selectedOptions[1].new_sale_regionid : "";
-        this.queryParams.new_province_id =
-          tabIndex >= 2 ? selectedOptions[2].new_sale_regionid : "";
-        this.queryParams.new_district_id =
-          tabIndex >= 3 ? selectedOptions[3].new_sale_regionid : "";
         this.branchName = selectedOptions[tabIndex].new_name;
         this.initData();
       }

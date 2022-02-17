@@ -9,6 +9,7 @@ const api = {
   BranchTree: '/api/saleregion/getregionbranch',    // [basic-branch] 
   ChannelTree: '/api/channel/getchannelbuildings',  // [basic-channel]
   saleregionTreelist: '/api/saleregion/gettreelist',    // [basic-region]
+  salenetworkTreelist: '/api/salenetwork/gettreelist',    // [basic-region]
   ShopList: '/api/appshop/querylist',
   ShopListBySelf: '/api/appshop/getshoplistbyself',
   ShopApproveList: '/api/appshop/getappshopapprovelist',
@@ -40,6 +41,10 @@ export function getCustomerList(data) {
 // Sale region tree list
 export function getSaleregionTreelist(params) {
   return http.get(api.saleregionTreelist, { params })
+}
+// Sale network tree list
+export function getSaleNetworkTreelist(params) {
+  return http.get(api.salenetworkTreelist, { params })
 }
 // [获取店铺列表|GET]
 export function getShopList(params) {

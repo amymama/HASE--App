@@ -224,6 +224,16 @@
           />
           <van-field
             required
+            readonly
+            clickable
+            :value="saleNetwork"
+            :label="$t('shopMaster.ShopNetwork')"
+            :placeholder="$t('shopCommon.PleaseSelect')"
+            @click="showSaleNetwork = true"
+            :rules="[{ required: true }]"
+          />
+          <van-field
+            required
             v-model="form.new_address_detail"
             rows="2"
             autosize
@@ -287,6 +297,20 @@
           }"
           @close="showSaleRegion = false"
           @change="onChangeSaleRegion"
+        />
+      </van-popup>
+      <!-- SALE SALEREGION -->
+      <van-popup v-model="showSaleNetwork" round position="bottom">
+        <van-cascader
+          title="Select Network"
+          :options="saleNetworkTree"
+          :field-names="{
+            text: 'new_name',
+            value: 'new_sale_networkid',
+            children: 'children',
+          }"
+          @close="showSaleNetwork = false"
+          @change="onChangeSaleNetwork"
         />
       </van-popup>
       <!-- GTM CHANNEL -->
@@ -371,6 +395,7 @@ import {
   getShopLocation,
   getShopSize,
   getSaleregionTreelist,
+  getSaleNetworkTreelist,
   postShopOperation,
   getShopDetail,
 } from "@/api/shop";
@@ -416,9 +441,7 @@ export default {
         new_shop_location: "",
         new_region_id: "",
         new_region_short_name: "",
-        new_area_id: "",
-        new_province_id: "",
-        new_district_id: "",
+        new_branch_id: "",
         new_address_detail: "",
         new_whether_visit: true,
         new_joinin_date: "",
@@ -442,6 +465,10 @@ export default {
       showSaleRegion: false,
       saleRegionTree: [],
       saleRegion: "",
+      // select salenetwork
+      showSaleNetwork: false,
+      saleNetworkTree: [],
+      saleNetwork: "",
       // select shop location
       showLocation: false,
       new_shop_location: "",
@@ -604,6 +631,23 @@ export default {
           });
       });
 
+      // SALENETWORK TREE LIST
+      const getNetworks = new Promise((resolve, reject) => {
+        getSaleNetworkTreelist()
+          .then((res) => {
+            const { data, success } = res;
+            if (success) {
+              this.saleNetworkTree = data.Items;
+              resolve();
+            } else {
+              reject();
+            }
+          })
+          .catch(() => {
+            reject();
+          });
+      });
+
       // SHOP SIZE
       const getShopsizes = new Promise((resolve, reject) => {
         getShopSize({
@@ -676,6 +720,7 @@ export default {
         getProductCategorys,
         getChannels,
         getRegions,
+        getNetworks,
         getShopType,
         getShopsizes,
         getLocation,
@@ -753,9 +798,11 @@ export default {
               new_shop_location: item.new_shop_location_name,
               new_region_id: item.new_region_id,
               new_region_short_name: item.new_region_short_name,
-              new_area_id: item.new_area_id,
-              new_province_id: item.new_province_id,
-              new_district_id: item.new_district_id,
+              new_branch_id: item.new_branch_id,
+              new_salenetwork_region_id: item.new_salenetwork_region_id,
+              new_salenetwork_province_id: item.new_salenetwork_province_id,
+              new_salenetwork_city_id: item.new_salenetwork_city_id,
+              new_salenetwork_district_id: item.new_salenetwork_district_id,
               new_address_detail: item.new_address_detail,
               new_whether_visit: item.new_whether_visit,
               new_joinin_date: item.new_joinin_date,
@@ -791,14 +838,20 @@ export default {
               productArr.push(item.new_product_category_name);
             });
             this.productValues = productArr.join("/");
-            // SET SALE NET WORK
+            // SET SALE REGION
             var saleRegionArr = [
               item.new_region_name,
-              item.new_area_name || null,
-              item.new_province_name || null,
-              item.new_district_name || null,
+              item.new_branch_name || null
             ];
             this.saleRegion = saleRegionArr.join("/");
+            // SET SALE  NETWORK
+            var saleNetworkArr = [
+              item.new_salenetwork_region_name,
+              item.new_salenetwork_province_name || null,
+              item.new_salenetwork_city_name || null,
+              item.new_salenetwork_district_name || null,
+            ];
+            this.saleNetwork = saleNetworkArr.join("/");
             this.$toast.clear();
           } else {
             this.$toast(message);
@@ -949,16 +1002,23 @@ export default {
       this.form.new_region_short_name = selectedOptions[0].new_short_name;
       this.form.new_region_id =
         tabIndex >= 0 ? selectedOptions[0].new_sale_regionid : "";
-      this.form.new_area_id =
+      this.form.new_branch_id =
         tabIndex >= 1 ? selectedOptions[1].new_sale_regionid : "";
-      this.form.new_province_id =
-        tabIndex >= 2 ? selectedOptions[2].new_sale_regionid : "";
-      this.form.new_district_id =
-        tabIndex >= 3 ? selectedOptions[3].new_sale_regionid : "";
-      this.saleRegion = selectedOptions
-        .map((option) => option.new_name)
-        .join("/");
+      this.saleRegion = selectedOptions.map((option) => option.new_name).join("/");
     },
+    // change saleNetwork
+    onChangeSaleNetwork(values) {
+      const { selectedOptions, tabIndex } = values;
+      this.form.new_salenetwork_region_id =
+        tabIndex >= 0 ? selectedOptions[0].new_sale_networkid : "";
+      this.form.new_salenetwork_province_id =
+        tabIndex >= 1 ? selectedOptions[1].new_sale_networkid : "";
+      this.form.new_salenetwork_city_id =
+        tabIndex >= 1 ? selectedOptions[1].new_sale_networkid : "";
+      this.form.new_salenetwork_district_id =
+        tabIndex >= 1 ? selectedOptions[1].new_sale_networkid : "";
+      this.saleNetwork = selectedOptions.map((option) => option.new_name).join("/");
+    }
   },
   beforeRouteLeave(to, from, next) {
     setTimeout(() => {
