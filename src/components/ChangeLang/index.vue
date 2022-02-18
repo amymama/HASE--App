@@ -13,7 +13,7 @@ export default {
       visible: false,
       actions: [
         { name: 'EN', value: 'en' },
-        { name: 'VN', value: 'id' }
+        { name: 'AR', value: 'id' }
       ]
     }
   },

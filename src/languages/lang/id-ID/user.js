@@ -1,23 +1,22 @@
 export default {
   uLogin: {
-    UserName: 'Tên người dùng',
-    Password: 'Mật khẩu',
-    Login: 'Đăng nhập',
-    Register: 'Đăng ký',
-    RememberPwd: 'Ghi nhớ mật khẩu'
+    UserName: 'اسم المستخدم',
+    Password: 'شعار',
+    Login: 'دخول',
+    RememberPwd: 'تذكر كلمه المرور'
   },
   uCenter: {
-    UserCode: 'Mã người dùng',
-    Shop: 'Cửa hàng',
-    Dealer: 'Đại lý',
-    Channel: 'Kênh',
-    CNIC: 'CMND/CCCD',
-    Mobile: 'ĐTDĐ',
-    Type: 'Loại',
-    VersionCode: 'Mã phiên bản',
-    ShareGTM: 'Chia sẽ GTM',
-    ChangePwd: 'Thay đổi mật khẩu',
-    SignOut: 'Đăng xuất'
+    UserCode: 'كود المستخدم',
+    Shop: 'محل',
+    Dealer: 'تاجر',
+    Channel: 'تاجر',
+    CNIC: 'CNIC',
+    Mobile: 'محمول',
+    Type: 'نوع',
+    VersionCode: ' كود الإصدار',
+    ShareGTM: ' مشاركة',
+    ChangePwd: ' تغيير كلمه سر',
+    SignOut: 'تسجيل خروج'
   },
   'user.login.userName': 'Tên đăng nhập',
   'user.login.password': 'mật khẩu',

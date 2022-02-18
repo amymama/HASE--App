@@ -5,7 +5,7 @@ import pmt from './id-ID/pmt'
 
 // 导出本地语言包
 export default {
-  lang: "VN",
+  lang: "AR",
   ...user,
   ...shop,
   ...pmt

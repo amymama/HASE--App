@@ -187,7 +187,6 @@ export default {
       ],
       brandList: [
         { text: "ALL", value: "" },
-        { text: "AQUA", value: "AQUA" },
         { text: "H", value: "HAIER" }
       ],
       form: {

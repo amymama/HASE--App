@@ -22,7 +22,7 @@
         <competitor-pie-chart :chartData="chartData" />
         <van-row style="padding: 5px 20px">
           <van-col span="12">
-            AQUA Total:{{ form.new_aqua_quantity || 0 }}
+            HAIER Total:{{ form.new_aqua_quantity || 0 }}
           </van-col>
           <van-col span="12" style="text-align: right">
             SHOP Total:
@@ -184,7 +184,7 @@ export default {
         if (values.competitorList.length > 0) {
           this.chartData = [
             {
-              name: "AQUA",
+              name: "HAIER",
               value: values.new_aqua_quantity || 0,
             },
           ];
