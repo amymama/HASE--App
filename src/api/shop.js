@@ -23,7 +23,8 @@ const api = {
   approvenodehistory: '/api/homepage/getapprovenodehistory', // 店铺审批流
   ShopCardOfAquaClass: '/api/appshop/getshopcardofaquaclass', // SHOP CARD-AQUA CLASS
   ShopCardOfAquaRank: '/api/appshop/getshopcardofaquarank', // SHOP CARD-AQUA RANK
-  gettodolistcount: 'api/visitplan/gettodolistcount',
+  gettodolistcount: '/api/visitplan/gettodolistcount',
+  getpartnerbycustomerno: '/api/customer/getpartnerbycustomerno',
 }
 
 // [获取SHOP SIZE|GET]
@@ -108,4 +109,8 @@ export function getShopCardOfAquaRank(params) {
 // 跑店审批待办
 export function getTodoListCount(params) {
   return http.get(api.gettodolistcount, { params })
+}
+// Sale network for treelist[销售网络-分类]
+export function getPartnerByCustomerNo(params) {
+  return http.get(api.getpartnerbycustomerno, { params })
 }

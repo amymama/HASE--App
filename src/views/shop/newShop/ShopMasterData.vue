@@ -76,6 +76,14 @@
               >
                 <template #right-icon>{{ (new_mdm_accountgroup) }}</template>
               </van-field>
+              <van-field
+                readonly
+                clickable
+                :value="form.new_local_shop_code"
+                label="MDM Ship To Code"
+                :placeholder="$t('shopCommon.PleaseSelect')"
+                @click="showPartner = true"
+              />
               <van-cell title="Customer Channel" :value="form.new_mdm_dealer_channel" />
               <van-cell title="Customer branch" :value="form.new_mdm_dealer_branch" />
               <van-field
@@ -275,6 +283,16 @@
               @cancel="showLocation = false"
             />
           </van-popup>
+          <!-- CUSTOMER PARTNER -->
+          <van-popup v-model="showPartner" round position="bottom">
+            <van-picker
+              title="Select local shop code"
+              show-toolbar
+              :columns="partnerList"
+              @confirm="onConfirmPartner"
+              @cancel="showPartner = false"
+            />
+          </van-popup>
           <!-- SELECT CUSTOMER -->
           <select-customer ref="selectCustomer" @selectCustomerOk="handleSelectCustomerOk" />
           <!-- SELECT PRODUCT CATEGORYS -->
@@ -339,6 +357,7 @@ import {
   getShopDetail,
   postCloseShop,
   getSaleregionTreelist,
+  getPartnerByCustomerNo
 } from "@/api/shop";
 
 export default {
@@ -431,6 +450,9 @@ export default {
       // select shop type
       showShopType: false,
       shopTypeList: [],
+      // select customer partner
+      showPartner: false,
+      partnerList: [],
       // shop photos
       active: 0,
       photoTypes: [
@@ -595,13 +617,34 @@ export default {
 
       // GET SHOP BASE DATA
       this.$toast.loading({ duration: 0, forbidClick: true });
-      Promise.all([getRegions, getChannels, getShopType, getShopsizes, getLocation])
-        .then(() => {
-          this.$toast.clear();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      Promise.all([
+        getRegions,
+        getChannels,
+        getShopType,
+        getShopsizes,
+        getLocation
+      ]).then(() => {
+        this.$toast.clear();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    },
+    handleGetPartner(code) {
+      this.partnerList = []
+      getPartnerByCustomerNo({
+        customerno: code
+      }).then((res) => {
+        const { success, data } = res
+        if (success) {
+          data.length > 0 && data.map((item) => {
+            this.partnerList.push({
+              value: item,
+              text: item
+            });
+          });
+        }
+      })
     },
     setShopSize() {
       if (this.sizeList.length > 0 && this.form.new_shop_size) {
@@ -722,6 +765,7 @@ export default {
           ];
           this.saleNetwork = saleNetworkArr.join("/");
           this.contactList = item.new_contactlist || [];
+          item.new_customer_code && this.handleGetPartner(item.new_customer_code)
         }
       });
     },
@@ -732,6 +776,15 @@ export default {
       this.new_shop_location = record.text;
       this.shop_location_level = record.new_level;
       this.showLocation = false;
+    },
+    // Confirm Location
+    onConfirmPartner(record) {
+      if (!this.form.new_customer_code) {
+        this.$toast("Please select customer")
+      } else {
+        this.form.new_local_shop_code = record.value
+        this.showPartner = false;
+      }
     },
     // Confirm Channel
     onConfirmChannel(record) {
@@ -749,6 +802,7 @@ export default {
       this.form.new_customer_code = code
       this.form.new_customer_id = id
       this.new_mdm_accountgroup = group
+      this.handleGetPartner(code)
     },
     // select product ok
     handleSelectProductOk(values, name) {

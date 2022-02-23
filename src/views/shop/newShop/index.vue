@@ -39,12 +39,6 @@
             :placeholder="$t('shopCommon.PleaseInput')"
             maxlength="200"
           />
-          <van-field
-            v-model="form.new_local_shop_code"
-            :label="$t('shopMaster.LocalShopCode')"
-            :placeholder="$t('shopCommon.PleaseInput')"
-            maxlength="100"
-          />
           <van-field required :label="$t('shopMaster.WhetherAQUA')">
             <template #input>
               <van-radio-group
@@ -90,6 +84,14 @@
               {{ (new_mdm_accountgroup) }}
             </template>
           </van-field>
+          <van-field
+            readonly
+            clickable
+            :value="form.new_local_shop_code"
+            label="MDM Ship To Code"
+            :placeholder="$t('shopCommon.PleaseSelect')"
+            @click="showPartner = true"
+          />
           <van-field
             readonly
             required
@@ -343,6 +345,16 @@
           @cancel="showLocation = false"
         />
       </van-popup>
+      <!-- CUSTOMER PARTNER -->
+      <van-popup v-model="showPartner" round position="bottom">
+        <van-picker
+          title="Select local shop code"
+          show-toolbar
+          :columns="partnerList"
+          @confirm="onConfirmPartner"
+          @cancel="showPartner = false"
+        />
+      </van-popup>
       <!-- SELECT CUSTOMER -->
       <select-customer
         ref="selectCustomer"
@@ -398,6 +410,7 @@ import {
   getSaleNetworkTreelist,
   postShopOperation,
   getShopDetail,
+  getPartnerByCustomerNo
 } from "@/api/shop";
 
 export default {
@@ -483,9 +496,15 @@ export default {
       // select channel
       showChannel: false,
       channelList: [],
+      // select local code
+      showLocalCode: false,
+      localCodeList: [],
       // select shop type
       showShopType: false,
       shopTypeList: [],
+      // select customer partner
+      showPartner: false,
+      partnerList: [],
       // shop photos
       active: 0,
       photoTypes: [
@@ -724,13 +743,28 @@ export default {
         getShopType,
         getShopsizes,
         getLocation,
-      ])
-        .then(() => {
-          this.$toast.clear();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      ]).then(() => {
+        this.$toast.clear();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    },
+    handleGetPartner(code) {
+      this.partnerList = []
+      getPartnerByCustomerNo({
+        customerno: code
+      }).then((res) => {
+        const { success, data } = res
+        if (success) {
+          data.length > 0 && data.map((item) => {
+            this.partnerList.push({
+              value: item,
+              text: item
+            });
+          });
+        }
+      })
     },
     // set Shop size
     setShopSize() {
@@ -852,6 +886,7 @@ export default {
               item.new_salenetwork_district_name || null,
             ];
             this.saleNetwork = saleNetworkArr.join("/");
+            item.new_customer_code && this.handleGetPartner(item.new_customer_code)
             this.$toast.clear();
           } else {
             this.$toast(message);
@@ -868,6 +903,11 @@ export default {
       this.new_shop_location = record.text;
       this.shop_location_level = record.new_level;
       this.showLocation = false;
+    },
+    // Confirm Location
+    onConfirmPartner(record) {
+      this.form.new_local_shop_code = record.value
+      this.showPartner = false;
     },
     // Confirm Channel
     onConfirmChannel(record) {
@@ -990,6 +1030,7 @@ export default {
       this.form.new_customer_code = code
       this.form.new_customer_id = id
       this.new_mdm_accountgroup = group
+      this.handleGetPartner(code)
     },
     // select product ok
     handleSelectProductOk(values, name) {
