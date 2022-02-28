@@ -10,7 +10,8 @@
           size="mini"
           :loading="planLoading"
           loading-text="Save"
-        >Save</van-button>
+          >Save</van-button
+        >
         <van-button
           class="header-btn_item"
           @click.stop="rightAction(true)"
@@ -19,7 +20,8 @@
           size="mini"
           :loading="planLoading"
           loading-text="Submit"
-        >Submit</van-button>
+          >Submit</van-button
+        >
       </div>
     </NavBar>
     <SearchboxDetail ref="search" class="page-hasnav" @search="handleSearch" />
@@ -37,14 +39,24 @@
         @touchstart="touchStart(false)"
       >
         <van-row type="flex" class="head-container">
-          <van-col class="action-table-shop_head action-table_common">Shop Name</van-col>
-          <van-col class="action-table-shop_head action-table_common">Shop Code</van-col>
+          <van-col class="action-table-shop_head action-table_common"
+            >Shop Name</van-col
+          >
+          <van-col class="action-table-shop_head action-table_common"
+            >Shop Code</van-col
+          >
         </van-row>
         <div style="position: relative">
           <!-- 占位 -->
-          <div class="action-table-shop_place" :style="{ height: placeHeight.shop }"></div>
+          <div
+            class="action-table-shop_place"
+            :style="{ height: placeHeight.shop }"
+          ></div>
           <!-- 渲染节点 -->
-          <div class="action-table-shop_list" :style="{ transform: shopOffset }">
+          <div
+            class="action-table-shop_list"
+            :style="{ transform: shopOffset }"
+          >
             <van-row
               class="shop-row"
               type="flex"
@@ -94,8 +106,16 @@
         </van-row>
         <div style="position: relative">
           <!-- 渲染节点 -->
-          <div class="action-table-plan_list" :style="{ transform: planOffset }">
-            <van-row class="plan-row" type="flex" v-for="shop in shopData" :key="shop.new_shopId">
+          <div
+            class="action-table-plan_list"
+            :style="{ transform: planOffset }"
+          >
+            <van-row
+              class="plan-row"
+              type="flex"
+              v-for="shop in shopData"
+              :key="shop.new_shopId"
+            >
               <van-col
                 class="action-card action-table-plan_item"
                 v-for="day in dayData"
@@ -112,7 +132,8 @@
                   class="action-btn"
                   :class="tableBtnClass(shop[day.text])"
                   size="mini"
-                >{{ tableBtnTitle(shop[day.text]) }}</van-button>
+                  >{{ tableBtnTitle(shop[day.text]) }}</van-button
+                >
               </van-col>
             </van-row>
           </div>
@@ -388,7 +409,9 @@ export default {
               let shopTime = new Date(
                 `${this.year}/${this.month}/${date}`
               ).getTime();
-              const createTime = new Date(planItem.new_plan_date.replace(/\-/g, '/'));
+              const createTime = new Date(
+                planItem.new_plan_date.replace(/\-/g, "/")
+              );
               const createDate = moment(createTime).date();
               if (
                 planItem.new_shop_code === shop.shopcode &&
@@ -403,8 +426,10 @@ export default {
                     new_shop_code: shop.shopcode,
                     new_shop_id: shop.new_shopId,
                     new_plan_date: moment(
-                      new Date(planItem.new_plan_date.replace(/\-/g, '/'))
-                    ).format("YYYY/MM/DD").replace(/\//g, '-'),
+                      new Date(planItem.new_plan_date.replace(/\-/g, "/"))
+                    )
+                      .format("YYYY/MM/DD")
+                      .replace(/\//g, "-"),
                     new_customer_id: shop.customerId,
                   });
                 // 表示当前日期的数据和当前店铺日期对应
@@ -437,7 +462,9 @@ export default {
     initDays() {
       const { new_create_time } = this.queryParam;
       let date;
-      date = new Date((new_create_time && new_create_time.replace(/\-/g, '/')) || Date.now());
+      date = new Date(
+        (new_create_time && new_create_time.replace(/\-/g, "/")) || Date.now()
+      );
       let days = moment(date).daysInMonth();
       this.month = moment(date).month() + 1;
       this.year = moment(date).year();
@@ -476,7 +503,9 @@ export default {
         param.roleid = this.roles[0] && this.roles[0].id;
       }
       if (!param.new_create_time)
-        param.new_create_time = moment(new Date()).format("YYYY/MM/DD").replace(/\//g, '-');
+        param.new_create_time = moment(new Date())
+          .format("YYYY/MM/DD")
+          .replace(/\//g, "-");
       param.visit_type = [];
       return postPlanList({
         plan_type: [],
@@ -528,8 +557,8 @@ export default {
               const mutipleMessage = !!res.message;
               mutipleMessage
                 ? this.$dialog.alert({
-                  message: this.formatMessage(res.message),
-                })
+                    message: this.formatMessage(res.message),
+                  })
                 : this.$toast.success(`visit plan ${action} success!`);
             } else {
               this.$toast.fail(message);
@@ -539,12 +568,16 @@ export default {
       };
       const nowMonth = moment(new Date()).month();
       const nowYear = moment(new Date()).year();
-      const { new_create_time } = this.queryParam
+      const { new_create_time } = this.queryParam;
       const selectMonth = moment(
-        new Date((new_create_time && new_create_time.replace(/\-/g, '/')) || Date.now())
+        new Date(
+          (new_create_time && new_create_time.replace(/\-/g, "/")) || Date.now()
+        )
       ).month();
       const selectYear = moment(
-        new Date((new_create_time && new_create_time.replace(/\-/g, '/')) || Date.now())
+        new Date(
+          (new_create_time && new_create_time.replace(/\-/g, "/")) || Date.now()
+        )
       ).year();
       let isNextMonth; // 判断选中的是否为第二个月
       if (nowMonth < 11) {
@@ -561,7 +594,7 @@ export default {
             cancelButtonText: this.$t("shopCommon.No"),
           })
           .then(() => request())
-          .catch(() => { });
+          .catch(() => {});
         return;
       }
       request();
@@ -645,9 +678,9 @@ export default {
       const date = +actionDay.substring(6);
       const daysInMonth = moment(Date.now()).daysInMonth();
       // T+1日
-      const TaddDay = nowDate + 1 > daysInMonth ? 1 : nowDate + 1;
+      const TaddDay = moment(Date.now()).add(1, "d").date();
       // T+1月
-      const TaddMonth = nowMonth + 1 > 12 ? 1 : nowMonth + 1;
+      const TaddMonth = moment(Date.now()).add(1, "M").month() + 1;
       const cb = () => {
         if (!shop[actionDay].new_approve_status) {
           shop[actionDay].new_approve_status = 1;
@@ -679,18 +712,13 @@ export default {
                 this.$toast.fail("Cancel Error");
               }
             })
-            .catch(() => { });
+            .catch(() => {});
           return;
         }
         const new_plan_date = moment(
           new Date(`${year}/${month}/${date}`)
         ).format("YYYY-MM-DD");
-        const {
-          shopcode,
-          new_shopId,
-          branch_id,
-          region_id,
-        } = shop;
+        const { shopcode, new_shopId, branch_id, region_id } = shop;
         const param = {
           new_shop_code: shopcode,
           new_shop_id: new_shopId,
@@ -776,7 +804,7 @@ export default {
         // T+1月 任何时间都可以提交
         console.log(
           (year === nowYear && month === nowMonth && +date === TaddDay) ||
-          (year === nowYear && month === TaddMonth)
+            (year === nowYear && month === TaddMonth)
         );
         console.log("year", year, nowYear);
         console.log("month", month, nowMonth, TaddMonth);
@@ -807,8 +835,8 @@ export default {
         shop,
         planList,
       })
-        .then(() => { })
-        .catch(() => { });
+        .then(() => {})
+        .catch(() => {});
     },
     touchStart(flag) {
       // this.flag = flag;
