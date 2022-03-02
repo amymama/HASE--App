@@ -102,16 +102,7 @@
             <!-- ITEM BEGIN -->
             <div class="shop-item">
               <div class="shop-level">{{ item.new_shop_class || "N/A" }}</div>
-              <router-link
-                class="shop-visit"
-                :to="{
-                  name: 'ShopVisit',
-                  query: item,
-                }"
-                v-action:ShopVisit
-              >
-                <van-icon name="arrow" />
-              </router-link>
+              <div class="shop-visit" @click="handleToVisit(item)"><van-icon name="arrow" /></div>
               <div class="shop-tools" @click="showQucikTools(item)">
                 <van-icon name="plus" />
               </div>
@@ -154,8 +145,8 @@
                     {{ item.new_shop_type }}
                   </van-tag>
                   <van-image
-                    width="3.4rem"
-                    height="3.4rem"
+                    width="3.5rem"
+                    height="3.5rem"
                     fit="cover"
                     :src="
                       item.new_dowmload_url
@@ -166,6 +157,7 @@
                 </div>
                 <div class="shop-info">
                   <h2 class="name van-ellipsis">{{ item.new_name }}</h2>
+                  <p class="van-ellipsis">{{ item.new_local_shop_name }}</p>
                   <p>{{ item.new_code }}</p>
                   <p>
                     <span style="margin-right: 10px">
@@ -411,6 +403,17 @@ export default {
   },
   methods: {
     formatTableDate,
+    // SHOP VISIT
+    handleToVisit (item) {
+      if (item.new_shop_status == '2') {
+        this.$toast("Shop Already Closed, can not visit shop")
+      } else {
+        this.$router.push({
+          name: 'ShopVisit',
+          query: item
+        })
+      }
+    },
     // GET SHOP MODULE TODO LIST
     handleGetTodo() {
       getTodoListCount().then((res) => {
@@ -423,7 +426,6 @@ export default {
                   data.NewShopQty > 0 || data.CloseShopQty > 0
                     ? data.NewShopQty + data.CloseShopQty
                     : null;
-                console.log(item.count);
                 break;
               case "ApprovePlan":
                 item.count = data.VisitPlanQty > 0 ? data.VisitPlanQty : null;
@@ -678,7 +680,7 @@ export default {
       height: 42px;
       line-height: 42px;
       border: 1PX solid #fff;
-      top: 60px;
+      top: 80px;
       right: 20px;
       box-sizing: border-box;
       i {
@@ -692,7 +694,7 @@ export default {
       height: 42px;
       line-height: 42px;
       background: #fff;
-      top: 130px;
+      top: 150px;
       right: 20px;
       i {
         line-height: 42px;
@@ -706,8 +708,8 @@ export default {
       box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.2);
       background-image: linear-gradient(131deg, #4094df 0%, #81cde8 100%);
       .shop-pics {
-        width: 3.2rem;
-        height: 3.2rem;
+        width: 3.5rem;
+        height: 3.5rem;
         border-radius: 10px;
         overflow: hidden;
         background: #ccc;
@@ -748,17 +750,18 @@ export default {
       .shop-info {
         flex: 1;
         box-sizing: border-box;
-        padding: 10px;
+        padding: 6px 10px;
         padding-bottom: 0;
         overflow: hidden;
         position: relative;
         h2 {
-          font-size: $font28;
-          margin-bottom: 10px;
+          font-size: $font24;
+          margin-bottom: 5px;
           color: #fff;
         }
         p {
           margin-bottom: 5px;
+          font-size: 18px;
         }
         .channel {
           max-width: 200px;
@@ -766,11 +769,11 @@ export default {
         .total-detail {
           display: flex;
           width: 88%;
-          margin-top: 5px;
+          margin-top: 0;
           .total-item {
             flex: 1;
             text-align: center;
-            padding: 6px 0;
+            padding: 4px 0;
             color: #fff;
             font-size: 18px;
             white-space: nowrap;
