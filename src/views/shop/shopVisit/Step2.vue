@@ -37,7 +37,33 @@
             v-if="currentCategory.subList && currentCategory.subList.length > 0"
           >
             <div class="visit-step2-1">
-              <div class="action-panel-item action-panel">
+              <div class="display-imgs">
+                <upload-imgs
+                  folder="VisitDisplaySample"
+                  prefix="Display"
+                  :max="4"
+                  :fileList="currentCategory.new_urllist"
+                  :isTakePhoto="true"
+                  :hasWallet="true"
+                  :walletText="walletText"
+                  :showUploader="new_process == 1"
+                  @fileUploadOk="handleFileUploadOk"
+                  @fileDelete="handleFileDelete"
+                />
+              </div>
+              <div class="display-remark">
+                <van-field
+                  v-model="currentCategory.new_remark"
+                  rows="2"
+                  autosize
+                  type="textarea"
+                  :disabled="new_process != 1"
+                  maxlength="200"
+                  :placeholder="$t('shopVisit.Remark')"
+                  show-word-limit
+                />
+              </div>
+              <div class="action-panel-item action-panel" style="margin-top: 10px">
                 <div class="filter-search">
                   <van-search
                     style="padding: 0; border: 1px solid #EEE;"
@@ -61,7 +87,7 @@
                   </van-col>
                 </van-row>
                 <div class="models-item-con">
-                  <div v-for="(sitem, sindex) in currentCategory.subList">
+                  <div v-for="(sitem, sindex) in currentCategory.subList" :key="sindex">
                     <div
                       class="models-group"
                       v-for="(
@@ -95,7 +121,7 @@
                   </van-col>
                 </van-row>
                 <div class="models-item-con">
-                  <div v-for="(sitem, sindex) in currentCategory.subList">
+                  <div v-for="(sitem, sindex) in currentCategory.subList" :key="sindex">
                     <model-item
                       v-for="(item, index) in sitem.othermodels"
                       :record="item"
@@ -115,32 +141,6 @@
                     />
                   </div>
                 </div>
-              </div>
-              <div class="display-imgs">
-                <upload-imgs
-                  folder="VisitDisplaySample"
-                  prefix="Display"
-                  :max="4"
-                  :fileList="currentCategory.new_urllist"
-                  :isTakePhoto="true"
-                  :hasWallet="true"
-                  :walletText="walletText"
-                  :showUploader="new_process == 1"
-                  @fileUploadOk="handleFileUploadOk"
-                  @fileDelete="handleFileDelete"
-                />
-              </div>
-              <div class="display-remark">
-                <van-field
-                  v-model="currentCategory.new_remark"
-                  rows="2"
-                  autosize
-                  type="textarea"
-                  :disabled="new_process != 1"
-                  maxlength="200"
-                  :placeholder="$t('shopVisit.Remark')"
-                  show-word-limit
-                />
               </div>
             </div>
             <filter-model ref="filterModel" :currentCategory="currentCategory" @ok="filterModelOk" />
@@ -609,7 +609,7 @@ export default {
         isoos: "",
         ispop: ""
       }
-      this.$refs.filterModel.reset()
+      this.stepActive == 0 && this.$refs.filterModel.reset()
     },
     // GET DISPLAY MODALS
     handleGetDisplayModels() {
@@ -855,7 +855,7 @@ export default {
           });
         }
         form.new_displaymodellist.push(record);
-        if (record.new_modelrecords.length > 0 && record.new_urllist.length != 1) {
+        if (record.new_modelrecords.length > 0 && record.new_urllist.length === 0) {
           isFourImg = false
         }
       });
@@ -1150,6 +1150,16 @@ export default {
     background: #fff;
     .item {
       flex: 1;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.visit-step2 {
+  .step2-content{
+    .sun-uploader__preview-image, .sun-upload-icon{
+      width: 100px !important;
+      height: 100px !important;
     }
   }
 }

@@ -26,18 +26,18 @@
             :rules="[{ required: true }]"
           />
           <van-field
-            required
             v-model="form.new_short_name"
             :label="$t('shopMaster.ShopShortName')"
             :placeholder="$t('shopCommon.PleaseInput')"
             maxlength="100"
-            :rules="[{ required: true }]"
           />
           <van-field
+            required
             v-model="form.new_local_shop_name"
             :label="$t('shopMaster.LocalShopName')"
             :placeholder="$t('shopCommon.PleaseInput')"
             maxlength="200"
+            :rules="[{ required: true }]"
           />
           <van-field required :label="$t('shopMaster.WhetherAQUA')">
             <template #input>

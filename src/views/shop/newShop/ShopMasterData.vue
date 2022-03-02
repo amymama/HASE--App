@@ -15,13 +15,17 @@
                 :title="$t('shopMaster.ShopName')"
                 :value="form.new_name"
               />
+              <van-field
+                input-align="right"
+                v-model="form.new_short_name"
+                :label="$t('shopMaster.ShopShortName')"
+                :placeholder="$t('shopCommon.PleaseInput')"
+                maxlength="100"
+              />
               <van-cell
                 class="van-cell--required"
-                :title="$t('shopMaster.ShopShortName')"
-                :value="form.new_short_name"
-              />
-              <van-cell :title="$t('shopMaster.LocalShopName')" :value="form.new_local_shop_name" />
-              <van-cell :title="$t('shopMaster.LocalShopCode')" :value="form.new_local_shop_code" />
+                :title="$t('shopMaster.LocalShopName')"
+                :value="form.new_local_shop_name" />
               <van-field required input-align="right" label="Whether Haier Joined In This Shop">
                 <template #input>
                   <van-radio-group
@@ -67,6 +71,7 @@
                 :rules="[{ required: true }]"
               />
               <van-field
+                input-align="right"
                 readonly
                 clickable
                 :value="form.new_customer_code"
@@ -77,6 +82,7 @@
                 <template #right-icon>{{ (new_mdm_accountgroup) }}</template>
               </van-field>
               <van-field
+                input-align="right"
                 readonly
                 clickable
                 :value="form.new_local_shop_code"
@@ -84,8 +90,10 @@
                 :placeholder="$t('shopCommon.PleaseSelect')"
                 @click="showPartner = true"
               />
-              <van-cell title="Customer Channel" :value="form.new_mdm_dealer_channel" />
-              <van-cell title="Customer branch" :value="form.new_mdm_dealer_branch" />
+              <van-cell
+                class="van-cell--required"
+                :title="$t('shopMaster.GtmChannel')"
+                :value="form.new_channel_name" />
               <van-field
                 clearable
                 input-align="right"
@@ -152,14 +160,17 @@
                 :rules="[{ required: true }]"
               />
               <van-field
+                required
                 input-align="right"
                 v-model="form.new_shop_size"
                 :label="$t('shopMaster.ShopSize')"
                 :placeholder="$t('shopCommon.PleaseInput')"
                 type="digit"
                 maxlength="6"
+                :rules="[{ required: true }]"
               />
               <van-field
+                required
                 readonly
                 clickable
                 input-align="right"
@@ -167,6 +178,7 @@
                 :label="$t('shopMaster.ShopLocation')"
                 :placeholder="$t('shopCommon.PleaseSelect')"
                 @click="showLocation = true"
+                :rules="[{ required: true }]"
               />
             </div>
             <div class="shop-group__header">
@@ -798,7 +810,7 @@ export default {
       }
     },
     // select customer ok
-    handleSelectCustomerOk(code, id, group) {
+    handleSelectCustomerOk (code, id, group) {
       this.form.new_customer_code = code
       this.form.new_customer_id = id
       this.new_mdm_accountgroup = group

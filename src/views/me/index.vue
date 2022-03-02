@@ -81,6 +81,12 @@
           </van-cell>
         </van-cell-group>
       </div>
+      <div class="me-menue-item">
+        <van-cell-group>
+          <van-cell title="Refresh Data" icon="replay" @click="refreshData">
+          </van-cell>
+        </van-cell-group>
+      </div>
       <!-- corrent pwd & sign out  -->
       <div class="me-actions">
         <div class="item" v-if="userInfo.new_user_type == 2">
@@ -151,6 +157,12 @@ export default {
     this.handleGetRoles()
   },
   methods: {
+    // refresh data
+    refreshData () {
+      this.$store.dispatch('user/GetInfo').then((res) => {
+        this.$toast.success('Refresh Success')
+      })
+    },
     // checkVesion
     checkVesion () {
       if (window.plus) {
