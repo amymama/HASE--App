@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { UserLayout, BasicLayout } from '@/layouts'
 import shopRoutes from './shopRoutes'
+import menuRoutes from './menuRoutes'
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,13 @@ export const constantRoutes = [
         name: 'Home',
         component: () => import('@/views/home'),
         meta: { title: 'Home', module: 'Basic', keepAlive: false }
+      },
+      {
+        path: '/menu',
+        name: 'Menu',
+        component: () => import('@/views/menu'),
+        meta: { title: 'Menu', module: 'Basic', keepAlive: false },
+        children:menuRoutes
       },
       {
         path: '/shop',

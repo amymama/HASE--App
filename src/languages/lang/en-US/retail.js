@@ -27,4 +27,9 @@ export default {
     'retail.retailSalesAmount':'Retail Sales Amount',
     'retail.mhModelSalesAmount':'MH Model Sales Amount',
     'retail.saveButton':'Save',
+
+  "Enter Product Name/Code/Model": "Enter Product Name/Code/Model",
+"Dealer Name":'Dealer Name',
+"Ship To":"Ship To",
+"Storage Location":'Storage Location'
     }

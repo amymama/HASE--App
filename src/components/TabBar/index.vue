@@ -40,25 +40,32 @@ export default {
           path: "/index",
           icon: "icon-home",
           permission: "tabBar:HOME",
-          replace: true
+          replace: true,
+        },
+        {
+          title: "MENU",
+          path: "/menu",
+          icon: "icon-pmt",
+          // permission: "tabBar:MENU",
+          replace: true,
         },
         {
           title: "HISHOP",
           path: "/shop",
           icon: "icon-shop",
           permission: "tabBar:HISHOP",
-          replace: true
+          replace: true,
         },
         {
           title: "ME",
           path: "/me",
           icon: "icon-me",
-          replace: true
-        }
-      ]
-    }
-  }
-}
+          replace: true,
+        },
+      ],
+    };
+  },
+};
 </script>
 <style lang="scss">
 .tab-bar {
@@ -66,7 +73,7 @@ export default {
     font-size: 36px !important;
   }
   .van-tabbar-item--active {
-    color: #2058AB;
+    color: #2058ab;
     font-weight: bold;
   }
 }
