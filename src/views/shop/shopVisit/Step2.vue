@@ -5,32 +5,32 @@
       <van-nav-bar left-arrow @click-left="goBack" title="Display sample" />
       <!-- SHOP HEADER -->
       <shop-header :shopInfo="query" />
+      <!-- PRODUCT CATEGORY -->
+      <product-category
+        :list="categorys"
+        @changeCategroy="handleChangeCategroy"
+      />
+      <!-- SHOP STATISTICS -->
+      <shop-statistics
+        :record="currentCategory"
+        :new_max_display_quantity="new_max_display_quantity"
+        :new_ood_quantity="new_ood_quantity"
+      />
+      <!-- ACTION-STEPS -->
+      <div class="action-steps">
+        <div
+          class="action-step-item"
+          :class="{ 'action-step-item-active': index == stepActive }"
+          v-for="(item, index) in stepList"
+          :key="index"
+        >
+          {{ item }}
+        </div>
+      </div>
     </div>
     <div class="flex-layout__body page-content">
       <!-- STEP1 -->
       <div class="step2-content">
-        <!-- PRODUCT CATEGORY -->
-        <product-category
-          :list="categorys"
-          @changeCategroy="handleChangeCategroy"
-        />
-        <!-- SHOP STATISTICS -->
-        <shop-statistics
-          :record="currentCategory"
-          :new_max_display_quantity="new_max_display_quantity"
-          :new_ood_quantity="new_ood_quantity"
-        />
-        <!-- ACTION-STEPS -->
-        <div class="action-steps">
-          <div
-            class="action-step-item"
-            :class="{ 'action-step-item-active': index == stepActive }"
-            v-for="(item, index) in stepList"
-            :key="index"
-          >
-            {{ item }}
-          </div>
-        </div>
         <!-- PRODUCT SUB-CATEGORY -->
         <div v-if="stepActive == 0">
           <template
@@ -1007,47 +1007,47 @@ export default {
 </script>
 <style lang="scss" scoped>
 .visit-step2 {
-  .step2-content {
-    background: #f5f5f5;
-    .action-steps {
-      display: flex;
-      .action-step-item {
-        flex: 1;
-        background: #a4e3ff;
-        color: #333;
-        height: 60px;
-        line-height: 60px;
-        margin-right: 29px;
-        position: relative;
-        text-indent: 6px;
-        white-space: nowrap;
-        &::after {
-          content: "";
-          background: #027db4;
-          position: absolute;
-          right: -29px;
-          top: 0;
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 30px 0 30px 30px;
-          border-color: transparent transparent transparent #a4e3ff;
-        }
-        &:last-child {
-          &::after {
-            background: none;
-          }
-        }
-      }
-      .action-step-item-active {
+  .action-steps {
+    display: flex;
+    .action-step-item {
+      flex: 1;
+      background: #a4e3ff;
+      color: #333;
+      height: 60px;
+      line-height: 60px;
+      margin-right: 29px;
+      position: relative;
+      text-indent: 6px;
+      white-space: nowrap;
+      &::after {
+        content: "";
         background: #027db4;
-        color: #fff;
+        position: absolute;
+        right: -29px;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 30px 0 30px 30px;
+        border-color: transparent transparent transparent #a4e3ff;
+      }
+      &:last-child {
         &::after {
-          background: #a4e3ff;
-          border-color: transparent transparent transparent #027db4;
+          background: none;
         }
       }
     }
+    .action-step-item-active {
+      background: #027db4;
+      color: #fff;
+      &::after {
+        background: #a4e3ff;
+        border-color: transparent transparent transparent #027db4;
+      }
+    }
+  }
+  .step2-content {
+    background: #f5f5f5;
     .action-panel {
       display: flex;
       align-items: center;
