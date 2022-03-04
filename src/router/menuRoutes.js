@@ -13,6 +13,12 @@ export default [
     meta: { title: 'ZSO', module: 'Basic', keepAlive: false }
   },
   {
+    path: '/zso/cart',
+    name: 'Cart',
+    component: () => import('@/views/menu/zso/components/cart'),
+    meta: { title: 'Cart', module: 'Basic', keepAlive: false }
+  },
+  {
     path: '/order',
     name: 'Order',
     component: () => import('@/views/menu/order'),

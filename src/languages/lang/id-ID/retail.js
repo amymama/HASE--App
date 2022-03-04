@@ -87,6 +87,7 @@ export default {
     "Enter Product Name/Code/Model": "Enter Product Name/Code/Model",
     "Dealer Name": 'Dealer Name',
     "Ship To": "Ship To",
-    "Storage Location": 'Storage Location'
+    "Storage Location": 'Storage Location',
+    "Product detail":'Product detail'
 
 }

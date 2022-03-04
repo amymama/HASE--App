@@ -25,6 +25,6 @@
 
   </div>
 </template>
-<style>
+<style lang="scss" scoped>
 @import url("./index.less");
 </style>
