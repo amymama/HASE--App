@@ -117,7 +117,12 @@
             </div>
           </div>
           <div class="addCartButton">
-            <van-button size="mini" style="padding: 0 0.3rem" color="#407FDC">
+            <van-button
+              size="mini"
+              style="padding: 0rem 0.3rem"
+              color="#407FDC"
+              @click="addCartClick"
+            >
               Add to Cart
             </van-button>
           </div>
@@ -125,6 +130,28 @@
       </van-list>
     </div>
     <!-- 弹框 -->
+    <van-action-sheet v-model="addToCartShow" title="HR-ADBX18 CC:1 DODR">
+      <div class="addToCartBox">
+        <div class="lietItemBox" style="color: #a2a8b2">
+          <span calss="textBox itemBox">BS08ZZEAE</span>
+          <span calss="textBox itemNet">Stock:1</span>
+        </div>
+        <div class="numButton">
+          <van-stepper
+            :disabled="isView"
+            button-size="24px"
+            min="0"
+            max="999"
+            :integer="true"
+            v-model.number="num"
+          />
+        </div>
+        <div class="addCartFooter">
+          <van-button class="cancel" type="danger">Cancel</van-button>
+          <van-button class="addCart" type="info">Ok</van-button>
+        </div>
+      </div>
+    </van-action-sheet>
     <search-history
       ref="searchHistory"
       searchType="shop"
@@ -155,6 +182,9 @@ export default {
   },
   data() {
     return {
+      num: 2,
+      isView: false,
+      addToCartShow: false,
       actions: [],
       list: [],
       mode: "dark",
@@ -188,7 +218,6 @@ export default {
       //   pageTotal: 1,
       //   pageCurrent: 1,
       //   pageSize: 10,
-
       page_no: 0,
       page_size: 20,
       height: "100vh",
@@ -205,10 +234,13 @@ export default {
     };
   },
   created() {
-    this.onLoad();
+    // this.onLoad();
     // this.getData();
   },
   methods: {
+    addCartClick() {
+      this.addToCartShow = true;
+    },
     onLoad() {
       setTimeout(() => {
         this.page_no++;
@@ -285,6 +317,17 @@ export default {
   .searchColor {
     background-color: #2058ab;
   }
+  .lietItemBox {
+    margin: 0.2rem 0;
+    display: flex;
+    justify-content: space-between;
+    .itemBox {
+      flex: 2;
+    }
+    .itemNet {
+      flex: 1;
+    }
+  }
   .listBox {
     display: flex;
     .listImage {
@@ -292,17 +335,7 @@ export default {
     }
     .listDetailBox {
       margin: 0.4rem 0.1rem 0.2rem 0rem;
-      .lietItemBox {
-        margin: 0.2rem 0;
-        display: flex;
-        justify-content: space-between;
-        .itemBox {
-          flex: 2;
-        }
-        .itemNet {
-          flex: 1;
-        }
-      }
+
       .textBox {
         margin: 0.2rem 0;
       }
@@ -315,7 +348,7 @@ export default {
   }
 
   .shop-status-list {
-    padding: 24px;
+    padding: 20px;
     background: #f5f5f5;
   }
   .shop-status-item {
@@ -417,6 +450,25 @@ export default {
     .delete-button {
       height: 100%;
       margin-left: 3px;
+    }
+  }
+  .addToCartBox {
+    margin: 0.2rem 0.5rem;
+  }
+  .numButton {
+    margin: 0.8rem;
+    text-align: center;
+  }
+  .addCartFooter {
+    display: flex;
+    margin: 0.4rem 0.7rem;
+    justify-content: space-between;
+    .addCart {
+      width: 47%;
+      margin-left: 0.4rem;
+    }
+    .cancel {
+      width: 47%;
     }
   }
 }
