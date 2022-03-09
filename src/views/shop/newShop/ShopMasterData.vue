@@ -9,11 +9,14 @@
         <van-tab title="SHOP  Master Data">
           <van-form ref="formData" alidate-first @submit="submit" label-width="3.7rem">
             <div class="shop-form-group">
-              <van-cell
-                class="van-cell--required"
-                center
-                :title="$t('shopMaster.ShopName')"
-                :value="form.new_name"
+              <van-field
+                input-align="right"
+                v-model="form.new_name"
+                :label="$t('shopMaster.ShopName')"
+                :placeholder="$t('shopCommon.PleaseInput')"
+                maxlength="200"
+                required
+                :rules="[{ required: true }]"
               />
               <van-field
                 input-align="right"
@@ -22,10 +25,15 @@
                 :placeholder="$t('shopCommon.PleaseInput')"
                 maxlength="100"
               />
-              <van-cell
-                class="van-cell--required"
-                :title="$t('shopMaster.LocalShopName')"
-                :value="form.new_local_shop_name" />
+              <van-field
+                input-align="right"
+                required
+                v-model="form.new_local_shop_name"
+                :label="$t('shopMaster.LocalShopName')"
+                :placeholder="$t('shopCommon.PleaseInput')"
+                maxlength="200"
+                :rules="[{ required: true }]"
+              />
               <van-field required input-align="right" label="Whether Haier Joined In This Shop">
                 <template #input>
                   <van-radio-group
