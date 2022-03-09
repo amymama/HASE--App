@@ -197,7 +197,7 @@ export default {
         { text: this.$t("shopCommon.All"), value: null },
         { text: this.$t("shopStatus.Draft"), value: "1" },
         { text: this.$t("shopStatus.WaitApproval"), value: "2" },
-        { text: "Pass", value: "3" },
+        { text: this.$t("shopApprove.PASS"), value: "3" },
         { text: this.$t("shopStatus.Reject"), value: "4" },
       ],
       // data list
