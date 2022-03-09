@@ -43,7 +43,7 @@ export default {
     ApproveShop: 'اعتماد المتجر',
     ApprovePlan: 'اعتماد الخطة',
     PosmInOut: 'مواد نقاط البيع في الداخل / في الخارج',
-    PosmForecast: 'Dự báo POSM',
+    PosmForecast: 'POSM Forecast',
     Product: 'منتج',
   },
   shopAnnouncement: {
