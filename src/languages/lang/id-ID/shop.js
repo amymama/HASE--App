@@ -277,7 +277,7 @@ export default {
     Stock: 'Stock',
     StockSort: 'المخزون',
     CreateDate: 'تاريخ الانتاج',
-    CreateDateSort: 'Ngày tạo DESC',
+    CreateDateSort: 'Create Date DESC',
     PlzQTY: 'يرجى إدخال الكمية المستلمة',
     CurrentStock: 'Current Stock',
     ProductDetail: 'تفاصيل المنتج',
