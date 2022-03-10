@@ -36,7 +36,8 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'https://tgtmhaseportal.haier.net:9665/Order_test',
+        // target: 'https://tgtmhaseportal.haier.net:9665/Order_test',
+        target: 'https://tgtmhaseportal.haier.net:9665/',
         ws: false,
         changeOrigin: true
       }
