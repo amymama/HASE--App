@@ -37,6 +37,7 @@
         <van-cell
           :title="$t('Dealer Name')"
           is-link
+          :value="selectedDealer.dealerName"
           @click="$refs.dealerSearch.onShow()"
         >
           <template #icon>
@@ -44,7 +45,7 @@
           </template>
         </van-cell>
         <van-cell
-          value=""
+          :value="selectedShipTo.partnerName"
           :title="$t('Ship To')"
           is-link
           @click="$refs.shipToSearch.onShow()"
@@ -54,7 +55,7 @@
           </template>
         </van-cell>
         <van-cell
-          value=""
+          :value="selectedLocation.locationName"
           :title="$t('Storage Location')"
           is-link
           @click="$refs.storageLoctionSearch.onShow()"
@@ -66,6 +67,14 @@
       </van-cell-group>
     </div>
     <!-- 图片分类 -->
+    <div class="imgBox">
+      <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
+        <div class="imgitem" @click="imgClick(itemImg)">
+          <img :src="itemImg.iconPath" />
+        </div>
+      </div>
+    </div>
+    <div style="clear: both"></div>
     <!-- list -->
     <div class="shop-status-list">
       <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
@@ -96,23 +105,21 @@
                 width="2.2rem"
                 height="1.3rem"
                 fit="cover"
-                :src="
-                  item.new_dowmload_url
-                    ? item.new_dowmload_url.split(',')[0]
-                    : ''
-                "
+                :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
               />
             </div>
             <div class="listDetailBox">
-              <h3>MKT-BathTowel Gray:Premium WH</h3>
-              <p class="textBox">TD0037148</p>
+              <h3>{{ item.productModel }}</h3>
+              <p class="textBox">{{ item.productNumber }}</p>
               <div class="lietItemBox">
                 <span calss="textBox itemBox">BKCR</span>
                 <span calss="textBox itemNet">Net Price</span>
               </div>
               <div class="lietItemBox">
-                <span calss="textBox itemBox">Stock:{{ index }}</span>
-                <span calss="textBox itemNet" style="color: #0000ff">$ 0</span>
+                <span calss="textBox itemBox">Stock:{{ item.stock }}</span>
+                <span calss="textBox itemNet" style="color: #0000ff"
+                  >$:{{ item.netPrice }}</span
+                >
               </div>
             </div>
           </div>
@@ -121,7 +128,7 @@
               size="mini"
               style="padding: 0rem 0.3rem"
               color="#407FDC"
-              @click="addCartClick"
+              @click="addCartClick(item)"
             >
               Add to Cart
             </van-button>
@@ -129,12 +136,12 @@
         </van-swipe-cell>
       </van-list>
     </div>
-    <!-- 弹框 -->
-    <van-action-sheet v-model="addToCartShow" title="HR-ADBX18 CC:1 DODR">
+    <!-- add弹框 -->
+    <van-action-sheet v-model="addToCartShow" :title="cartParams.productModel">
       <div class="addToCartBox">
         <div class="lietItemBox" style="color: #a2a8b2">
-          <span calss="textBox itemBox">BS08ZZEAE</span>
-          <span calss="textBox itemNet">Stock:1</span>
+          <span calss="textBox itemBox">{{ cartParams.productNumber }}</span>
+          <span calss="textBox itemNet">Stock:{{ cartParams.stock }}</span>
         </div>
         <div class="numButton">
           <van-stepper
@@ -147,8 +154,12 @@
           />
         </div>
         <div class="addCartFooter">
-          <van-button class="cancel" type="danger">Cancel</van-button>
-          <van-button class="addCart" type="info">Ok</van-button>
+          <van-button class="cancel" @click="onaddCartCancel" type="danger"
+            >Cancel</van-button
+          >
+          <van-button class="addCart" @click="addCartOk" type="info"
+            >Ok</van-button
+          >
         </div>
       </div>
     </van-action-sheet>
@@ -157,21 +168,37 @@
       searchType="shop"
       @ok="handleSearchOk"
     />
-    <dealer-Search ref="dealerSearch" @ok="handleDealerOk" />
-    <ship-to ref="shipToSearch" @ok="handleshipToOk" />
-    <storage-loction ref="storageLoctionSearch" @ok="handlestorageLoctionOk" />
+    <dealer-Search
+      ref="dealerSearch"
+      :allList="allDealerList"
+      @ok="handleDealerOk"
+    />
+    <ship-to ref="shipToSearch" :allList="allShipToList" @ok="handleshipToOk" />
+    <storage-loction
+      ref="storageLoctionSearch"
+      :allList="allStorageList"
+      @ok="handlestorageLoctionOk"
+    />
     <ZsoDetail ref="zsodetailRef" />
   </div>
 </template>
 <script>
-import SearchHistory from "@/components/SearchHistory";
+import SearchHistory from "./components/SearchHistory.vue";
 import DealerSearch from "./components/dealer.vue";
 import ShipTo from "./components/shipTo.vue";
 import StorageLoction from "./components/storageLoction.vue";
 import ZsoDetail from "./components/zsoDetail.vue";
 
 import { getShopListBySelf, postShopOperation } from "@/api/shop";
-import { orderGetDealerList, zsoGetProductList } from "@/api/order";
+import {
+  orderGetDealerList,
+  zsoGetProductList,
+  GetCategoryList,
+  GetDealerList,
+  GetPartnerListByDealer,
+  GetStorageLocationList,
+  OrderCartAddCart,
+} from "@/api/order";
 export default {
   components: {
     SearchHistory,
@@ -182,7 +209,11 @@ export default {
   },
   data() {
     return {
-      num: 2,
+      allDealerList: [],
+      allShipToList: [],
+      allStorageList: [],
+      categoryList: [],
+      num: 0,
       isView: false,
       addToCartShow: false,
       actions: [],
@@ -196,8 +227,13 @@ export default {
       showCategory: false,
       showDetail: false,
       selectedDealer: {},
-      selectedPartner: {},
+      selectedShipTo: {
+        partnerCode: "",
+        partnerName: "",
+        partnerId: "",
+      },
       selectedLocation: {},
+      selectedPartner: {},
       selectedCategory: {},
       selectedProduct: {},
       selectedSubCatrgory: "",
@@ -234,21 +270,95 @@ export default {
     };
   },
   created() {
-    // this.onLoad();
-    // this.getData();
+    this.getData();
   },
   methods: {
-    addCartClick() {
+    addCartClick(val) {
       this.addToCartShow = true;
+      this.cartParams = val;
+      console.log("val::", val);
+    },
+    //确认加入购物车
+    addCartOk() {
+      let that = this;
+      if (this.num == 0) {
+        that.$toast.fail("The quantity cannot be 0");
+        return false;
+      }
+      this.$toast.loading({ duration: 0 });
+      OrderCartAddCart({
+        new_user_id: this.$store.getters.userInfo.id,
+        new_user_realname: this.$store.getters.userInfo.realname,
+        new_dealer_code: this.selectedDealer.dealerCode,
+        new_dealer_id: this.selectedDealer.dealerId,
+        new_dealer_name: this.selectedDealer.dealerName,
+        new_ship_to_code: this.selectedShipTo.partnerCode,
+        new_ship_to_id: this.selectedShipTo.partnerId,
+        new_ship_to_name: this.selectedShipTo.partnerName,
+        new_product_id: this.cartParams.productId,
+        new_product_number: this.cartParams.productNumber,
+        new_product_model: this.cartParams.productModel,
+        new_product_counts: this.num, //加入购物车商品的数量
+        new_order_type: "ZSO",
+        new_storage_location: this.selectedLocation.locationCode,
+      })
+        .then((res) => {
+          console.log("加入购物车", res, res.success);
+          if (res.success) {
+            // this.$toast.clear();
+            that.$toast.success("succes");
+            that.onaddCartCancel();
+          } else {
+            // that.$toast.clear();
+            that.$toast.fail(res.message);
+          }
+        })
+        .catch((e) => {
+          // that.$toast.clear();
+          console.log(e, "22");
+          that.$toast.fail("Network error");
+        });
+    },
+    onaddCartCancel() {
+      this.addToCartShow = false;
+    },
+    imgClick(val) {
+      this.selectedCategory = val;
+      console.log(this.selectedCategory, "1212");
+      this.initData();
+    },
+    initData() {
+      this.list = [];
+      this.page_no = 0;
+      this.loading = true;
+      this.finished = false;
+      this.noRes = false;
+      this.error = false;
+      this.onLoad();
     },
     onLoad() {
       setTimeout(() => {
         this.page_no++;
-        getShopListBySelf(
-          Object.assign(this.selectedDealer, {
-            itemsperpage: this.page_size,
-            page: this.page_no,
-          })
+        zsoGetProductList(
+          Object.assign(
+            {
+              // hasStock: true,
+              userId: this.$store.getters.userInfo.id,
+              dealerCode: this.selectedDealer.dealerCode,
+              shipToCode: this.selectedShipTo.partnerCode,
+              catalogueId: this.selectedCategory.categoryId, //catalogueId
+              subCatalogueId: this.selectedCategory.catalogueType, //产品0大类1小类
+              storageLocation: this.selectedLocation.locationCode,
+              // orderby: "",
+              searchValue: this.filterParams.searchValue, //关键字搜索
+              orderType: "ZSO",
+              // subCatalogueId: this.state.selectedSubCatrgory,
+            },
+            {
+              itemsperpage: this.page_size,
+              page: this.page_no,
+            }
+          )
         )
           .then((res) => {
             const { success, data } = res;
@@ -269,7 +379,7 @@ export default {
             this.loading = false;
             this.error = true;
           });
-      }, 100);
+      }, 500);
     },
     setShowSearch() {
       this.showSearchHistory = true;
@@ -278,9 +388,6 @@ export default {
     clickright() {
       this.$router.push("/zso/cart");
     },
-    // clickLeft() {
-    //   this.$router.push("/menu");
-    // },
     // clear search
     clearSearch() {
       this.filterParams.searchValue = "";
@@ -290,25 +397,79 @@ export default {
     handleSearchOk(key) {
       this.filterParams.searchValue = key;
       this.filterParams.searchCode = key;
-      //   this.initData();
+      this.initData();
     },
     // 确认dealer
-    handleDealerOk(selectedOptions, tabIndex) {
-      if (selectedOptions.length > 0) {
-        // this.selectedDealer.id =
-        //   tabIndex >= 0 ? selectedOptions[0].new_sale_regionid : "";
-        // this.selectedDealer.id =
-        //   tabIndex >= 1 ? selectedOptions[1].new_sale_regionid : "";
-        // this.branchName = selectedOptions[tabIndex].new_name;
-        // this.initData();
-      }
+    handleDealerOk(val) {
+      this.selectedDealer = val;
+      this.getShipTo();
+      this.selectedShipTo = {};
+      this.initData();
     },
     // 关闭dealer
-    // onCancel() {},
-    // onSelect() {},
-    handleshipToOk(selectedOptions, tabIndex) {},
-    handlestorageLoctionOk(selectedOptions, tabIndex) {},
-    // getData() {},
+    handleshipToOk(val) {
+      this.selectedShipTo = val;
+      this.initData();
+    },
+    handlestorageLoctionOk(val) {
+      this.selectedLocation = val;
+      this.initData();
+    },
+    getData() {
+      GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
+        (res) => {
+          if (res.success) {
+            console.log(res, "ddddddddddddd");
+            this.categoryList = res.data;
+          }
+        }
+      );
+      //dealer Name
+      GetDealerList({ userId: this.$store.getters.userInfo.id })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data || [];
+            this.allDealerList = this.allDealerList.concat(Items);
+            if (this.allDealerList.length > 0) {
+              this.selectedDealer = this.allDealerList[0];
+              this.getShipTo();
+            }
+          }
+        })
+        .catch(() => {});
+      GetStorageLocationList()
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data || [];
+            this.allStorageList = this.allStorageList.concat(Items);
+            if (this.allStorageList.length > 0) {
+              this.selectedLocation = this.allStorageList[0];
+            }
+          }
+        })
+        .catch(() => {});
+    },
+    getShipTo() {
+      GetPartnerListByDealer({
+        dealer_code: this.selectedDealer.dealerCode,
+        type: "SH",
+      })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data || [];
+            this.allShipToList = this.allShipToList.concat(Items);
+            console.log("allShipToList", this.allShipToList);
+            if (this.allShipToList.length > 0) {
+              this.selectedShipTo = this.allShipToList[0];
+              console.log("selectedShipTo", this.selectedShipTo);
+            }
+          }
+        })
+        .catch(() => {});
+    },
   },
 };
 </script>
@@ -469,6 +630,22 @@ export default {
     }
     .cancel {
       width: 47%;
+    }
+  }
+  .imgBox {
+    height: 1.3rem;
+    display: flex;
+    padding: 0.2rem 0.3rem;
+    display: flex;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+    .imgitem {
+      margin: 0.1rem 0.1rem;
+    }
+    img {
+      width: 0.8rem;
+      height: 1.1rem;
     }
   }
 }

@@ -15,40 +15,36 @@
       />
       <!-- Search bar -->
       <div class="search-top">
-        <van-search
+        <van-field
           v-model="keyword"
-          show-action
           autofocus="false"
           placeholder="Please input keywords"
           background="#f2f2f2"
           shape="round"
-          @search="onSearch"
-          @cancel="onCancel"
+          action
+          clearable
+          @input="onSearchChange"
         />
+        <div class="bottomBox"></div>
+
+        <!-- @search="onSearch" @cancel="onCancel" -->
       </div>
       <div class="detailTitleBox">
+        <div class="bottomBox"></div>
         <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
-        <van-list
-          v-else
-          v-model="loading"
-          :finished="finished"
-          :finished-text="$t('shopCommon.NoMoreData')"
-          @load="getDataDealer"
-          :error.sync="error"
-          :error-text="$t('shopCommon.RequestErrorText')"
+        <van-swipe-cell
+          class="shop-status-item"
+          v-for="(item, index) in list"
+          :key="index"
         >
-          <van-swipe-cell
-            class="shop-status-item"
-            v-for="(item, index) in list"
-            :key="index"
-          >
+          <div class="dealerTextBox" @click="selectedDealer(item)">
             <div class="dealerText">
-              <p class="detailTitle">MKT-Bathtowel Gray:Premium WH</p>
-              <p>Price:$0</p>
+              <p class="detailTitle">{{ item.dealerName }}</p>
+              <p>{{ item.dealerCode }}</p>
             </div>
             <div class="bottomBox"></div>
-          </van-swipe-cell>
-        </van-list>
+          </div>
+        </van-swipe-cell>
       </div>
     </van-popup>
   </div>
@@ -56,8 +52,13 @@
 <script>
 // import { orderGetDealerList } from "@/api/shop";
 import { getShopListBySelf, postShopOperation } from "@/api/shop";
-import { orderGetDealerList } from "@/api/order";
+import { orderGetDealerList, GetDealerList } from "@/api/order";
 export default {
+  props: {
+    allList: {
+      type: Array,
+    },
+  },
   data() {
     return {
       dealerShow: false,
@@ -69,61 +70,67 @@ export default {
       noRes: false,
       finished: false,
       list: [],
+      // allList: [],
     };
   },
-  created() {
-    // this.getData();
-  },
   methods: {
-    getDataDealer() {
-      setTimeout(() => {
-        this.page_no++;
-        getShopListBySelf(
-          Object.assign(
-            {},
-            {
-              itemsperpage: this.page_size,
-              page: this.page_no,
-            }
-          )
-        )
-          .then((res) => {
-            const { success, data } = res;
-            if (success) {
-              var Items = data.Items || [];
-              this.loading = false;
-              this.list = this.list.concat(Items);
-              if (this.list.length === 0) {
-                this.noRes = true;
-              }
-              if (Items.length < this.page_size) {
-                this.finished = true;
-              }
-            }
-          })
-          .catch(() => {
-            this.page_no = 0;
-            this.loading = false;
-            this.error = true;
-          });
-      }, 100);
+    selectedDealer(val) {
+      console.log(val, "111");
+      this.$emit("ok", val);
+      this.onCancel();
     },
-    onSearch() {},
+    onSearchChange(value) {
+      console.log("value2223", value);
+      this.list = this.allList;
+      if (this.list.length > 0) {
+        const _list = [];
+        this.list.map((item) => {
+          if (typeof value === "string" && item.dealerName && item.dealerCode) {
+            const _key = String(value).toLowerCase();
+            if (
+              item.dealerName.toLowerCase().includes(_key) ||
+              item.dealerCode.toLowerCase().includes(_key)
+            ) {
+              _list.push(item);
+            }
+          }
+        });
+        this.list = [..._list];
+        console.log("dealer22", this.list);
+      }
+    },
     onShow() {
       this.dealerShow = true;
+      this.list = this.allList;
+      console.log(this.list,'list')
     },
     onCancel() {
       this.dealerShow = false;
+      this.keyword = "";
     },
-    // getData() {
-    //   orderGetDealerList({ userId: this.$store.getters.userInfo.id })
+    // getDataDealer() {
+    //   this.$toast.loading({ duration: 0 });
+    //   GetDealerList({ userId: this.$store.getters.userInfo.id })
     //     .then((res) => {
     //       const { success, data } = res;
-    //       console.log(data);
+    //       // this.loading = true;
     //       if (success) {
+    //         var Items = data || [];
+    //         // this.loading = false;
+    //         this.$toast.clear();
+    //         this.allList = this.allList.concat(Items);
+    //         this.list = this.allList;
+    //         if (this.allList.length === 0) {
+    //           this.noRes = true;
+    //         }
     //       }
     //     })
-    //     .catch((error) => {});
+    //     .catch(() => {
+    //       this.page_no = 0;
+    //       // this.loading = false;
+    //       // this.error = true;
+    //       this.$toast.clear();
+    //     });
     // },
   },
 };
@@ -140,5 +147,8 @@ export default {
       margin-bottom: 0.2rem;
     }
   }
+}
+.search-top {
+  background-color: #f5f5f5;
 }
 </style>

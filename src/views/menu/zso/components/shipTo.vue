@@ -11,21 +11,23 @@
       <van-nav-bar left-arrow @click-left="onCancel" :title="$t('Ship To')" />
       <!-- Search bar -->
       <div class="search-top">
-        <van-search
+        <van-field
           v-model="keyword"
-          show-action
           autofocus="false"
           placeholder="Please input keywords"
           background="#f2f2f2"
           shape="round"
-          @search="onSearch"
-          @cancel="onCancel"
+          action
+          clearable
+          @input="onSearchChange"
         />
+        <div class="bottomBox"></div>
       </div>
 
       <div class="detailTitleBox">
+        <div class="bottomBox"></div>
         <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
-        <van-list
+        <!-- <van-list
           v-else
           v-model="loading"
           :finished="finished"
@@ -33,79 +35,84 @@
           @load="getDatashopTo"
           :error.sync="error"
           :error-text="$t('shopCommon.RequestErrorText')"
+        > -->
+
+        <van-swipe-cell
+          class="shop-status-item"
+          v-for="(item, index) in list"
+          :key="index"
         >
-          <van-swipe-cell
-            class="shop-status-item"
-            v-for="(item, index) in list"
-            :key="index"
-          >
+          <div @click="selectedDealer(item, index)">
             <div class="dealerText">
-              <p class="detailTitle">MKT-Bathtowel Gray:Premium WH</p>
-              <p>Price:$0</p>
+              <p class="detailTitle">{{ item.partnerName }}</p>
+              <p>{{ item.partnerCode }}</p>
             </div>
             <div class="bottomBox"></div>
-          </van-swipe-cell>
-        </van-list>
+          </div>
+        </van-swipe-cell>
+        <!-- </van-list> -->
       </div>
     </van-popup>
   </div>
 </template>
 <script>
 import { getShopListBySelf, postShopOperation } from "@/api/shop";
+import { GetPartnerListByDealer } from "@/api/order";
 export default {
+  props: {
+    allList: {
+      type: Array,
+    },
+  },
+
   data() {
     return {
       dealerShow: false,
       keyword: "",
-      page_no: 0,
-      page_size: 20,
-      loading: false,
-      error: false,
-      noRes: false,
-      finished: false,
       list: [],
+      noRes: false,
     };
   },
+  mounted() {
+    // this.getDatashopTo();
+  },
   methods: {
-    getDatashopTo() {
-      setTimeout(() => {
-        this.page_no++;
-        getShopListBySelf(
-          Object.assign(
-            {},
-            {
-              itemsperpage: this.page_size,
-              page: this.page_no,
-            }
-          )
-        )
-          .then((res) => {
-            const { success, data } = res;
-            if (success) {
-              var Items = data.Items || [];
-              this.loading = false;
-              this.list = this.list.concat(Items);
-              if (this.list.length === 0) {
-                this.noRes = true;
-              }
-              if (Items.length < this.page_size) {
-                this.finished = true;
-              }
-            }
-          })
-          .catch(() => {
-            this.page_no = 0;
-            this.loading = false;
-            this.error = true;
-          });
-      }, 100);
+    selectedDealer(val) {
+      console.log(val, "111");
+      this.$emit("ok", val);
+      this.onCancel();
     },
-    onSearch() {},
+    onSearchChange(value) {
+      console.log(value, this.list, this.allList);
+      this.list = [];
+      this.list = this.allList;
+      if (this.list.length > 0) {
+        const _list = [];
+        this.list.map((item) => {
+          if (
+            typeof value === "string" &&
+            item.partnerName &&
+            item.partnerCode
+          ) {
+            const _key = String(value).toLowerCase();
+            if (
+              item.partnerName.toLowerCase().includes(_key) ||
+              item.partnerCode.toLowerCase().includes(_key)
+            ) {
+              _list.push(item);
+            }
+          }
+        });
+        this.list = _list;
+      }
+    },
     onShow() {
       this.dealerShow = true;
+      this.list = this.allList;
     },
     onCancel() {
       this.dealerShow = false;
+      this.keyword = "";
     },
   },
 };

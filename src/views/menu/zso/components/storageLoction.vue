@@ -15,7 +15,7 @@
       />
       <!-- Search bar -->
       <div class="search-top">
-        <van-search
+        <!-- <van-search
           v-model="keyword"
           show-action
           autofocus="false"
@@ -24,12 +24,23 @@
           shape="round"
           @search="onSearch"
           @cancel="onCancel"
+        /> -->
+        <van-field
+          v-model="keyword"
+          autofocus="false"
+          placeholder="Please input keywords"
+          background="#f2f2f2"
+          shape="round"
+          action
+          clearable
+          @input="onSearchChange"
         />
       </div>
 
       <div class="detailTitleBox">
+        <div class="bottomBox"></div>
         <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
-        <van-list
+        <!-- <van-list
           v-else
           v-model="loading"
           :finished="finished"
@@ -37,19 +48,21 @@
           @load="getDataStorage"
           :error.sync="error"
           :error-text="$t('shopCommon.RequestErrorText')"
+        > -->
+        <van-swipe-cell
+          class="shop-status-item"
+          v-for="(item, index) in list"
+          :key="index"
         >
-          <van-swipe-cell
-            class="shop-status-item"
-            v-for="(item, index) in list"
-            :key="index"
-          >
+          <div @click="selectedDealer(item, index)">
             <div class="dealerText">
-              <p class="detailTitle">MKT-Bathtowel Gray:Premium WH</p>
-              <p>Price:$0</p>
+              <p class="detailTitle">{{ item.locationName }}</p>
+              <p>{{ item.locationCode }}</p>
             </div>
             <div class="bottomBox"></div>
-          </van-swipe-cell>
-        </van-list>
+          </div>
+        </van-swipe-cell>
+        <!-- </van-list> -->
       </div>
     </van-popup>
   </div>
@@ -58,11 +71,15 @@
 import { getShopListBySelf, postShopOperation } from "@/api/shop";
 
 export default {
+  props: {
+    allList: {
+      type: Array,
+    },
+  },
   data() {
     return {
       dealerShow: false,
       keyword: "",
-
       page_no: 0,
       page_size: 20,
       loading: false,
@@ -73,45 +90,41 @@ export default {
     };
   },
   methods: {
-    getDataStorage() {
-      setTimeout(() => {
-        this.page_no++;
-        getShopListBySelf(
-          Object.assign(
-            {},
-            {
-              itemsperpage: this.page_size,
-              page: this.page_no,
-            }
-          )
-        )
-          .then((res) => {
-            const { success, data } = res;
-            if (success) {
-              var Items = data.Items || [];
-              this.loading = false;
-              this.list = this.list.concat(Items);
-              if (this.list.length === 0) {
-                this.noRes = true;
-              }
-              if (Items.length < this.page_size) {
-                this.finished = true;
-              }
-            }
-          })
-          .catch(() => {
-            this.page_no = 0;
-            this.loading = false;
-            this.error = true;
-          });
-      }, 100);
+    selectedDealer(val) {
+      console.log(val, "111");
+      this.$emit("ok", val);
+      this.onCancel();
     },
-    onSearch() {},
     onShow() {
       this.dealerShow = true;
+      this.list = this.allList;
+    },
+    onSearchChange(value) {
+      console.log("value2223", value);
+      this.list = this.allList;
+      if (this.list.length > 0) {
+        const _list = [];
+        this.list.map((item) => {
+          if (
+            typeof value === "string" &&
+            item.locationName &&
+            item.locationCode
+          ) {
+            const _key = String(value).toLowerCase();
+            if (
+              item.locationName.toLowerCase().includes(_key) ||
+              item.locationCode.toLowerCase().includes(_key)
+            ) {
+              _list.push(item);
+            }
+          }
+        });
+        this.list = [..._list];
+      }
     },
     onCancel() {
       this.dealerShow = false;
+      this.keyword = "";
     },
   },
 };

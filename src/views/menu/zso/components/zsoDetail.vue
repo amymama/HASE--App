@@ -42,7 +42,7 @@
               <span calss="textBox itemNet">TD0046</span>
             </div>
             <div class="lietItemBox">
-              <span calss="textBox itemBox">Order Type{{ index }}</span>
+              <span calss="textBox itemBox">Order Type</span>
               <span calss="textBox itemNet">ZSO</span>
             </div>
             <div class="lietItemBox">

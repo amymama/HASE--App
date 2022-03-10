@@ -7,6 +7,7 @@
       <van-cell
         :title="$t('Dealer Name')"
         is-link
+        :value="selectedDealer.dealerName"
         @click="$refs.dealerSearch.onShow()"
       >
         <template #icon>
@@ -15,6 +16,7 @@
       </van-cell>
       <van-cell
         :title="$t('Ship To')"
+        :value="selectedShipTo.partnerName"
         is-link
         @click="$refs.shipToSearch.onShow()"
       >
@@ -40,7 +42,7 @@
         v-model="loading"
         :finished="finished"
         :finished-text="$t('shopCommon.NoMoreData')"
-        @load="getDataDealer"
+        @load="getDataListCart"
         :error.sync="error"
         :error-text="$t('shopCommon.RequestErrorText')"
       >
@@ -84,21 +86,8 @@
                   v-model.number="num"
                 />
               </div>
-              <!-- <div class="lietItemBox">
-                <span calss="textBox itemBox">Stock:{{ index }}</span>
-                <span calss="textBox itemNet" style="color: #0000ff">$ 0</span>
-              </div> -->
             </div>
           </div>
-          <!-- <div class="addCartButton">
-            <van-button
-              size="mini"
-              style="padding: 0rem 0.3rem"
-              color="#407FDC"
-            >
-              Add to Cart
-            </van-button>
-          </div> -->
         </van-swipe-cell>
       </van-list>
     </div>
@@ -123,21 +112,29 @@
         >Confirm</van-button
       >
     </div>
-    <dealer-Search ref="dealerSearch" @ok="handleDealerOk" />
-    <ship-to ref="shipToSearch" @ok="handleshipToOk" />
-    <storage-loction ref="storageLoctionSearch" @ok="handlestorageLoctionOk" />
+    <dealer-Search
+      ref="dealerSearch"
+      @ok="handleDealerOk"
+      :allList="allDealerList"
+    />
+    <ship-to ref="shipToSearch" @ok="handleshipToOk" :allList="allShipToList" />
+    <!-- <storage-loction ref="storageLoctionSearch" @ok="handlestorageLoctionOk" /> -->
   </div>
 </template>
 <script>
 import DealerSearch from "./dealer.vue";
+import {
+  GetDealerList,
+  GetPartnerListByDealer,
+  GetCartCount,
+} from "@/api/order";
 import ShipTo from "./shipTo.vue";
-import StorageLoction from "./storageLoction.vue";
-import { getShopListBySelf } from "@/api/shop";
+// import StorageLoction from "./storageLoction.vue";
 export default {
   components: {
     DealerSearch,
     ShipTo,
-    StorageLoction,
+    // StorageLoction,
   },
   data() {
     return {
@@ -152,25 +149,89 @@ export default {
       finished: false,
       list: [],
       num: 1,
-      isView:false,
+      isView: false,
+      selectedDealer: {},
+      selectedShipTo: {},
+      allDealerList: [],
+      allShipToList: [],
     };
   },
+  created() {
+    this.getDataSelect();
+  },
   methods: {
-    onCancel() {},
     confirmClick() {},
-    handleshipToOk() {},
-    handlestorageLoctionOk(){},
-    handleDealerOk(){},
-    getDataDealer() {
+    handleshipToOk(val) {
+      this.selectedShipTo = val;
+      this.initData();
+    },
+    initData() {
+      this.list = [];
+      this.page_no = 0;
+      this.loading = true;
+      this.finished = false;
+      this.noRes = false;
+      this.error = false;
+      this.getDataListCart();
+    },
+    // 确认dealer
+    handleDealerOk(val) {
+      this.selectedDealer = val;
+      this.getShipTo();
+      this.selectedShipTo = {};
+      this.initData();
+    },
+    //dealer Name
+    getDataSelect() {
+      GetDealerList({ userId: this.$store.getters.userInfo.id })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data || [];
+            this.allDealerList = this.allDealerList.concat(Items);
+            if (this.allDealerList.length > 0) {
+              this.selectedDealer = this.allDealerList[0];
+              this.getShipTo();
+            }
+          }
+        })
+        .catch(() => {});
+    },
+    getShipTo() {
+      GetPartnerListByDealer({
+        dealer_code: this.selectedDealer.dealerCode,
+        type: "SH",
+      })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data || [];
+            this.allShipToList = this.allShipToList.concat(Items);
+            console.log("allShipToList", this.allShipToList);
+            if (this.allShipToList.length > 0) {
+              this.selectedShipTo = this.allShipToList[0];
+              console.log("selectedShipTo", this.selectedShipTo);
+            }
+          }
+        })
+        .catch(() => {});
+    },
+    getDataListCart() {
       setTimeout(() => {
         this.page_no++;
-        getShopListBySelf(
+        GetCartCount(
           Object.assign(
-            {},
             {
-              itemsperpage: this.page_size,
-              page: this.page_no,
-            }
+              new_user_id: this.$store.getters.userInfo.id,
+              new_dealer_id: this.selectedDealer.dealerId,
+              new_ship_to_id: this.selectedShipTo.partnerId,
+              // new_ship_to_id:'a7edd580-3160-4539-baea-ecc03b36b1ce',
+              new_order_type: "ZSO",
+            },
+            // {
+            //   itemsperpage: this.page_size,
+            //   page: this.page_no,
+            // }
           )
         )
           .then((res) => {
@@ -192,7 +253,7 @@ export default {
             this.loading = false;
             this.error = true;
           });
-      }, 100);
+      }, 1000);
     },
   },
 };
@@ -238,8 +299,8 @@ export default {
           flex: 1;
         }
       }
-      .numButton{
-          float:right;
+      .numButton {
+        float: right;
       }
       .textBox {
         margin: 0.2rem 0;
