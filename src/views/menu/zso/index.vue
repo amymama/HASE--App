@@ -1,82 +1,85 @@
 <template>
   <div class="zsoListBox">
-    <!-- 搜索 -->
-    <div class="filter-search searchColor">
-      <span
-        style="position: relative; left: 0.2rem; top: 0.5rem"
-        @click="goBack"
-      >
-        <img
-          style="float: left; width: 0.25rem"
-          src="../../../assets/images/icon/previous_white.png"
-        />
-      </span>
-      <van-search
-        clearable
-        style="padding-left: 0.6rem; padding-right: 1.3rem"
-        v-model="filterParams.searchValue"
-        @click="$refs.searchHistory.handleShow()"
-        background="none"
-        shape="round"
-        :placeholder="$t('Enter Product Name/Code/Model')"
-      >
-      </van-search>
-      <span
-        style="position: relative; right: 0.2rem; bottom: 1rem"
-        @click="clickright"
-      >
-        <img
-          style="float: right; width: 0.6rem"
-          src="../../../assets/images/icon/cart.png"
-        />
-      </span>
-    </div>
-    <!-- 查询 -->
-    <div class="searchColor">
-      <van-cell-group>
-        <van-cell
-          :title="$t('Dealer Name')"
-          is-link
-          :value="selectedDealer.dealerName"
-          @click="$refs.dealerSearch.onShow()"
+    <div class="top"></div>
+    <div class="topBox">
+      <!-- 搜索 -->
+      <div class="filter-search searchColor">
+        <span
+          style="position: relative; left: 0.2rem; top: 0.5rem"
+          @click="goBack"
         >
-          <template #icon>
-            <i class="iconfont icon-dealer"></i>
-          </template>
-        </van-cell>
-        <van-cell
-          :value="selectedShipTo.partnerName"
-          :title="$t('Ship To')"
-          is-link
-          @click="$refs.shipToSearch.onShow()"
+          <img
+            style="float: left; width: 0.25rem"
+            src="../../../assets/images/icon/previous_white.png"
+          />
+        </span>
+        <van-search
+          clearable
+          style="padding-left: 0.6rem; padding-right: 1.3rem"
+          v-model="filterParams.searchValue"
+          @click="$refs.searchHistory.handleShow()"
+          background="none"
+          shape="round"
+          :placeholder="$t('Enter Product Name/Code/Model')"
         >
-          <template #icon>
-            <i class="iconfont icon-type"></i>
-          </template>
-        </van-cell>
-        <van-cell
-          :value="selectedLocation.locationName"
-          :title="$t('Storage Location')"
-          is-link
-          @click="$refs.storageLoctionSearch.onShow()"
+        </van-search>
+        <span
+          style="position: relative; right: 0.2rem; bottom: 1rem"
+          @click="clickright"
         >
-          <template #icon>
-            <i class="iconfont icon-type"></i>
-          </template>
-        </van-cell>
-      </van-cell-group>
-    </div>
-    <!-- 图片分类 -->
-    <div class="imgBox">
-      <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
-        <div class="imgitem" @click="imgClick(itemImg)">
-          <img :src="itemImg.iconPath" />
+          <img
+            style="float: right; width: 0.6rem"
+            src="../../../assets/images/icon/cart.png"
+          />
+        </span>
+      </div>
+      <!-- 查询 -->
+      <div class="searchColor">
+        <van-cell-group>
+          <van-cell
+            :title="$t('Dealer Name')"
+            is-link
+            :value="selectedDealer.dealerName"
+            @click="$refs.dealerSearch.onShow()"
+          >
+            <template #icon>
+              <i class="iconfont icon-dealer"></i>
+            </template>
+          </van-cell>
+          <van-cell
+            :value="selectedShipTo.partnerName"
+            :title="$t('Ship To')"
+            is-link
+            @click="$refs.shipToSearch.onShow()"
+          >
+            <template #icon>
+              <i class="iconfont icon-type"></i>
+            </template>
+          </van-cell>
+          <van-cell
+            :value="selectedLocation.locationName"
+            :title="$t('Storage Location')"
+            is-link
+            @click="$refs.storageLoctionSearch.onShow()"
+          >
+            <template #icon>
+              <i class="iconfont icon-type"></i>
+            </template>
+          </van-cell>
+        </van-cell-group>
+      </div>
+      <!-- 图片分类 -->
+      <div class="imgBox">
+        <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
+          <div class="imgitem" @click="imgClick(itemImg)">
+            <img :src="itemImg.iconPath" />
+          </div>
         </div>
       </div>
     </div>
     <div style="clear: both"></div>
     <!-- list -->
-    <div class="shop-status-list">
+    <div class="shop-status-list" >
       <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
       <van-list
         v-else
@@ -99,7 +102,7 @@
             <div class="shop-code"></div>
           </div>
 
-          <div class="listBox" @click="$refs.zsodetailRef.onShow()">
+          <div class="listBox" @click="detailShowModel(item)">
             <div class="listImage">
               <van-image
                 width="2.2rem"
@@ -136,7 +139,7 @@
         </van-swipe-cell>
       </van-list>
     </div>
-    <!-- add弹框 -->
+    <!-- addCart弹框 -->
     <van-action-sheet v-model="addToCartShow" :title="cartParams.productModel">
       <div class="addToCartBox">
         <div class="lietItemBox" style="color: #a2a8b2">
@@ -179,7 +182,16 @@
       :allList="allStorageList"
       @ok="handlestorageLoctionOk"
     />
-    <ZsoDetail ref="zsodetailRef" />
+    <ZsoDetail
+      ref="zsodetailRef"
+      v-if="detailShow"
+      :detailShow="detailShow"
+      @detailShowModelCencel="detailShowModelCencel"
+      :productDetail="productDetail"
+      :selectedDealer="selectedDealer"
+      :selectedShipTo="selectedShipTo"
+      :selectedLocation="selectedLocation"
+    />
   </div>
 </template>
 <script>
@@ -209,11 +221,13 @@ export default {
   },
   data() {
     return {
+      productDetail: {},
+      detailShow: false,
       allDealerList: [],
       allShipToList: [],
       allStorageList: [],
       categoryList: [],
-      num: 0,
+      num: 1,
       isView: false,
       addToCartShow: false,
       actions: [],
@@ -238,7 +252,7 @@ export default {
       selectedProduct: {},
       selectedSubCatrgory: "",
       cartParams: {}, // 加入购物车的参数，传递至详情页用
-      productNumber: 0, // 加购商品数
+      // productNumber: 0, // 加购商品数
       productNumberDefault: 1, // 默认加购商品数
       isSubCategory: false,
       partnerList: [],
@@ -273,10 +287,21 @@ export default {
     this.getData();
   },
   methods: {
-    addCartClick(val) {
-      this.addToCartShow = true;
-      this.cartParams = val;
-      console.log("val::", val);
+    //查看shangpin详情
+    detailShowModel(val) {
+      this.detailShow = true;
+      this.productDetail = {
+        productId: val.productId,
+        orderType: "ZSO",
+        dealerCode: this.selectedDealer.dealerCode,
+        shipToCode: this.selectedShipTo.partnerCode,
+        storageLocationName: this.selectedLocation.locationName,
+      };
+      console.log(val, "2223", this.cartParams);
+      // this.$refs.zsodetailRef.onShow();
+    },
+    detailShowModelCencel() {
+      this.detailShow = false;
     },
     //确认加入购物车
     addCartOk() {
@@ -314,10 +339,13 @@ export default {
           }
         })
         .catch((e) => {
-          // that.$toast.clear();
-          console.log(e, "22");
           that.$toast.fail("Network error");
         });
+    },
+    addCartClick(val) {
+      this.addToCartShow = true;
+      this.cartParams = val;
+      console.log("val::", val);
     },
     onaddCartCancel() {
       this.addToCartShow = false;
@@ -466,6 +494,7 @@ export default {
               this.selectedShipTo = this.allShipToList[0];
               console.log("selectedShipTo", this.selectedShipTo);
             }
+              this.onLoad()
           }
         })
         .catch(() => {});
@@ -475,10 +504,23 @@ export default {
 </script>
 <style lang="scss" scoped>
 .zsoListBox {
+    position: relative;
+
+  .top{
+    height: 7rem;
+    overflow: hidden;
+  }
+  .topBox {
+    width: 100%;
+    height: 5rem;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+  }
   .searchColor {
     background-color: #2058ab;
   }
-  .lietItemBox {
+  .lietItemBox {    
     margin: 0.2rem 0;
     display: flex;
     justify-content: space-between;
@@ -509,8 +551,11 @@ export default {
   }
 
   .shop-status-list {
+    height: 60%;
+    clear: both;
     padding: 20px;
     background: #f5f5f5;
+    overflow: hidden;
   }
   .shop-status-item {
     margin-bottom: 32px;
@@ -633,6 +678,7 @@ export default {
     }
   }
   .imgBox {
+    background-color: #f4f4f4;
     height: 1.3rem;
     display: flex;
     padding: 0.2rem 0.3rem;

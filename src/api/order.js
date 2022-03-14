@@ -10,7 +10,12 @@ const api = {
     SaveUserSearch:"api/OrderProduct/SaveUserSearch",
     GetUserSearchList:'api/OrderProduct/GetUserSearchList',
     GetCartCount:'api/OrderCart/GetCartCount',
-    OrderCartAddCart:'api/OrderCart/AddCart'
+    OrderCartAddCart:'api/OrderCart/AddCart',
+    GetProductDetail:'api/OrderProduct/GetProductDetail',
+    GetCartListByDealer:'api/OrderCart/GetCartListByDealer',
+    UpdateCartProductCounts:'api/OrderCart/UpdateCartProductCounts',
+    DeleteCart:"api/OrderCart/DeleteCart",
+    ReSubmitOrder:' api/Order/ReSubmitOrder'
 }
 export function orderGetDealerList(params) {
     return http.post(api.orderGetDealerList,  params )
@@ -42,4 +47,23 @@ export function GetCartCount(data) {
 }
 export function OrderCartAddCart(data) {
     return http.post(api.OrderCartAddCart,data)
+}
+
+export function GetProductDetail(data) {
+    return http.post(api.GetProductDetail,data)
+}
+export function GetCartListByDealer(data) {
+    return http.post(api.GetCartListByDealer,data)
+}
+
+export function UpdateCartProductCounts(data) {
+    return http.post(api.UpdateCartProductCounts,data)
+}
+
+export function DeleteCart(data) {
+    return http.post(api.DeleteCart,data)
+}
+
+export function ReSubmitOrder(data) {
+    return http.post(api.ReSubmitOrder,data)
 }
