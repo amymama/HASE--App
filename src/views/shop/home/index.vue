@@ -190,7 +190,7 @@
                       <span>{{ item.new_visit_submitor }}</span>
                       {{ formatTableDate(item.new_visit_submit_time) }}
                     </div>
-                    <div v-else>Have not any visit recorded</div>
+                    <div v-else>{{$t('shopCommon.HaveNotAnyVisitRecords')}}</div>
                   </div>
                 </div>
               </div>

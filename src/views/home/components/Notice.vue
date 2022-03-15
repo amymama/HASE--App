@@ -23,10 +23,10 @@
           :key="index"
           @click="$refs.noticeDetail.show(item)">
           <van-tag v-if="item.new_announce_type == 0" type="primary">
-            Announce
+            {{ $t('shopCommon.Announce') }}
           </van-tag>
           <van-tag v-if="item.new_announce_type == 1" type="warning">
-            Policy
+            {{ $t('shopCommon.Policy') }}
           </van-tag>
           {{ item.new_title }}
         </van-swipe-item>

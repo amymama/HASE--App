@@ -16,7 +16,13 @@ export default {
     PleaseSelect: 'فضلاً، اختر',
     PlanTips: 'Monthly Visit Plan only can submit once by one person, once you submited, can not submit monthly Visit Plan again. Ensure your plan already covered all your shops',
     LeavePageTip: 'متأكد من رغبتك بالخروج من هذه الصفحة؟',
-    SubmitTips: 'Once submitted, sysytem will generate Asset Code auto, and you can not delete it.'
+    SubmitTips: 'Once submitted, sysytem will generate Asset Code auto, and you can not delete it.',
+    HaveNotAnyVisitRecords: 'لا توجد سجلات الوصول',
+    NewShopProcessesNeedYourApproval: 'ورشة عمل جديدة تتطلب موافقتك',
+    CloseShopProcessesNeedYourApproval: 'إغلاق المصنع يتطلب موافقتك',
+    VisitPlansNeedYourApproval: 'خطة الزيارة يتطلب موافقتك',
+    Announce: 'أعلن',
+    Policy: 'السياسات',
   },
   select: {
     InputTip: 'فضلاً، أدخل',
@@ -43,7 +49,7 @@ export default {
     ApproveShop: 'اعتماد المتجر',
     ApprovePlan: 'اعتماد الخطة',
     PosmInOut: 'مواد نقاط البيع في الداخل / في الخارج',
-    PosmForecast: 'POSM Forecast',
+    PosmForecast: 'توقعات الطقس المواد الترويجية',
     Product: 'منتج',
   },
   shopAnnouncement: {

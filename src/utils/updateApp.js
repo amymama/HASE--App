@@ -15,7 +15,7 @@ function appUpdate (ismanual) {
           var nv = data.Items.new_version  // online version
           if (ov == nv) {
             if (ismanual) {
-              plus.nativeUI.toast('Already the latest version!')
+              plus.nativeUI.toast(this.$t('uCenter.AlreadyTheLatestVersion'))
             }
           } else {
             plus.nativeUI.alert(`Found new version:v${nv}`, (e) => {

@@ -22,7 +22,7 @@
               />
             </van-col>
             <van-col span="18">
-              <van-cell>
+              <van-cell class="tt">
                 <template #title>
                   <span class="count">
                     {{ item.count }}
@@ -59,19 +59,19 @@ export default {
           this.list = [
             {
               routeName: "ApproveShop",
-              name: 'new shop processes need your approval',
+              name: this.$t('shopCommon.NewShopProcessesNeedYourApproval'),
               query: { new_process_type: '1' },
               count: data.NewShopQty
             },
             {
               routeName: "ApproveShop",
-              name: 'close shop processes need your approval',
+              name: this.$t('shopCommon.CloseShopProcessesNeedYourApproval'),
               query: { new_process_type: '2' },
               count: data.CloseShopQty
             },
             {
               routeName: "ApprovePlan",
-              name: 'visit plans need your approval',
+              name: this.$t('shopCommon.VisitPlansNeedYourApproval'),
               query: {},
               count: data.VisitPlanQty
             }
@@ -103,9 +103,18 @@ export default {
       color: #FFFFFF;
     }
   }
-
+  .van-cell{
+    height: 100%;
+  }
   .van-cell__title {
     font-weight: bold;
+  }
+  .tt{
+    .van-cell__title {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
   }
 }
 </style>

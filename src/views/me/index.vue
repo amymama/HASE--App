@@ -83,7 +83,7 @@
       </div>
       <div class="me-menue-item">
         <van-cell-group>
-          <van-cell title="Refresh Data" icon="replay" @click="refreshData">
+          <van-cell :title="$t('uCenter.RefreshData')" icon="replay" @click="refreshData">
           </van-cell>
         </van-cell-group>
       </div>
@@ -160,7 +160,7 @@ export default {
     // refresh data
     refreshData () {
       this.$store.dispatch('user/GetInfo').then((res) => {
-        this.$toast.success('Refresh Success')
+        this.$toast.success(this.$t('uCenter.RefreshSuccess'))
       })
     },
     // checkVesion
