@@ -52,15 +52,15 @@
       </van-tab>
       <van-tab title="Pending"> <!-- list2-->内容 1</van-tab>
     </van-tabs>
-    <orderConfirm ref="orderConfirm" />
+    <orderDetail ref="orderConfirm" />
   </div>
 </template>
 <script>
 import { getShopListBySelf, postShopOperation } from "@/api/shop";
-import orderConfirm from "./components/orderConfirm.vue";
+import orderDetail from "./components/orderDetail.vue";
 export default {
   components: {
-    orderConfirm,
+    orderDetail,
   },
   data() {
     return {

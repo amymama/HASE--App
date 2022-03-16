@@ -150,7 +150,7 @@
           <van-stepper
             :disabled="isView"
             button-size="24px"
-            min="0"
+            min="1"
             max="999"
             :integer="true"
             v-model.number="num"

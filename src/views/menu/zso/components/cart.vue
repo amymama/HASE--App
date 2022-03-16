@@ -28,7 +28,9 @@
         </van-cell>
         <div class="selecAllBox">
           <div class="radioBox">
-            <van-checkbox v-model="radio">All</van-checkbox>
+            <van-checkbox v-model="radio" @change="allRadioClick"
+              >All</van-checkbox
+            >
           </div>
           <van-cell title="" is-link @click="goBack">
             Continue to Purchase
@@ -96,12 +98,13 @@
               <van-stepper
                 :disabled="isView"
                 button-size="24px"
-                min="0"
+                min="1"
                 max="999"
                 :integer="true"
                 v-model.number="item.new_product_counts"
                 @change="numAddClick(item)"
               />
+              <!-- @minus="minusNum(item)"  -->
             </div>
           </div>
         </van-cell-group>
@@ -124,7 +127,7 @@
         <p class="text">Total Net Price :${{ totalNetPrice }}</p>
         <p class="text">Total Tax Price :${{ totalTaxPrice }}</p>
         <p class="text">
-          Tatal Price :<span style="color: #fa0e0e; font-weight: 700"
+          Total Price :<span style="color: #fa0e0e; font-weight: 700"
             >${{ totalPrice }}</span
           >
         </p>
@@ -149,11 +152,26 @@
       :selectedShipTo="selectedShipTo"
       :selectedLocation="selectedLocation"
     />
+    <orderConfirm
+      ref="zsoConfirmRef"
+      v-if="confirmShow"
+      :orderConfirmShow="confirmShow"
+      @confirmShowCencel="confirmShowCencel"
+      @getDataListCart="getDataListCart"
+      :selectedDealer="selectedDealer"
+      :selectedShipTo="selectedShipTo"
+      :selectedLocation="selectedLocation"
+      :list="productGoodsList"
+      :totalNetPrice="totalNetPrice"
+      :totalTaxPrice="totalTaxPrice"
+      :totalPrice="totalPrice"
+    />
     <!-- <storage-loction ref="storageLoctionSearch" @ok="handlestorageLoctionOk" /> -->
   </div>
 </template>
 <script>
 import DealerSearch from "./dealer.vue";
+import orderConfirm from "./orderConfirm.vue";
 import {
   GetDealerList,
   GetPartnerListByDealer,
@@ -170,6 +188,7 @@ export default {
     ZsoDetail,
     DealerSearch,
     ShipTo,
+    orderConfirm,
     // StorageLoction,
   },
   data() {
@@ -185,6 +204,7 @@ export default {
       noRes: false,
       // finished: false,
       list: [],
+      productGoodsList: [],
       num: 1,
       isView: false,
       selectedDealer: {},
@@ -192,6 +212,7 @@ export default {
       allDealerList: [],
       allShipToList: [],
       detailShow: false,
+      confirmShow: false,
       productDetail: {},
       totalNetPrice: 0,
       totalTaxPrice: 0,
@@ -203,69 +224,26 @@ export default {
     this.getDataListCart();
   },
   methods: {
+    confirmShowCencel() {
+      this.confirmShow = false;
+    },
     //确认订单
     confirmClick() {
-      const prams = {
-        orderType: "ZSO",
-        userId: this.$store.getters.userInfo.id,
-        userRealname: this.$store.getters.userInfo.realname,
-        text: "string",
-        dealerId: this.selectedDealer.dealerId,
-        dealerCode:this.selectedDealer.dealerId,
-        dealerName:this.selectedDealer.dealerId,
-        shipToId: this.selectedShipTo.partnerCode,
-        shipToCode: this.selectedShipTo.partnerCode,
-        shipToName: this.selectedShipTo.partnerCode,
-        billToId: "string",
-        billToCode: "string",
-        billToName: "string",
-        payerId: "string",
-        payerCode: "string",
-        payerName: "string",
-        logisticVendorName: "string",
-        logisticVendorCode: "string",
-        pickupByThemselve: 0,
-        productCount: 0,
-        orderAmount: 0,
-        orderTax: 0,
-        orderNetAmount: 0,
-        creditBalance: 0,
-        plant: "string",
-        stroageLocation: "string",
-        poNumber: "string",
-        VDATU: "string",
-        NAME1: "string",
-        STREET: "string",
-        STREET2: "string",
-        HOUSE_NUMBER: "string",
-        POST_CODE: "string",
-        CITY: "string",
-        STREET3: "string",
-        VSNMR_V: "string",
-        productGoodsList: [
-          {
-            cartId: "string",
-            productId: "string",
-            productNum: "string",
-            productModel: "string",
-            salesCount: 0,
-            salesPrice: 0,
-            stroageLocation: "string",
-          },
-        ],
-        Base64ImageList: ["string"],
-      };
-      ReSubmitOrder(prams)
-        .then((res) => {
-          console.log("提交订单：", res);
-        })
-        .catch((e) => {});
+      this.productGoodsList = [];
+      let arr = this.list;
+      arr.forEach((item) => {
+        if (item.radio) {
+          this.productGoodsList.push(item);
+        }
+      });
+      if (this.productGoodsList.length == 0) {
+        this.$toast.fail("没有选择商品");
+        return false;
+      }
+      this.confirmShow = true;
     },
     //选择商品
     radioBoxItemClick(val, index) {
-      console.log("aa", val.radio);
-      // let num=+this.list[index].netPrice
-      //   console.log(num)
       let arr = this.list;
       let totalNetPrice = 0;
       let totalTaxPrice = 0;
@@ -282,9 +260,23 @@ export default {
       this.totalTaxPrice = totalTaxPrice;
       this.totalPrice = totalPrice;
     },
-    //增加商品件数
+    //选择全部商品
+    allRadioClick() {
+      let arr = this.list;
+      arr.forEach((item) => {
+        if (this.radio) {
+          item.radio = true;
+        } else {
+          item.radio = false;
+        }
+      });
+      this.radioBoxItemClick();
+    },
+    // minusNum(val){
+    //   console.log(val,'qqqqqq')
+    // },
+    //增加或减少商品件数
     numAddClick(val) {
-      console.log(val, "addd");
       this.$toast.loading({ duration: 0 });
       UpdateCartProductCounts({
         new_order_cartId: val.new_order_cartId,
