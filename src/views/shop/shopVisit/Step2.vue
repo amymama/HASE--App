@@ -149,7 +149,7 @@
         <div v-if="stepActive == 1">
           <div class="visit-step2-1">
             <div class="booth-models">
-              <van-cell-group inset @click="handleShowMoveToBooth">
+              <van-cell-group inset @click="handleShowMoveToBooth" style="margin: 0">
                 <van-cell
                   title="Sample not in Booth"
                   :value="$t('shopVisit.MoveTo')"

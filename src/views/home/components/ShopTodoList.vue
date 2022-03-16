@@ -24,10 +24,12 @@
             <van-col span="18">
               <van-cell class="tt">
                 <template #title>
-                  <span class="count">
-                    {{ item.count }}
-                  </span>
-                  {{ item.name }}
+                  <div>
+                    <span class="count">
+                      {{ item.count }}
+                    </span>
+                    {{ item.name }}
+                  </div>
                 </template>
               </van-cell>
             </van-col>
@@ -93,6 +95,7 @@ export default {
     margin-bottom: 5px;
     .count{
       color: #ee4300;
+      margin-right: 5px;
     }
     .lable-title-shop {
       padding-left: 0;

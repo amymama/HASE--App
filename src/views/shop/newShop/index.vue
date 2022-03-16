@@ -67,7 +67,7 @@
             required
             clickable
             :value="form.new_shop_type"
-            label="Shop Type"
+            :label="$t('shopMaster.ShopType')"
             :placeholder="$t('shopCommon.PleaseSelect')"
             @click="showShopType = true"
             :rules="[{ required: true }]"
@@ -88,7 +88,7 @@
             readonly
             clickable
             :value="form.new_local_shop_code"
-            label="MDM Ship To Code"
+            :label="$t('shopMaster.MDMShipToCode')"
             :placeholder="$t('shopCommon.PleaseSelect')"
             @click="showPartner = true"
           />
@@ -188,7 +188,7 @@
             v-model="form.new_longitude"
             readonly
             :label="$t('shopMaster.Longitude')"
-            placeholder="Input longitude"
+            :placeholder="$t('shopCommon.PleaseInput')"
             maxlength="50"
             type="number"
           />
@@ -196,7 +196,7 @@
             v-model="form.new_latitude"
             readonly
             :label="$t('shopMaster.Latitude')"
-            placeholder="Input latitude"
+            :placeholder="$t('shopCommon.PleaseInput')"
             maxlength="50"
             type="number"
           />

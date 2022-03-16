@@ -111,6 +111,9 @@ export default {
     ShopSign: 'Shop Sign',
     ShopDoor: 'Shop Door',
     ShopInside: 'Shop Inside',
+    ShopType: 'Shop Type',
+    ShopRegion: 'Shop Region',
+    MDMShipToCode: 'MDM Ship to code'
   },
   shopApprove: {
     ToDoList: 'To Do List',

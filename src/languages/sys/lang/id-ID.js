@@ -1,22 +1,22 @@
 export default {
-  name: 'Name',
-  tel: 'Phone',
-  save: 'Menyimpan',
-  confirm: 'Konfirmasi',
-  cancel: 'Membatalkan',
-  delete: 'Menghapus',
+  name: 'الإسم',
+  tel: 'تلفون .',
+  save: 'مقتصد',
+  confirm: 'أكّد',
+  cancel: 'ألغى',
+  delete: 'حذف .',
   complete: 'Complete',
-  loading: 'Memuat...',
+  loading: 'تحميل ....',
   telEmpty: 'Please fill in the tel',
   nameEmpty: 'Please fill in the name',
   nameInvalid: 'Malformed name',
   confirmDelete: 'Anda yakin ingin menghapus?',
   telInvalid: 'Malformed phone number',
   vanCalendar: {
-    end: 'Akhir',
-    start: 'Mulailah',
-    title: 'Kalender',
-    startEnd: 'Mulai/Akhir',
+    end: 'نهاية .',
+    start: 'بداية .',
+    title: 'عنوان',
+    startEnd: 'الكشافة',
     weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     monthTitle: function monthTitle(year, month) {
       return year + "/" + month;
@@ -35,8 +35,8 @@ export default {
     addText: 'Add new contact'
   },
   vanPagination: {
-    prev: 'Sebelumnya',
-    next: 'Berikutnya'
+    prev: 'أعلى',
+    next: 'التالي'
   },
   vanPullRefresh: {
     pulling: 'Tarik untuk menyegarkan...',
