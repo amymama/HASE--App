@@ -6,251 +6,262 @@
       :style="{
         width: '100%',
         height: '100%',
+        overflow: 'hidden',
       }"
     >
       <!-- navBar -->
-      <div class="top"></div>
-      <div class="topBox">
-        <van-nav-bar
-          left-arrow
-          @click-left="onCancel"
-          :title="$t('Order Confirm')"
-        />
-      </div>
-      <van-cell-group>
-        <!-- input -->
-        <van-field
-          v-model="formData.orderType"
-          input-align="right"
-          label-width="150"
-          clearable
-          label="Order Type"
-          placeholder=""
-          readonly
-          @click-right-icon="$toast('question')"
-        />
-        <van-field
-          input-align="right"
-          label-width="150"
-          v-model="formData.dealerName"
-          clearable
-          placeholder=""
-          label="Dealer"
-          readonly
-        />
-        <van-field
-          v-model="formData.creditBalance"
-          input-align="right"
-          clearable
-          placeholder=""
-          label="Current AR Balance"
-          label-width="150"
-          readonly
-        />
-        <van-field
-          v-model="formData.billToName"
-          input-align="right"
-          clearable
-          placeholder=""
-          label="Bill To"
-          is-link
-          label-width="150"
-          readonly
-          @click="billToShow"
-        />
-        <van-field
-          input-align="right"
-          v-model="formData.payerName"
-          clearable
-          placeholder=""
-          label="Payer"
-          label-width="150"
-          is-link
-          readonly
-          @click="payerShowClick"
-        />
-        <!-- v-model="" -->
-        <van-field
-          input-align="right"
-          clearable
-          placeholder=""
-          label-width="150"
-          readonly
-          label="Select Delivery Address"
-        />
-        <van-field
-          v-model="formData.CompanyName"
-          clearable
-          input-align="right"
-          placeholder=""
-          label="Company Name"
-          label-width="150"
-        />
-        <van-field
-          v-model="formData.STREET"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Street"
-          label-width="150"
-        />
-        <van-field
-          v-model="formData.HOUSE_NUMBER"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="House Number"
-          label-width="150"
-        />
-        <van-field
-          v-model="formData.STREET2"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Street2"
-          label-width="150"
-        />
-        <!-- <div style="float:left"> -->
-        <van-field
-          v-model="formData.POST_CODE"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Postal Code"
-          label-width="150"
-        />
-        <van-field
-          v-model="formData.CITY"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="City"
-          label-width="150"
-        />
-        <!-- </div> -->
-        <van-field
-          v-model="formData.Phone"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Phone"
-          label-width="150"
-        />
-        <van-field
-          v-model="formData.DeliveryDate"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Delivery Date"
-          label-width="150"
-          is-link
-          @click="currentDateClick"
-          readonly
-        />
-        <!-- <van-field
-          v-model="username"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Dealer Pickup by themselves"
-          label-width="185"
-        /> -->
-        <van-cell title="Dealer Pickup by themselves">
-          <van-checkbox
-            v-model="isLogisticShow"
-            @change="isLogisticClick"
-          ></van-checkbox>
-        </van-cell>
-        <!-- <van-cell title="Foc.inv">
+      <div class="scollrBox">
+        <div class="topBox">
+          <van-nav-bar
+            left-arrow
+            @click-left="onCancel"
+            :title="$t('Order Confirm')"
+          />
+        </div>
+        <van-cell-group class="inputBox">
+          <!-- input -->
+          <van-field
+            v-model="formData.orderType"
+            input-align="right"
+            label-width="150"
+            clearable
+            label="Order Type"
+            placeholder=""
+            readonly
+            @click-right-icon="$toast('question')"
+          />
+          <van-field
+            input-align="right"
+            label-width="150"
+            v-model="formData.dealerName"
+            clearable
+            placeholder=""
+            label="Dealer"
+            readonly
+          />
+          <van-field
+            v-model="formData.creditBalance"
+            input-align="right"
+            clearable
+            placeholder=""
+            label="Current AR Balance"
+            label-width="150"
+            readonly
+          />
+          <van-field
+            v-model="formData.billToName"
+            input-align="right"
+            clearable
+            placeholder=""
+            label="Bill To"
+            is-link
+            label-width="150"
+            readonly
+            @click="billToShow"
+          />
+          <van-field
+            input-align="right"
+            v-model="formData.payerName"
+            clearable
+            placeholder=""
+            label="Payer"
+            label-width="150"
+            is-link
+            readonly
+            @click="payerShowClick"
+          />
+          <!-- v-model="" -->
+          <van-field
+            input-align="right"
+            clearable
+            placeholder=""
+            label-width="150"
+            readonly
+            label="Select Delivery Address"
+          />
+          <van-field
+            v-model="formData.CompanyName"
+            clearable
+            input-align="right"
+            placeholder=""
+            label="Company Name"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.STREET"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Street"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.HOUSE_NUMBER"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="House Number"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.STREET2"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Street2"
+            label-width="150"
+          />
+          <!-- <div style="float:left"> -->
+          <van-field
+            v-model="formData.POST_CODE"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Postal Code"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.CITY"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="City"
+            label-width="150"
+          />
+          <!-- </div> -->
+          <van-field
+            v-model="formData.Phone"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Phone"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.DeliveryDate"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Delivery Date"
+            label-width="150"
+            is-link
+            @click="currentDateClick"
+            readonly
+          />
+          <van-cell title="Dealer Pickup by themselves">
+            <van-checkbox
+              v-model="isLogisticShow"
+              @change="isLogisticClick"
+            ></van-checkbox>
+          </van-cell>
+          <!-- <van-cell title="Foc.inv">
           <van-checkbox v-model="isLogisticShow"></van-checkbox>
         </van-cell> -->
-        <van-field
-          v-show="isLogisticShow"
-          v-model="formData.logisticVendorName"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Logistic vendor"
-          label-width="150"
-          is-link
-          readonly
-          @click="onLogisticShow"
-        />
-        <van-field
-          v-model="formData.text"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Text"
-          label-width="150"
-        />
-        <van-field
-          v-model="formData.poNumber"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="PO Number"
-          label-width="150"
-        />
-        <van-field
-          v-model="formData.userRealname"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Sale Agent"
-          label-width="150"
-          readonly
-        />
-        <van-field
-          v-model="username"
-          clearable
-          placeholder=""
-          input-align="right"
-          label="Photos"
-          label-width="150"
-          is-link
-          readonly
-        />
-      </van-cell-group>
-      <!-- 商品 list-->
-      <div class="shop-status-list">
-        <van-swipe-cell
-          class="shop-status-item"
-          v-for="(item, index) in list"
-          :key="index"
-        >
-          <van-cell-group class="groupBox">
-            <div class="listBox">
-              <div class="listImage">
-                <van-image
-                  width="2.2rem"
-                  height="1.3rem"
-                  fit="cover"
-                  :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
-                />
+          <van-field
+            v-show="isLogisticShow"
+            v-model="formData.logisticVendorName"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Logistic vendor"
+            label-width="150"
+            is-link
+            readonly
+            @click="onLogisticShow"
+          />
+          <van-field
+            v-model="formData.text"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Text"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.poNumber"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="PO Number"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.userRealname"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Sale Agent"
+            label-width="150"
+            readonly
+          />
+          <van-field
+            v-model="username"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Photos"
+            label-width="150"
+            readonly
+          />
+          <div class="vanPhotos">
+            <upload-imgs
+              ref="uploader"
+              folder="asset"
+              prefix="POSMIO"
+              class="paddingIconU"
+              :max="5"
+              :fileList="potopImageurl"
+              @fileUploadOk="handleFileUploadOk"
+            />
+            <!-- @fileDelete="handleFileDelete" -->
+          </div>
+        </van-cell-group>
+
+        <!-- 商品 list-->
+        <div class="shop-status-list">
+          <van-swipe-cell
+            class="shop-status-item"
+            v-for="(item, index) in list"
+            :key="index"
+          >
+            <div class="shop-status__header">
+              <div class="shop-status-left approved">
+                <!-- {{ $t("shopStatus.Approved") }} -->
               </div>
-              <div class="listDetailBox">
-                <h3>{{ item.new_product_model }}</h3>
-                <p class="textBox" style="color: #bcc1c1">
-                  {{
-                    item.new_product_number +
-                    "(" +
-                    item.new_storage_location +
-                    ")"
-                  }}
-                </p>
-                <div class="lietItemBox">
-                  <span calss="textBox itemBox" style="color: #ef9f61"
-                    >Stock:{{ item.inventory }}</span
-                  >
-                  <span calss="textBox itemNet" style="color: #ef9f61"
-                    >Price:${{ item.retailprice }}</span
-                  >
-                </div>
-                <div class="lietItemBox">X{{ item.new_product_counts }}</div>
-              </div>
+              <div class="shop-code"></div>
             </div>
-            <!-- <div class="numButtonBox">
+            <van-cell-group class="groupBox">
+              <div class="listBox">
+                <div class="listImage">
+                  <van-image
+                    width="2.2rem"
+                    height="1.3rem"
+                    fit="cover"
+                    :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
+                  />
+                </div>
+                <div class="listDetailBox">
+                  <h3>{{ item.new_product_model }}</h3>
+                  <p class="textBox" style="color: #bcc1c1">
+                    {{
+                      item.new_product_number +
+                      "(" +
+                      item.new_storage_location +
+                      ")"
+                    }}
+                  </p>
+                  <div class="lietItemBox">
+                    <span calss="textBox itemBox" style="color: #ef9f61"
+                      >Stock:{{ item.inventory }}</span
+                    >
+                    <span calss="textBox itemNet" style="color: #ef9f61"
+                      >Price:${{ item.retailprice }}</span
+                    >
+                  </div>
+                  <div class="lietItemBox">X{{ item.new_product_counts }}</div>
+                </div>
+              </div>
+              <!-- <div class="numButtonBox">
                 <div class="numButton">
                   <van-stepper
                     :disabled="isView"
@@ -263,11 +274,12 @@
                   />
                 </div>
               </div> -->
-          </van-cell-group>
-          <!-- <span slot="right" class="slotGroupBox" @click="deleteClick(item)"
+            </van-cell-group>
+            <!-- <span slot="right" class="slotGroupBox" @click="deleteClick(item)"
             >Delete</span
           > -->
-        </van-swipe-cell>
+          </van-swipe-cell>
+        </div>
       </div>
       <!--footer Confirm -->
       <div class="submitBox">
@@ -285,6 +297,7 @@
         >
       </div>
     </van-popup>
+
     <!-- 弹框 -->
     <van-popup
       position="bottom"
@@ -352,11 +365,14 @@
         @confirm="onConfirmDate"
         @cancel="onCancelDate"
       />
+      <change-avatar ref="changeAvatar" />
     </van-popup>
   </div>
 </template>
 <script>
 import moment from "moment";
+import UploadImgs from "@/components/UploadImgs";
+import ChangeAvatar from "../../../me/components/CorpperAvatar.vue";
 import {
   GetDearlerCreditLimitFrom,
   GetLogisticsList,
@@ -364,6 +380,10 @@ import {
   GetPartnerListByDealer,
 } from "@/api/order";
 export default {
+  components: {
+    ChangeAvatar,
+    UploadImgs,
+  },
   props: {
     totalNetPrice: {
       type: Number,
@@ -429,6 +449,7 @@ export default {
   },
   data() {
     return {
+      potopImageurl: [],
       username: "",
       currentDateShow: false,
       minDate: new Date(),
@@ -485,7 +506,9 @@ export default {
             stroageLocation: "",
           },
         ],
-        Base64ImageList: [], //最多5张图片
+        Base64ImageList: [
+          // "hhttp://d2gmuflv362wio.cloudfront.net/HASE/UAT/asset/POSMIO_20220318103513800_55GNfi.jpg",
+        ], //最多5张图片
       },
       LogisticsList: [], //下拉选项
       LogisticsListShow: false,
@@ -495,8 +518,48 @@ export default {
     };
   },
   methods: {
+    // 格式化后服务器返回照片
+    handleFileUploadOk(file) {
+      // this.formData.Base64ImageList = [];
+      let imageurl = file.url;
+      console.log("file.url:", file.url);
+      this.potopImageurl.push({
+        new_download_url: file.url,
+        new_keyword: "retail",
+        new_description: "retail",
+        new_type: 1,
+        new_filename: file.name,
+        new_filesize: 0,
+      });
+      this.toBase64(imageurl);
+      // console.log(" this.potopImageurl:", this.potopImageurl);
+    },
+    // Delete img
+    handleFileDelete(dindex) {
+      var index = Number(this.active);
+      this.Base64ImageList[index].list.splice(dindex, 1);
+      this.potopImageurl[index].list.splice(dindex, 1);
+    },
+    toBase64(imageurl) {
+      var file = imageurl;
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        $("#base64Img").attr("style", "display:inline-block");
+        $("#base64Img").attr("src", reader.result);
+        console.log(reader.result);
+        this.formData.Base64ImageList.push(reader.result);
+        console.log(
+          " this.formData.Base64ImageList:",
+          this.formData.Base64ImageList
+        );
+      };
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    },
     //下单
     checkOutClick() {
+      console.log(this.formData, "下单");
       SubmitOrder(this.formData)
         .then((res) => {
           if (res.success) {
@@ -621,16 +684,26 @@ export default {
 </script>
 <style lang="scss" scoped>
 .confirmBox {
-  .top {
-    // height: 1.5rem;
-    overflow: hidden;
+  // position: relative;
+  .vanPhotos {
+    width: 100%;
+    margin: 0.3rem;
+    // // position: fixed;
+    // bottom: 0rem;
+    // z-index: 999;
+  }
+  .scollrBox {
+    height: 90%;
+    overflow-y: auto !important;
   }
   .topBox {
     width: 100%;
-    // height: 5rem;
-    position: sticky;
-    top: 0rem;
+    position: fixed;
+    top: 0;
     z-index: 1;
+  }
+  .inputBox {
+    padding-top: 1rem;
   }
   .bottomBox {
     height: 0.2rem;
@@ -640,15 +713,75 @@ export default {
     padding: 18px;
     background: #f5f5f5;
   }
+  .shop-status__header {
+    display: flex;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+    .shop-status-left {
+      width: 370px;
+      height: 40px;
+      line-height: 40px;
+      position: relative;
+      background: #aaa;
+      color: #fff;
+      text-align: center;
+      margin-right: 50px;
+      font-size: 24px;
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        right: -39px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 40px 0 0 40px;
+        border-color: transparent transparent transparent #aaa;
+      }
+      &.draft {
+        background: #aaa;
+        &::after {
+          border-color: transparent transparent transparent #aaa;
+        }
+      }
+      &.wait-approvel {
+        background: #ff976a;
+        &::after {
+          border-color: transparent transparent transparent #ff976a;
+        }
+      }
+      &.approved {
+        background: #07c160;
+        &::after {
+          border-color: transparent transparent transparent #07c160;
+        }
+      }
+      &.reject {
+        background: #ee0a24;
+        &::after {
+          border-color: transparent transparent transparent #ee0a24;
+        }
+      }
+    }
+    .shop-code {
+      flex: 1;
+      line-height: 40px;
+      font-size: $font24;
+      color: #666;
+    }
+  }
   .shop-status-item {
     margin-bottom: 32px;
     border-radius: 20px;
-    overflow: hidden;
-    background: #fef9f3;
+    // overflow: hidden;
+    // background: #fef9f3;
+    background: #ffffff;
     box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
   }
+
   .groupBox {
-    background-color: #fef9f3;
+    // background-color: #fef9f3;
   }
   .slotGroupBox {
     color: #f5f5f5;
@@ -690,13 +823,15 @@ export default {
   }
   .submitBox {
     width: 100%;
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    height: 2rem;
     background-color: #ffffff;
     display: flex;
     font-size: 0.2rem;
     .submitPrice {
       flex: 2;
+      // height: 100%;
       padding: 0.3rem 0.1rem;
       .text {
         margin: 0.1rem;
@@ -704,7 +839,8 @@ export default {
     }
     .submitButton {
       flex: 1;
-      padding: 1rem 0.2rem;
+      // padding: 1rem 0.2rem;
+      height: 100%;
     }
   }
 }

@@ -1,30 +1,73 @@
-<template>
-  <div class="menu">
-    <div class="menu_item menu_item01">
-      <router-link :to="{ path: '/zso' }">
-        <div class="menu_item_img menu_item_img01">
-          <span />
-        </div>
-        <div class="menu_item_info">
-          <!-- <span>{{i18n.get("E-Learning")}}</span> -->
-          <span>Zso</span>
-        </div>
-      </router-link>
-    </div>
-    <div class="menu_item menu_item02">
-      <router-link :to="{ path: '/order' }">
-        <div class="menu_item_img menu_item_img02">
-          <span />
-        </div>
-        <div class="menu_item_info">
-          <!-- <span>{{i18n.get("E-Learning")}}</span> -->
-          <span>Order</span>
-        </div>
-      </router-link>
-    </div>
 
+  <template>
+  <div class="memuGrid">
+    <div class="topBox">
+      <van-nav-bar fixed title="Menu" />
+    </div>
+    <van-grid :column-num="columnNumber" :gutter="10">
+      <van-grid-item
+        class="pmt_guid"
+        v-for="(item, index) in memuGridDataSource"
+        :key="index"
+        :icon="item.icon"
+        :text="item.text"
+        :to="item.toPath"
+      />
+      <!-- v-action:[item.permission] -->
+    </van-grid>
+      <tab-bar />
   </div>
 </template>
+<script>
+import icon_invoiceSubmit from "@/assets/images/icon/Exhibition_icon.png";
+import TabBar from "@/components/TabBar";
+export default {
+  components: {
+    TabBar,
+  },
+  data() {
+    return {
+      columnNumber: "3",
+      memuGridDataSource: [
+        {
+          icon: icon_invoiceSubmit,
+          text: "ZSO",
+          toPath: "/zso",
+          // permission: "pmtMenu:retailInvoice",
+        },
+        {
+          icon: icon_invoiceSubmit,
+          text: "Order",
+          toPath: "/order",
+          // permission: "pmtMenu:retailInvoice",
+        },
+      ],
+    };
+  },
+};
+</script>
 <style lang="scss" scoped>
-@import url("./index.less");
+// @import url("./index.less");
+.topBox {
+  width: 100%;
+  height: 1.8rem;
+  position: relative;
+  overflow: auto;
+  top: 0rem;
+  z-index: 1;
+}
+.memuGrid {
+  padding-top: 5px;
+  margin-bottom: 15%;
+}
+.pmt_guid .van-grid-item__content {
+  color: #00aeef ;
+  font-size: 24px;
+  text-align: center;
+}
+.pmt_guid .van-grid-item__content .van-grid-item__text {
+  /* color: #fff; */
+  font-size: 24px;
+  text-align: center;
+}
 </style>

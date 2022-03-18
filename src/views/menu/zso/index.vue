@@ -3,36 +3,44 @@
     <div class="top"></div>
     <div class="topBox">
       <!-- 搜索 -->
-      <div class="filter-search searchColor">
-        <span
-          style="position: relative; left: 0.2rem; top: 0.5rem"
-          @click="goBack"
-        >
-          <img
-            style="float: left; width: 0.25rem"
-            src="../../../assets/images/icon/previous_white.png"
+      <van-nav-bar left-arrow @click-left="goBack">
+        <div slot="title" style="padding-right: 22px">
+          <van-field
+            readonly
+            v-model="filterParams.searchValue"
+            clearable
+            style="height: 0.8rem; border-radius: 20px; line-height: 0.4rem"
+            :placeholder="$t('Enter Product Name/Code/Model')"
+            @click="$refs.searchHistory.handleShow()"
           />
-        </span>
-        <van-search
-          clearable
-          style="padding-left: 0.6rem; padding-right: 1.3rem"
-          v-model="filterParams.searchValue"
-          @click="$refs.searchHistory.handleShow()"
-          background="none"
-          shape="round"
-          :placeholder="$t('Enter Product Name/Code/Model')"
-        >
-        </van-search>
-        <span
-          style="position: relative; right: 0.2rem; bottom: 1rem"
-          @click="clickright"
-        >
-          <img
-            style="float: right; width: 0.6rem"
-            src="../../../assets/images/icon/cart.png"
-          />
-        </span>
-      </div>
+        </div>
+        <div slot="right">
+          <span style="color:#ffffff" v-show="filterParams.searchValue?true:false" @click="searchCancel">Cancel</span>
+          <span @click="clickright">
+            <img
+              style="float: right; width: 0.6rem"
+              src="../../../assets/images/icon/cart.png"
+            />
+            <span
+              v-show="cartCount == 0 ? false : true"
+              style="
+                float: right;
+                position: relative;
+                left: 0.7rem;
+                top: -0.1rem;
+                height: 0.4rem;
+                line-height: 0.4rem;
+                width: 0.3rem;
+                background: red;
+                border-radius: 0.1rem;
+                color: #ffffff;
+                font-size: 12px;
+              "
+              >{{ cartCount }}</span
+            >
+          </span>
+        </div>
+      </van-nav-bar>
       <!-- 查询 -->
       <div class="searchColor">
         <van-cell-group>
@@ -42,9 +50,9 @@
             :value="selectedDealer.dealerName"
             @click="$refs.dealerSearch.onShow()"
           >
-            <template #icon>
+            <!-- <template #icon>
               <i class="iconfont icon-dealer"></i>
-            </template>
+            </template> -->
           </van-cell>
           <van-cell
             :value="selectedShipTo.partnerName"
@@ -52,9 +60,9 @@
             is-link
             @click="$refs.shipToSearch.onShow()"
           >
-            <template #icon>
+            <!-- <template #icon>
               <i class="iconfont icon-type"></i>
-            </template>
+            </template> -->
           </van-cell>
           <van-cell
             :value="selectedLocation.locationName"
@@ -62,9 +70,9 @@
             is-link
             @click="$refs.storageLoctionSearch.onShow()"
           >
-            <template #icon>
+            <!-- <template #icon>
               <i class="iconfont icon-type"></i>
-            </template>
+            </template> -->
           </van-cell>
         </van-cell-group>
       </div>
@@ -79,7 +87,7 @@
     </div>
     <div style="clear: both"></div>
     <!-- list -->
-    <div class="shop-status-list" >
+    <div class="shop-status-list">
       <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
       <van-list
         v-else
@@ -201,9 +209,9 @@ import ShipTo from "./components/shipTo.vue";
 import StorageLoction from "./components/storageLoction.vue";
 import ZsoDetail from "./components/zsoDetail.vue";
 
-import { getShopListBySelf, postShopOperation } from "@/api/shop";
+// import { getShopListBySelf, postShopOperation } from "@/api/shop";
 import {
-  orderGetDealerList,
+  GetCartCount,
   zsoGetProductList,
   GetCategoryList,
   GetDealerList,
@@ -287,6 +295,10 @@ export default {
     this.getData();
   },
   methods: {
+    searchCancel(){
+      this.filterParams.searchValue=''
+      this.initData()
+    },
     //查看shangpin详情
     detailShowModel(val) {
       this.detailShow = true;
@@ -332,6 +344,7 @@ export default {
           if (res.success) {
             // this.$toast.clear();
             that.$toast.success("succes");
+            this.getCartCountNumber();
             that.onaddCartCancel();
           } else {
             // that.$toast.clear();
@@ -341,6 +354,22 @@ export default {
         .catch((e) => {
           that.$toast.fail("Network error");
         });
+    },
+    //获取商品件数
+    getCartCountNumber() {
+      GetCartCount({
+        new_user_id: this.$store.getters.userInfo.id,
+        new_dealer_id: this.selectedDealer.dealerId,
+        new_ship_to_id: this.selectedShipTo.partnerId,
+        new_order_type: "ZSO",
+      })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            this.cartCount = data;
+          }
+        })
+        .catch(() => {});
     },
     addCartClick(val) {
       this.addToCartShow = true;
@@ -420,7 +449,7 @@ export default {
     clearSearch() {
       this.filterParams.searchValue = "";
       this.filterParams.searchCode = "";
-      //   this.initData();
+      this.initData();
     },
     handleSearchOk(key) {
       this.filterParams.searchValue = key;
@@ -447,7 +476,6 @@ export default {
       GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
         (res) => {
           if (res.success) {
-            console.log(res, "ddddddddddddd");
             this.categoryList = res.data;
           }
         }
@@ -494,7 +522,8 @@ export default {
               this.selectedShipTo = this.allShipToList[0];
               console.log("selectedShipTo", this.selectedShipTo);
             }
-              this.onLoad()
+            this.onLoad();
+            this.getCartCountNumber();
           }
         })
         .catch(() => {});
@@ -504,9 +533,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .zsoListBox {
-    position: relative;
-
-  .top{
+  position: relative;
+  // .van-field__body{
+  //   margin-bottom:0.4rem;
+  // }
+  .top {
     height: 7rem;
     overflow: hidden;
   }
@@ -520,7 +551,7 @@ export default {
   .searchColor {
     background-color: #2058ab;
   }
-  .lietItemBox {    
+  .lietItemBox {
     margin: 0.2rem 0;
     display: flex;
     justify-content: space-between;

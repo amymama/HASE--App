@@ -1,10 +1,9 @@
 <template>
   <div class="carBox">
     <van-nav-bar @click-left="goBack" left-arrow fixed title="Cart" />
-    <div class="standardBox">Standard</div>
-    <!-- select -->
-    <div class="top"></div>
+    <!-- nav Bar -->
     <div class="topBox">
+      <div class="standardBox">Standard</div>
       <div>
         <van-cell
           :title="$t('Dealer Name')"
@@ -12,9 +11,9 @@
           :value="selectedDealer.dealerName"
           @click="$refs.dealerSearch.onShow()"
         >
-          <template #icon>
+          <!-- <template #icon>
             <i class="iconfont icon-dealer"></i>
-          </template>
+          </template> -->
         </van-cell>
         <van-cell
           :title="$t('Ship To')"
@@ -22,13 +21,13 @@
           is-link
           @click="$refs.shipToSearch.onShow()"
         >
-          <template #icon>
+          <!-- <template #icon>
             <i class="iconfont icon-type"></i>
-          </template>
+          </template> -->
         </van-cell>
         <div class="selecAllBox">
           <div class="radioBox">
-            <van-checkbox v-model="radio" @change="allRadioClick"
+            <van-checkbox v-model="radio" @click="allRadioClick"
               >All</van-checkbox
             >
           </div>
@@ -38,7 +37,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="bottomBox"></div> -->
     <!-- list -->
     <div class="shop-status-list" style="height: 90%; overflow: auto">
       <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
@@ -57,6 +55,12 @@
         v-for="(item, index) in list"
         :key="index"
       >
+        <div class="shop-status__header">
+          <div class="shop-status-left approved">
+            <!-- {{ $t("shopStatus.Approved") }} -->
+          </div>
+          <div class="shop-code"></div>
+        </div>
         <van-cell-group class="groupBox">
           <div class="radioBoxItem">
             <van-checkbox
@@ -132,10 +136,15 @@
           >
         </p>
       </div>
-      <van-button class="submitButton" color="#407FDC" @click="confirmClick"
+      <van-button
+        class="submitButton"
+        color="#407FDC"
+        :disabled="confirmDisabled"
+        @click="confirmClick"
         >Confirm</van-button
       >
     </div>
+    <!-- 弹框 -->
     <dealer-Search
       ref="dealerSearch"
       @ok="handleDealerOk"
@@ -154,7 +163,6 @@
     />
     <orderConfirm
       ref="zsoConfirmRef"
-      v-if="confirmShow"
       :orderConfirmShow="confirmShow"
       @confirmShowCencel="confirmShowCencel"
       @getDataListCart="getDataListCart"
@@ -175,11 +183,10 @@ import orderConfirm from "./orderConfirm.vue";
 import {
   GetDealerList,
   GetPartnerListByDealer,
-  GetCartCount,
   GetCartListByDealer,
   UpdateCartProductCounts,
   DeleteCart,
-  ReSubmitOrder,
+  // ReSubmitOrder,
 } from "@/api/order";
 import ShipTo from "./shipTo.vue";
 import ZsoDetail from "./zsoDetail.vue";
@@ -193,6 +200,7 @@ export default {
   },
   data() {
     return {
+      confirmDisabled: true,
       selectedLocation: {},
       cartShow: false,
       keyword: "",
@@ -221,7 +229,7 @@ export default {
   },
   created() {
     this.getDataSelect();
-    this.getDataListCart();
+    // this.getDataListCart();
   },
   methods: {
     confirmShowCencel() {
@@ -229,6 +237,7 @@ export default {
     },
     //确认订单
     confirmClick() {
+      let show = true;
       this.productGoodsList = [];
       let arr = this.list;
       arr.forEach((item) => {
@@ -237,10 +246,16 @@ export default {
         }
       });
       if (this.productGoodsList.length == 0) {
-        this.$toast.fail("没有选择商品");
+        this.$toast.fail("No commodity is chosen!");
         return false;
       }
-      this.confirmShow = true;
+      let srr = this.productGoodsList;
+      show = srr.every((item) => item.inventory != 0 && item.retailprice != 0);
+      if (!show) {
+        this.$toast.fail("Commodity is includes Price id 0 or Stock is 0!");
+        return false;
+      }
+      this.confirmShow = show ? true : false;
     },
     //选择商品
     radioBoxItemClick(val, index) {
@@ -248,29 +263,44 @@ export default {
       let totalNetPrice = 0;
       let totalTaxPrice = 0;
       let totalPrice = 0;
+      let arrRadio = 0;
       arr.forEach((item) => {
+        if (item.radio) {
+          totalNetPrice += item.netPrice * item.new_product_counts;
+          totalTaxPrice += item.taxPrice * item.new_product_counts;
+          totalPrice += item.retailprice * item.new_product_counts;
+          arrRadio++;
+        }
+      });
+      this.totalNetPrice = totalNetPrice;
+      this.totalTaxPrice = totalTaxPrice;
+      this.totalPrice = totalPrice;
+      this.confirmDisabled = arrRadio > 0 ? false : true; //是否有选择商品
+      this.radio = arrRadio == arr.length ? true : false; //是否全选
+    },
+    //选择全部商品
+    allRadioClick() {
+      let arr = this.list;
+      let totalNetPrice = 0;
+      let totalTaxPrice = 0;
+      let totalPrice = 0;
+      arr.forEach((item) => {
+        if (this.radio) {
+          item.radio = true;
+          this.confirmDisabled = false;
+        } else {
+          item.radio = false;
+          this.confirmDisabled = true;
+        }
         if (item.radio) {
           totalNetPrice += item.netPrice * item.new_product_counts;
           totalTaxPrice += item.taxPrice * item.new_product_counts;
           totalPrice += item.retailprice * item.new_product_counts;
         }
       });
-      console.log(totalNetPrice);
       this.totalNetPrice = totalNetPrice;
       this.totalTaxPrice = totalTaxPrice;
       this.totalPrice = totalPrice;
-    },
-    //选择全部商品
-    allRadioClick() {
-      let arr = this.list;
-      arr.forEach((item) => {
-        if (this.radio) {
-          item.radio = true;
-        } else {
-          item.radio = false;
-        }
-      });
-      this.radioBoxItemClick();
     },
     // minusNum(val){
     //   console.log(val,'qqqqqq')
@@ -333,8 +363,6 @@ export default {
         shipToCode: this.selectedShipTo.partnerCode,
         storageLocationName: this.selectedLocation.new_storage_location,
       };
-      console.log(val, "2222222222222222222223");
-      // this.$refs.zsodetailRef.onShow();
     },
     detailShowModelCencel() {
       this.detailShow = false;
@@ -349,6 +377,7 @@ export default {
     },
     //获取购物车数据
     getDataListCart() {
+      this.$toast.loading({ message: "Loading...", duration: 0 });
       let parms = {
         new_user_id: this.$store.getters.userInfo.id,
         new_dealer_id: this.selectedDealer.dealerId,
@@ -393,13 +422,6 @@ export default {
         .catch((e) => {
           this.$toast.clear();
         });
-      GetCartCount(parms)
-        .then((res) => {
-          const { success, data } = res;
-          if (success) {
-          }
-        })
-        .catch(() => {});
     },
     // 确认dealer
     handleDealerOk(val) {
@@ -425,7 +447,7 @@ export default {
         .catch(() => {});
     },
     getShipTo() {
-      this.$toast.loading({ message: "Loading...", duration: 0 });
+      // this.$toast.loading({ message: "Loading...", duration: 0 });
       GetPartnerListByDealer({
         dealer_code: this.selectedDealer.dealerCode,
         type: "SH",
@@ -450,14 +472,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .carBox {
-  .top {
-    height: 3.8rem;
-    overflow: hidden;
-  }
   .topBox {
     width: 100%;
     // height: 5rem;
     position: fixed;
+    // overflow: hidden;
     top: 1rem;
     z-index: 1;
   }
@@ -467,14 +486,76 @@ export default {
   }
   .shop-status-list {
     padding: 18px;
+    padding-top: 6.5rem;
     background: #f5f5f5;
+    overflow-y: auto;
+    clear: both;
   }
   .shop-status-item {
     margin-bottom: 32px;
     border-radius: 20px;
     overflow: hidden;
-    background: #fef9f3;
+    // background: #fef9f3;
+    background: #fff;
     box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
+  }
+  .shop-status__header {
+    display: flex;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+    .shop-status-left {
+      width: 370px;
+      height: 40px;
+      line-height: 40px;
+      position: relative;
+      background: #aaa;
+      color: #fff;
+      text-align: center;
+      margin-right: 50px;
+      font-size: 24px;
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        right: -39px;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 40px 0 0 40px;
+        border-color: transparent transparent transparent #aaa;
+      }
+      &.draft {
+        background: #aaa;
+        &::after {
+          border-color: transparent transparent transparent #aaa;
+        }
+      }
+      &.wait-approvel {
+        background: #ff976a;
+        &::after {
+          border-color: transparent transparent transparent #ff976a;
+        }
+      }
+      &.approved {
+        background: #07c160;
+        &::after {
+          border-color: transparent transparent transparent #07c160;
+        }
+      }
+      &.reject {
+        background: #ee0a24;
+        &::after {
+          border-color: transparent transparent transparent #ee0a24;
+        }
+      }
+    }
+    .shop-code {
+      flex: 1;
+      line-height: 40px;
+      font-size: $font24;
+      color: #666;
+    }
   }
   .radioBoxItem {
     z-index: 1;
@@ -484,7 +565,7 @@ export default {
     left: 0.2rem;
   }
   .groupBox {
-    background-color: #fef9f3;
+    // background-color: #fef9f3;
   }
   .slotGroupBox {
     color: #f5f5f5;
@@ -506,11 +587,11 @@ export default {
     //   width: 0.6rem;
     // }
     .listImage {
-      margin: 0.8rem 0.3rem 0.3rem;
+      margin: 0.3rem 0.3rem 0rem;
     }
     .listDetailBox {
       width: 57%;
-      margin: 0.4rem 0.1rem 0.2rem 0rem;
+      margin: 0rem 0.1rem 0.2rem 0rem;
       .lietItemBox {
         margin: 0.2rem 0;
         display: flex;
@@ -536,6 +617,7 @@ export default {
     }
   }
   .standardBox {
+    padding-top: 20px;
     height: 1rem;
     line-height: 1rem;
     background-color: #2058ab;
@@ -557,11 +639,13 @@ export default {
     width: 100%;
     position: fixed;
     bottom: 0;
+    // height: 2rem;
     background-color: #ffffff;
     display: flex;
     font-size: 0.2rem;
     .submitPrice {
       flex: 2;
+      // height: 100%;
       padding: 0.3rem 0.1rem;
       .text {
         margin: 0.1rem;
@@ -569,7 +653,8 @@ export default {
     }
     .submitButton {
       flex: 1;
-      padding: 1rem 0.2rem;
+      padding: 0.9rem 0.2rem;
+      height: 100%;
     }
   }
 }
