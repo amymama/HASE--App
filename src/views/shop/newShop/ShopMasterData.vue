@@ -204,17 +204,10 @@
               <div class="shop-group__title">{{ $t("shopMaster.ShopNetwork") }}</div>
             </div>
             <div class="shop-form-group">
-              <van-field
-                input-align="right"
-                clearable
-                required
-                readonly
-                clickable
-                :value="saleRegion"
-                :label="$t('shopMaster.ShopSaleRegion')"
-                :placeholder="$t('shopCommon.PleaseSelect')"
-                :rules="[{ required: true }]"
-              />
+              <van-cell
+                class="van-cell--required"
+                :title="$t('shopMaster.ShopSaleRegion')"
+                :value="saleRegion" />
               <van-field
                 input-align="right"
                 clearable
