@@ -79,6 +79,7 @@
                 :rules="[{ required: true }]"
               />
               <van-field
+                :required="form.new_aqua_enterin"
                 input-align="right"
                 readonly
                 clickable
@@ -86,6 +87,7 @@
                 :label="$t('shopMaster.CustomerCode')"
                 :placeholder="$t('shopCommon.PleaseSelect')"
                 @click="$refs.selectCustomer.show()"
+                :rules="[{ required: form.new_aqua_enterin }]"
               >
                 <template #right-icon>{{ (new_mdm_accountgroup) }}</template>
               </van-field>
