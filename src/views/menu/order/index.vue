@@ -41,7 +41,7 @@
                 <div class="box">
                   <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
                   <p class="text">ZSO</p>
-                  <p class="text">Total Price:12630</p>
+                  <p class="text">Total Price:{{item.new_order_amount}}</p>
                 </div>
               </div>
             </van-swipe-cell>
@@ -75,13 +75,13 @@
                 >
                   <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
                   <p class="text">Zso</p>
-                  <p class="text">Total Price:12630</p>
+                  <p class="text">Total Price:{{item.new_order_amount}}</p>
                 </div>
                 <div class="buttonBox">
                   <van-button
                     type="info"
                     size="mini"
-                    @click="resubmitClick(item.new_order_amount)"
+                    @click="resubmitClick(item.new_order_summaryId)"
                     >Resubmit</van-button
                   >
                 </div>
@@ -144,8 +144,8 @@ export default {
           Object.assign(
             {
               userId: this.$store.getters.userInfo.id,
-              // orderState: this.orderState,
-              orderState: 2,
+              orderState: this.orderState,
+              // orderState: 2,
               searchValue: this.keyword,
               // orderby: "string",
             },
