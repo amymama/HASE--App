@@ -15,12 +15,17 @@ const api = {
     GetCartListByDealer: 'api/OrderCart/GetCartListByDealer',
     UpdateCartProductCounts: 'api/OrderCart/UpdateCartProductCounts',
     DeleteCart: "api/OrderCart/DeleteCart",
-    ReSubmitOrder: ' api/Order/ReSubmitOrder',
 
     GetDearlerCreditLimitFromSAP: 'api/OrderProduct/GetDearlerCreditLimitFromSAP',
     // GetPartnerListByDealer: 'api/OrderCart/GetPartnerListByDealer',
     GetLogisticsList: 'api/OrderProduct/GetLogisticsList',
-    SubmitOrder: 'api/Order/SubmitOrder'
+    SubmitOrder: 'api/Order/SubmitOrder',
+    
+    GetOrderList:'api/Order/GetOrderList',
+    GetOrderDetail:'api/Order/GetOrderDetail',
+    ReSubmitOrder: 'api/Order/ReSubmitOrder',
+
+
 }
 export function orderGetDealerList(params) {
     return http.post(api.orderGetDealerList, params)
@@ -87,4 +92,12 @@ export function GetLogisticsList(data) {
 
 export function SubmitOrder(data) {
     return http.post(api.SubmitOrder, data)
+}
+
+export function GetOrderList(params) {
+    return http.post(api.GetOrderList, params)
+}
+
+export function GetOrderDetail(params) {
+    return http.post(api.GetOrderDetail, params)
 }

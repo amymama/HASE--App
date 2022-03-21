@@ -192,6 +192,7 @@ export default {
             this.$emit("fileUploadOk", {
               url: url,
               name: file.filename,
+              base64:content
             });
           } else {
             this.$toast.fail("Upload fail");

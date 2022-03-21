@@ -84,6 +84,7 @@ export default {
     // Show history
     handleShow() {
       this.show = true;
+      this.keyword=''
       //获取历史搜索记录
       GetUserSearchList({ userId: this.$store.getters.userInfo.id })
         .then((res) => {

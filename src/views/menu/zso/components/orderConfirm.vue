@@ -204,14 +204,16 @@
             readonly
           />
           <div class="vanPhotos">
+            
             <upload-imgs
               ref="uploader"
               folder="asset"
               prefix="POSMIO"
               class="paddingIconU"
-              :max="5"
+              :max="4"
               :fileList="potopImageurl"
               @fileUploadOk="handleFileUploadOk"
+              @fileDelete="handleFileDelete"
             />
             <!-- @fileDelete="handleFileDelete" -->
           </div>
@@ -531,35 +533,19 @@ export default {
         new_filename: file.name,
         new_filesize: 0,
       });
-      this.toBase64(imageurl);
+      this.formData.Base64ImageList.push(file.base64);
+      console.log('file.base64',file.base64)
       // console.log(" this.potopImageurl:", this.potopImageurl);
     },
     // Delete img
     handleFileDelete(dindex) {
-      var index = Number(this.active);
-      this.Base64ImageList[index].list.splice(dindex, 1);
-      this.potopImageurl[index].list.splice(dindex, 1);
+      this.formData.Base64ImageList.splice(dindex, 1);
+      this.potopImageurl.splice(dindex, 1);
     },
-    toBase64(imageurl) {
-      var file = imageurl;
-      var reader = new FileReader();
-      reader.onloadend = function () {
-        $("#base64Img").attr("style", "display:inline-block");
-        $("#base64Img").attr("src", reader.result);
-        console.log(reader.result);
-        this.formData.Base64ImageList.push(reader.result);
-        console.log(
-          " this.formData.Base64ImageList:",
-          this.formData.Base64ImageList
-        );
-      };
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    },
+
     //下单
     checkOutClick() {
-      console.log(this.formData, "下单");
+      console.log(JSON.stringify(this.formData), "下单");
       SubmitOrder(this.formData)
         .then((res) => {
           if (res.success) {
@@ -693,17 +679,18 @@ export default {
     // z-index: 999;
   }
   .scollrBox {
-    height: 90%;
+    height: 80%;
+    width: 100%;
     overflow-y: auto !important;
+    overflow-x: hidden;
+    padding-top: 1.3rem;
+    clear: both;
   }
   .topBox {
     width: 100%;
     position: fixed;
     top: 0;
     z-index: 1;
-  }
-  .inputBox {
-    padding-top: 1rem;
   }
   .bottomBox {
     height: 0.2rem;
@@ -716,11 +703,13 @@ export default {
   .shop-status__header {
     display: flex;
     overflow: hidden;
+    border-radius: 20px 0 0 0;
     border-bottom: 1px solid #eee;
     .shop-status-left {
       width: 370px;
       height: 40px;
       line-height: 40px;
+      // border-radius: 20px;
       position: relative;
       background: #aaa;
       color: #fff;
@@ -780,9 +769,9 @@ export default {
     box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
   }
 
-  .groupBox {
-    // background-color: #fef9f3;
-  }
+  // .groupBox {
+  //   // background-color: #fef9f3;
+  // }
   .slotGroupBox {
     color: #f5f5f5;
     font-weight: 700;
@@ -821,11 +810,13 @@ export default {
       }
     }
   }
+
   .submitBox {
     width: 100%;
     position: fixed;
     bottom: 0;
-    height: 2rem;
+    // height: 2rem;
+    z-index: 1;
     background-color: #ffffff;
     display: flex;
     font-size: 0.2rem;
@@ -835,11 +826,12 @@ export default {
       padding: 0.3rem 0.1rem;
       .text {
         margin: 0.1rem;
+        font-size: 28px;
       }
     }
     .submitButton {
       flex: 1;
-      // padding: 1rem 0.2rem;
+      padding: 0.9rem 0.2rem;
       height: 100%;
     }
   }

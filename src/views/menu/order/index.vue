@@ -15,7 +15,7 @@
       />
     </div>
     <!-- tabs -->
-    <van-tabs v-model="active" swipeable>
+    <van-tabs v-model="active" swipeable @change="tabsChange">
       <van-tab title="Success">
         <!-- list 1 -->
         <div class="shop-status-list">
@@ -34,14 +34,54 @@
               v-for="(item, index) in list"
               :key="index"
             >
-              <div class="detailBox">
+              <div
+                class="detailBox"
+                @click="$refs.orderDetailShow.onShow(item.new_order_summaryId)"
+              >
                 <div class="box">
-                  <h4 class="text">Dealer Name:jasfhsafasu</h4>
+                  <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
+                  <p class="text">ZSO</p>
+                  <p class="text">Total Price:12630</p>
+                </div>
+              </div>
+            </van-swipe-cell>
+          </van-list>
+        </div>
+      </van-tab>
+      <van-tab title="Pending">
+        <!-- list2-->
+        <div class="shop-status-list">
+          <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
+          <van-list
+            v-else
+            v-model="loading"
+            :finished="finished"
+            :finished-text="$t('shopCommon.NoMoreData')"
+            @load="onLoad"
+            :error.sync="error"
+            :error-text="$t('shopCommon.RequestErrorText')"
+          >
+            <van-swipe-cell
+              class="shop-status-item"
+              v-for="(item, index) in list"
+              :key="index"
+            >
+              <div class="detailBox">
+                <div
+                  class="box"
+                  @click="
+                    $refs.orderDetailShow.onShow(item.new_order_summaryId)
+                  "
+                >
+                  <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
                   <p class="text">Zso</p>
                   <p class="text">Total Price:12630</p>
                 </div>
                 <div class="buttonBox">
-                  <van-button type="info" size="mini" @click="resubmit"
+                  <van-button
+                    type="info"
+                    size="mini"
+                    @click="resubmitClick(item.new_order_amount)"
                     >Resubmit</van-button
                   >
                 </div>
@@ -50,13 +90,12 @@
           </van-list>
         </div>
       </van-tab>
-      <van-tab title="Pending"> <!-- list2-->内容 1</van-tab>
     </van-tabs>
-    <orderDetail ref="orderConfirm" />
+    <orderDetail ref="orderDetailShow" />
   </div>
 </template>
 <script>
-import { getShopListBySelf, postShopOperation } from "@/api/shop";
+import { GetOrderList, ReSubmitOrder } from "@/api/order";
 import orderDetail from "./components/orderDetail.vue";
 export default {
   components: {
@@ -64,7 +103,8 @@ export default {
   },
   data() {
     return {
-      active: "1",
+      active: 0,
+      orderState: 1,
       keyword: "",
       page_no: 0,
       page_size: 20,
@@ -76,17 +116,39 @@ export default {
     };
   },
   methods: {
-    onSearch() {},
-    onCancel() {},
-    resubmit() {
-      this.$refs.orderConfirm.orderConfirmShow = true;
+    resubmitClick(id) {
+      this.$toast.loading({ duration: 0 });
+      ReSubmitOrder({ orderId: id })
+        .then((res) => {
+          console.log(res, "ss");
+          if (res.success) {
+            this.$toast.success("Success");
+            // this.$toast.clear();
+          } else {
+            this.$toast.fail("Network error");
+          }
+        })
+        .catch((e) => {
+          this.$toast.fail("Network error");
+        });
+    },
+    tabsChange(val) {
+      this.keyword = "";
+      this.orderState = val == 0 ? 1 : 2;
+      this.initData();
     },
     onLoad() {
       setTimeout(() => {
         this.page_no++;
-        getShopListBySelf(
+        GetOrderList(
           Object.assign(
-            {},
+            {
+              userId: this.$store.getters.userInfo.id,
+              // orderState: this.orderState,
+              orderState: 2,
+              searchValue: this.keyword,
+              // orderby: "string",
+            },
             {
               itemsperpage: this.page_size,
               page: this.page_no,
@@ -114,6 +176,21 @@ export default {
           });
       }, 100);
     },
+    initData() {
+      this.list = [];
+      this.page_no = 0;
+      this.loading = true;
+      this.finished = false;
+      this.noRes = false;
+      this.error = false;
+      this.onLoad();
+    },
+    onSearch() {
+      this.initData();
+    },
+    onCancel() {
+      this.initData();
+    },
   },
 };
 </script>
@@ -130,18 +207,15 @@ export default {
   box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
 }
 .detailBox {
-  display: flex;
-  margin: 0.2rem;
+  margin: 0.5rem 0.3rem;
+  position: relative;
   .text {
-    margin: 0.2rem;
-  }
-  .box {
-    flex: 2;
+    margin: 0.3rem;
   }
   .buttonBox {
-    flex: 1;
-    margin-top: 0.7rem;
-    margin-left: 3rem;
+    position: absolute;
+    left: 7.2rem;
+    bottom: 0rem;
   }
 }
 </style>

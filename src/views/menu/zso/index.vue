@@ -15,7 +15,12 @@
           />
         </div>
         <div slot="right">
-          <span style="color:#ffffff" v-show="filterParams.searchValue?true:false" @click="searchCancel">Cancel</span>
+          <span
+            style="color: #ffffff"
+            v-show="filterParams.searchValue ? true : false"
+            @click="searchCancel"
+            >Cancel</span
+          >
           <span @click="clickright">
             <img
               style="float: right; width: 0.6rem"
@@ -295,9 +300,9 @@ export default {
     this.getData();
   },
   methods: {
-    searchCancel(){
-      this.filterParams.searchValue=''
-      this.initData()
+    searchCancel() {
+      this.filterParams.searchValue = "";
+      this.initData();
     },
     //查看shangpin详情
     detailShowModel(val) {
@@ -597,6 +602,7 @@ export default {
     .shop-status__header {
       display: flex;
       overflow: hidden;
+      border-radius: 20px 0 0 0;
       border-bottom: 1px solid #eee;
       .shop-status-left {
         width: 370px;

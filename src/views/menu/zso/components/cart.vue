@@ -50,7 +50,7 @@
         :error-text="$t('shopCommon.RequestErrorText')"
       > -->
       <van-swipe-cell
-        :right-width="65"
+        :right-width="68"
         class="shop-status-item"
         v-for="(item, index) in list"
         :key="index"
@@ -234,6 +234,7 @@ export default {
   methods: {
     confirmShowCencel() {
       this.confirmShow = false;
+      this.radio=false
     },
     //确认订单
     confirmClick() {
@@ -372,6 +373,7 @@ export default {
       this.initData();
     },
     initData() {
+      this.radio=false
       this.list = [];
       this.getDataListCart();
     },
@@ -503,6 +505,7 @@ export default {
     display: flex;
     overflow: hidden;
     border-bottom: 1px solid #eee;
+    border-radius: 20px 0 0 0;
     .shop-status-left {
       width: 370px;
       height: 40px;
@@ -512,6 +515,7 @@ export default {
       color: #fff;
       text-align: center;
       margin-right: 50px;
+      // border-radius: 20px 0 0 0;
       font-size: 24px;
       &::after {
         content: "";
@@ -564,9 +568,9 @@ export default {
     top: 1.5rem;
     left: 0.2rem;
   }
-  .groupBox {
-    // background-color: #fef9f3;
-  }
+  // .groupBox {
+  //   // background-color: #fef9f3;
+  // }
   .slotGroupBox {
     color: #f5f5f5;
     font-weight: 700;
@@ -629,6 +633,7 @@ export default {
     position: relative;
     .radioBox {
       position: absolute;
+      // width: 0.5rem;
       top: 0.3rem;
       left: 0.4rem;
       z-index: 1;
@@ -649,6 +654,7 @@ export default {
       padding: 0.3rem 0.1rem;
       .text {
         margin: 0.1rem;
+        font-size: 28px;
       }
     }
     .submitButton {

@@ -742,4 +742,14 @@ export default {
     'pmt.mySalary.EmployeeTotalDeduction': 'Toàn bộ nhân viên khấu trừ',
     'pmt.mySalary.Advance': 'Advance',
     //#endregion
+
+    'Order detail':'Order detail',
+    'Total Invoice Value':'Total Invoice Value',
+    'Dealer Name':"Dealer Name",
+    'Po Number':'Po Number',
+    'GTM Order No':'GTM Order No',
+    'ZSO No':'ZSO No',
+    'Payer':'Payer',
+    'Bill To':'Bill To',
+    'Ship To':'Ship To'
 }
