@@ -5,26 +5,22 @@
     <div class="topBox">
       <div class="standardBox">Standard</div>
       <div>
-        <van-cell
-          :title="$t('Dealer Name')"
+        <van-field
+          v-model="selectedDealer.dealerName"
+          input-align="right"
+          :label="$t('Dealer Name')"
+          readonly
           is-link
-          :value="selectedDealer.dealerName"
           @click="$refs.dealerSearch.onShow()"
-        >
-          <!-- <template #icon>
-            <i class="iconfont icon-dealer"></i>
-          </template> -->
-        </van-cell>
-        <van-cell
-          :title="$t('Ship To')"
-          :value="selectedShipTo.partnerName"
+        />
+        <van-field
+          v-model="selectedShipTo.partnerName"
+          input-align="right"
+          :label="$t('Ship To')"
+          readonly
           is-link
           @click="$refs.shipToSearch.onShow()"
-        >
-          <!-- <template #icon>
-            <i class="iconfont icon-type"></i>
-          </template> -->
-        </van-cell>
+        />
         <div class="selecAllBox">
           <div class="radioBox">
             <van-checkbox v-model="radio" @click="allRadioClick"
@@ -234,7 +230,7 @@ export default {
   methods: {
     confirmShowCencel() {
       this.confirmShow = false;
-      this.radio=false
+      // this.radio=false
     },
     //确认订单
     confirmClick() {
@@ -373,7 +369,7 @@ export default {
       this.initData();
     },
     initData() {
-      this.radio=false
+      this.radio = false;
       this.list = [];
       this.getDataListCart();
     },
@@ -458,6 +454,7 @@ export default {
           const { success, data } = res;
           if (success) {
             var Items = data || [];
+            this.allShipToList=[]
             this.allShipToList = this.allShipToList.concat(Items);
             console.log("allShipToList", this.allShipToList);
             if (this.allShipToList.length > 0) {

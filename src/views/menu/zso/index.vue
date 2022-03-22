@@ -1,96 +1,98 @@
 <template>
   <div class="zsoListBox">
-    <div class="top"></div>
-    <div class="topBox">
-      <!-- 搜索 -->
-      <van-nav-bar left-arrow @click-left="goBack">
-        <div slot="title" style="padding-right: 22px">
-          <van-field
-            readonly
-            v-model="filterParams.searchValue"
-            clearable
-            style="height: 0.8rem; border-radius: 20px; line-height: 0.4rem"
-            :placeholder="$t('Enter Product Name/Code/Model')"
-            @click="$refs.searchHistory.handleShow()"
-          />
-        </div>
-        <div slot="right">
-          <span
-            style="color: #ffffff"
-            v-show="filterParams.searchValue ? true : false"
-            @click="searchCancel"
-            >Cancel</span
-          >
-          <span @click="clickright">
-            <img
-              style="float: right; width: 0.6rem"
-              src="../../../assets/images/icon/cart.png"
+    <div class="top">
+      <div class="topBox">
+        <!-- 搜索 -->
+        <van-nav-bar left-arrow @click-left="goBack">
+          <div slot="title" style="padding-right: 22px">
+            <van-field
+              readonly
+              v-model="filterParams.searchValue"
+              clearable
+              style="height: 0.8rem; border-radius: 20px; line-height: 0.4rem"
+              :placeholder="$t('Enter Product Name/Code/Model')"
+              @click="$refs.searchHistory.handleShow()"
             />
+          </div>
+          <div slot="right">
             <span
-              v-show="cartCount == 0 ? false : true"
-              style="
-                float: right;
-                position: relative;
-                left: 0.7rem;
-                top: -0.1rem;
-                height: 0.4rem;
-                line-height: 0.4rem;
-                width: 0.3rem;
-                background: red;
-                border-radius: 0.1rem;
-                color: #ffffff;
-                font-size: 12px;
-              "
-              >{{ cartCount }}</span
+              style="color: #ffffff"
+              v-show="filterParams.searchValue ? true : false"
+              @click="searchCancel"
+              >Cancel</span
             >
-          </span>
-        </div>
-      </van-nav-bar>
-      <!-- 查询 -->
-      <div class="searchColor">
-        <van-cell-group>
-          <van-cell
-            :title="$t('Dealer Name')"
-            is-link
-            :value="selectedDealer.dealerName"
-            @click="$refs.dealerSearch.onShow()"
-          >
+            <span @click="clickright">
+              <img
+                style="float: right; width: 0.6rem"
+                src="../../../assets/images/icon/cart.png"
+              />
+              <span
+                v-show="cartCount == 0 ? false : true"
+                style="
+                  float: right;
+                  position: relative;
+                  left: 0.7rem;
+                  top: -0.1rem;
+                  height: 0.4rem;
+                  line-height: 0.4rem;
+                  width: 0.3rem;
+                  background: red;
+                  border-radius: 0.1rem;
+                  color: #ffffff;
+                  font-size: 12px;
+                "
+                >{{ cartCount }}</span
+              >
+            </span>
+          </div>
+        </van-nav-bar>
+        <!-- 查询 -->
+        <div class="searchColor">
+          <van-cell-group>
             <!-- <template #icon>
               <i class="iconfont icon-dealer"></i>
             </template> -->
-          </van-cell>
-          <van-cell
-            :value="selectedShipTo.partnerName"
-            :title="$t('Ship To')"
-            is-link
-            @click="$refs.shipToSearch.onShow()"
-          >
+            <van-field
+              v-model="selectedDealer.dealerName"
+              input-align="right"
+              :label="$t('Dealer Name')"
+              readonly
+              is-link
+              @click="$refs.dealerSearch.onShow()"
+            />
+            <van-field
+              v-model="selectedShipTo.partnerName"
+              input-align="right"
+              :label="$t('Ship To')"
+              readonly
+              is-link
+              @click="$refs.shipToSearch.onShow()"
+            />
+            <van-field
+              v-model="selectedLocation.locationName"
+              input-align="right"
+              label-width="110"
+              :label="$t('Storage Location')"
+              readonly
+              is-link
+              @click="$refs.storageLoctionSearch.onShow()"
+            />
             <!-- <template #icon>
               <i class="iconfont icon-type"></i>
             </template> -->
-          </van-cell>
-          <van-cell
-            :value="selectedLocation.locationName"
-            :title="$t('Storage Location')"
-            is-link
-            @click="$refs.storageLoctionSearch.onShow()"
-          >
-            <!-- <template #icon>
-              <i class="iconfont icon-type"></i>
-            </template> -->
-          </van-cell>
-        </van-cell-group>
-      </div>
-      <!-- 图片分类 -->
-      <div class="imgBox">
-        <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
-          <div class="imgitem" @click="imgClick(itemImg)">
-            <img :src="itemImg.iconPath" />
+          </van-cell-group>
+        </div>
+        <!-- 图片分类 -->
+        <div class="imgBox">
+          <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
+            <div class="imgitem" @click="imgClick(itemImg)">
+              <img :src="itemImg.iconPath" />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div style="clear: both"></div>
+    <!-- <div style="clear: both"></div> -->
     <!-- list -->
     <div class="shop-status-list">
       <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
@@ -441,7 +443,7 @@ export default {
             this.loading = false;
             this.error = true;
           });
-      }, 500);
+      }, 100);
     },
     setShowSearch() {
       this.showSearchHistory = true;
@@ -521,13 +523,14 @@ export default {
           const { success, data } = res;
           if (success) {
             var Items = data || [];
+            this.allShipToList=[]
             this.allShipToList = this.allShipToList.concat(Items);
             console.log("allShipToList", this.allShipToList);
             if (this.allShipToList.length > 0) {
               this.selectedShipTo = this.allShipToList[0];
               console.log("selectedShipTo", this.selectedShipTo);
             }
-            this.onLoad();
+            this.initData();
             this.getCartCountNumber();
           }
         })
@@ -538,20 +541,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .zsoListBox {
-  position: relative;
-  // .van-field__body{
-  //   margin-bottom:0.4rem;
-  // }
   .top {
     height: 7rem;
-    overflow: hidden;
-  }
-  .topBox {
-    width: 100%;
-    height: 5rem;
-    position: fixed;
-    top: 0;
-    z-index: 1;
+    .topBox {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1;
+    }
   }
   .searchColor {
     background-color: #2058ab;
@@ -585,13 +582,11 @@ export default {
     margin-bottom: 0.3rem;
     margin-right: 0.3rem;
   }
-
   .shop-status-list {
     height: 60%;
-    clear: both;
     padding: 20px;
     background: #f5f5f5;
-    overflow: hidden;
+    overflow: auto;
   }
   .shop-status-item {
     margin-bottom: 32px;
