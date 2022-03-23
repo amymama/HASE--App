@@ -1,256 +1,247 @@
 <template>
   <div class="confirmBox">
-    <van-popup
-      v-model="orderConfirmShow"
-      :close-on-click-overlay="false"
-      :style="{
-        width: '100%',
-        height: '100%',
-      }"
-    >
-      <div class="fatherBox">
-        <!-- navBar -->
-        <div class="scollrBox">
-          <!-- <div class="topBox"> -->
-          <van-nav-bar
-            fixed
-            left-arrow
-            @click-left="onCancel"
-            :title="$t('Order Confirm')"
+    <div class="fatherBox">
+      <!-- navBar -->
+      <div class="scollrBox">
+        <!-- <div class="topBox"> -->
+        <van-nav-bar
+          fixed
+          left-arrow
+          @click-left="goBack"
+          :title="$t('Order Confirm')"
+        />
+        <!-- </div> -->
+        <van-cell-group class="inputBox">
+          <!-- input -->
+          <van-field
+            v-model="formData.orderType"
+            input-align="right"
+            clearable
+            label="Order Type"
+            placeholder=""
+            readonly
+            @click-right-icon="$toast('question')"
+          />
+          <van-field
+            input-align="right"
+            v-model="formData.dealerName"
+            clearable
+            placeholder=""
+            label="Dealer"
+            readonly
+          />
+          <van-field
+            v-model="formData.creditBalance"
+            input-align="right"
+            clearable
+            placeholder=""
+            label="Current AR Balance"
+            readonly
+            label-width="120"
+          />
+          <van-field
+            v-model="formData.billToName"
+            input-align="right"
+            clearable
+            placeholder=""
+            label="Bill To"
+            is-link
+            readonly
+            @click="billToShow"
+          />
+          <van-field
+            input-align="right"
+            v-model="formData.payerName"
+            clearable
+            placeholder=""
+            label="Payer"
+            is-link
+            readonly
+            @click="payerShowClick"
+          />
+          <!-- v-model="" -->
+          <van-field
+            input-align="right"
+            clearable
+            placeholder=""
+            readonly
+            label="Select Delivery Address"
+            label-width="150"
+          />
+          <van-field
+            v-model="formData.CompanyName"
+            clearable
+            input-align="right"
+            placeholder=""
+            label="Company Name"
+          />
+          <van-field
+            v-model="formData.STREET"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Street"
+          />
+          <van-field
+            v-model="formData.HOUSE_NUMBER"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="House Number"
+          />
+          <van-field
+            v-model="formData.STREET2"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Street2"
+          />
+          <!-- <div style="float:left"> -->
+          <van-field
+            v-model="formData.POST_CODE"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Postal Code"
+          />
+          <van-field
+            v-model="formData.CITY"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="City"
           />
           <!-- </div> -->
-          <van-cell-group class="inputBox">
-            <!-- input -->
-            <van-field
-              v-model="formData.orderType"
-              input-align="right"
-              clearable
-              label="Order Type"
-              placeholder=""
-              readonly
-              @click-right-icon="$toast('question')"
-            />
-            <van-field
-              input-align="right"
-              v-model="formData.dealerName"
-              clearable
-              placeholder=""
-              label="Dealer"
-              readonly
-            />
-            <van-field
-              v-model="formData.creditBalance"
-              input-align="right"
-              clearable
-              placeholder=""
-              label="Current AR Balance"
-              readonly
-              label-width="120"
-            />
-            <van-field
-              v-model="formData.billToName"
-              input-align="right"
-              clearable
-              placeholder=""
-              label="Bill To"
-              is-link
-              readonly
-              @click="billToShow"
-            />
-            <van-field
-              input-align="right"
-              v-model="formData.payerName"
-              clearable
-              placeholder=""
-              label="Payer"
-              is-link
-              readonly
-              @click="payerShowClick"
-            />
-            <!-- v-model="" -->
-            <van-field
-              input-align="right"
-              clearable
-              placeholder=""
-              readonly
-              label="Select Delivery Address"
-              label-width="150"
-            />
-            <van-field
-              v-model="formData.CompanyName"
-              clearable
-              input-align="right"
-              placeholder=""
-              label="Company Name"
-            />
-            <van-field
-              v-model="formData.STREET"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Street"
-            />
-            <van-field
-              v-model="formData.HOUSE_NUMBER"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="House Number"
-            />
-            <van-field
-              v-model="formData.STREET2"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Street2"
-            />
-            <!-- <div style="float:left"> -->
-            <van-field
-              v-model="formData.POST_CODE"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Postal Code"
-            />
-            <van-field
-              v-model="formData.CITY"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="City"
-            />
-            <!-- </div> -->
-            <van-field
-              v-model="formData.Phone"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Phone"
-            />
-            <van-field
-              v-model="formData.DeliveryDate"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Delivery Date"
-              is-link
-              @click="currentDateClick"
-              readonly
-              label-width="110"
-            />
-            <van-cell title="Dealer Pickup by themselves">
-              <van-checkbox
-                v-model="isLogisticShow"
-                @change="isLogisticClick"
-              ></van-checkbox>
-            </van-cell>
-            <!-- <van-cell title="Foc.inv">
+          <van-field
+            v-model="formData.Phone"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Phone"
+          />
+          <van-field
+            v-model="formData.DeliveryDate"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Delivery Date"
+            is-link
+            @click="currentDateClick"
+            readonly
+            label-width="110"
+          />
+          <van-cell title="Dealer Pickup by themselves">
+            <van-checkbox
+              v-model="isLogisticShow"
+              @change="isLogisticClick"
+            ></van-checkbox>
+          </van-cell>
+          <!-- <van-cell title="Foc.inv">
           <van-checkbox v-model="isLogisticShow"></van-checkbox>
         </van-cell> -->
-            <van-field
-              v-show="isLogisticShow"
-              v-model="formData.logisticVendorName"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Logistic vendor"
-              label-width="110"
-              is-link
-              readonly
-              @click="onLogisticShow"
+          <van-field
+            v-show="isLogisticShow"
+            v-model="formData.logisticVendorName"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Logistic vendor"
+            label-width="110"
+            is-link
+            readonly
+            @click="onLogisticShow"
+          />
+          <van-field
+            v-model="formData.text"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Text"
+          />
+          <van-field
+            v-model="formData.poNumber"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="PO Number"
+            readonly
+          />
+          <van-field
+            v-model="formData.userRealname"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Sale Agent"
+            readonly
+          />
+          <van-field
+            v-model="username"
+            clearable
+            placeholder=""
+            input-align="right"
+            label="Photos"
+            readonly
+          />
+          <div class="vanPhotos">
+            <upload-imgs
+              ref="uploader"
+              folder="asset"
+              prefix="POSMIO"
+              class="paddingIconU"
+              :max="4"
+              :fileList="potopImageurl"
+              @fileUploadOk="handleFileUploadOk"
+              @fileDelete="handleFileDelete"
             />
-            <van-field
-              v-model="formData.text"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Text"
-            />
-            <van-field
-              v-model="formData.poNumber"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="PO Number"
-            />
-            <van-field
-              v-model="formData.userRealname"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Sale Agent"
-              readonly
-            />
-            <van-field
-              v-model="username"
-              clearable
-              placeholder=""
-              input-align="right"
-              label="Photos"
-              readonly
-            />
-            <div class="vanPhotos">
-              <upload-imgs
-                ref="uploader"
-                folder="asset"
-                prefix="POSMIO"
-                class="paddingIconU"
-                :max="4"
-                :fileList="potopImageurl"
-                @fileUploadOk="handleFileUploadOk"
-                @fileDelete="handleFileDelete"
-              />
-              <!-- @fileDelete="handleFileDelete" -->
-            </div>
-          </van-cell-group>
+            <!-- @fileDelete="handleFileDelete" -->
+          </div>
+        </van-cell-group>
 
-          <!-- 商品 list-->
-          <div class="shop-status-list">
-            <van-swipe-cell
-              class="shop-status-item"
-              v-for="(item, index) in list"
-              :key="index"
-            >
-              <div class="shop-status__header">
-                <div class="shop-status-left approved">
-                  <!-- {{ $t("shopStatus.Approved") }} -->
-                </div>
-                <div class="shop-code"></div>
+        <!-- 商品 list-->
+        <div class="shop-status-list">
+          <van-swipe-cell
+            class="shop-status-item"
+            v-for="(item, index) in list"
+            :key="index"
+          >
+            <div class="shop-status__header">
+              <div class="shop-status-left approved">
+                <!-- {{ $t("shopStatus.Approved") }} -->
               </div>
-              <div class="groupBox">
-                <div class="listBox">
-                  <div class="listImage">
-                    <van-image
-                      width="2.2rem"
-                      height="1.3rem"
-                      fit="cover"
-                      :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
-                    />
-                  </div>
-                  <div class="listDetailBox">
-                    <h3>{{ item.new_product_model }}</h3>
-                    <p class="textBox" style="color: #bcc1c1">
-                      {{
-                        item.new_product_number +
-                        "(" +
-                        item.new_storage_location +
-                        ")"
-                      }}
-                    </p>
-                    <div class="lietItemBox">
-                      <span calss="textBox itemBox" style="color: #ef9f61"
-                        >Stock:{{ item.inventory }}</span
-                      >
-                      <span calss="textBox itemNet" style="color: #ef9f61"
-                        >Price:${{ item.retailprice }}</span
-                      >
-                    </div>
-                    <div class="lietItemBox">
-                      X{{ item.new_product_counts }}
-                    </div>
-                  </div>
+              <div class="shop-code"></div>
+            </div>
+            <div class="groupBox">
+              <div class="listBox">
+                <div class="listImage">
+                  <van-image
+                    width="2.2rem"
+                    height="1.3rem"
+                    fit="cover"
+                    :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
+                  />
                 </div>
-                <!-- <div class="numButtonBox">
+                <div class="listDetailBox">
+                  <h3>{{ item.new_product_model }}</h3>
+                  <p class="textBox" style="color: #bcc1c1">
+                    {{
+                      item.new_product_number +
+                      "(" +
+                      item.new_storage_location +
+                      ")"
+                    }}
+                  </p>
+                  <div class="lietItemBox">
+                    <span calss="textBox itemBox" style="color: #ef9f61"
+                      >Stock:{{ item.inventory }}</span
+                    >
+                    <span calss="textBox itemNet" style="color: #ef9f61"
+                      >Price:${{ item.retailprice }}</span
+                    >
+                  </div>
+                  <div class="lietItemBox">X{{ item.new_product_counts }}</div>
+                </div>
+              </div>
+              <!-- <div class="numButtonBox">
                 <div class="numButton">
                   <van-stepper
                     :disabled="isView"
@@ -263,34 +254,32 @@
                   />
                 </div>
               </div> -->
-              </div>
-              <!-- <span slot="right" class="slotGroupBox" @click="deleteClick(item)"
-            >Delete</span
-          > -->
-            </van-swipe-cell>
-          </div>
-        </div>
-        <!--footer Confirm -->
-        <div class="submitBox">
-          <div class="submitPrice">
-            <p class="text">Total Net Price :${{ totalNetPrice }}</p>
-            <p class="text">Total Tax Price :${{ totalTaxPrice }}</p>
-            <p class="text">
-              Total Price :<span style="color: #fa0e0e; font-weight: 700"
-                >${{ totalPrice }}</span
-              >
-            </p>
-          </div>
-          <van-button
-            class="submitButton"
-            color="#407FDC"
-            @click="checkOutClick"
-            >Check Out</van-button
-          >
+            </div>
+          </van-swipe-cell>
         </div>
       </div>
-    </van-popup>
-
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <!--footer Confirm -->
+      <div class="submitBox">
+        <div class="submitPrice">
+          <p class="text">Total Net Price :${{ totalNetPrice }}</p>
+          <p class="text">Total Tax Price :${{ totalTaxPrice }}</p>
+          <p class="text">
+            Total Price :<span style="color: #fa0e0e; font-weight: 700"
+              >${{ totalPrice }}</span
+            >
+          </p>
+        </div>
+        <van-button class="submitButton" color="#407FDC" @click="checkOutClick"
+          >Check Out</van-button
+        >
+      </div>
+    </div>
     <!-- 弹框 -->
     <van-popup
       position="bottom"
@@ -372,74 +361,75 @@ import {
   SubmitOrder,
   GetPartnerListByDealer,
 } from "@/api/order";
+import { mapState } from "vuex";
 export default {
   components: {
     ChangeAvatar,
     UploadImgs,
   },
-  props: {
-    totalNetPrice: {
-      type: Number,
-    },
-    totalTaxPrice: {
-      type: Number,
-    },
-    totalPrice: {
-      type: Number,
-    },
-    orderConfirmShow: {
-      type: Boolean,
-    },
-    selectedLocation: {
-      type: Object,
-    },
-    selectedShipTo: {
-      type: Object,
-    },
-    selectedDealer: {
-      type: Object,
-    },
-    list: {
-      type: Array,
-    },
-  },
-  watch: {
-    orderConfirmShow: {
-      handler(val) {
-        console.log(val, "valvalvalvalvalvalval", this.list);
-        this.formData.shipToId = this.selectedShipTo.partnerId;
-        this.formData.shipToCode = this.selectedShipTo.partnerCode;
-        this.formData.shipToName = this.selectedShipTo.partnerName;
-        this.formData.dealerId = this.selectedDealer.dealerId;
-        this.formData.dealerCode = this.selectedDealer.dealerCode;
-        this.formData.dealerName = this.selectedDealer.dealerName;
-        let arr = this.list;
-        this.formData.productGoodsList = [];
-        arr.forEach((item) => {
-          const obj = {
-            cartId: item.new_order_cartId,
-            productId: item.new_product_id,
-            productNum: item.new_product_number,
-            productModel: item.new_product_model,
-            salesCount: item.new_product_counts,
-            salesPrice: item.retailprice,
-            stroageLocation: item.new_storage_location,
-          };
-          this.formData.productGoodsList.push(obj);
-        });
-        console.log(
-          this.formData.productGoodsList,
-          "this.formData.productGoodsList"
-        );
-        // this.formData.stroageLocation=this.selectedLocation.new_storage_location
-        if (val) {
-          this.onShow();
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
+
+  // props: {
+  //   totalNetPrice: {
+  //     type: Number,
+  //   },
+  //   totalTaxPrice: {
+  //     type: Number,
+  //   },
+  //   totalPrice: {
+  //     type: Number,
+  //   },
+  //   orderConfirmShow: {
+  //     type: Boolean,
+  //   },
+  //   selectedLocation: {
+  //     type: Object,
+  //   },
+  //   selectedShipTo: {
+  //     type: Object,
+  //   },
+  //   selectedDealer: {
+  //     type: Object,
+  //   },
+  //   list: {
+  //     type: Array,
+  //   },
+  // },
+  // watch: {
+  //   orderConfirmShow: {
+  //     handler(val) {
+  //       this.formData.shipToId = this.selectedShipTo.partnerId;
+  //       this.formData.shipToCode = this.selectedShipTo.partnerCode;
+  //       this.formData.shipToName = this.selectedShipTo.partnerName;
+  //       this.formData.dealerId = this.selectedDealer.dealerId;
+  //       this.formData.dealerCode = this.selectedDealer.dealerCode;
+  //       this.formData.dealerName = this.selectedDealer.dealerName;
+  //       let arr = this.list;
+  //       this.formData.productGoodsList = [];
+  //       arr.forEach((item) => {
+  //         const obj = {
+  //           cartId: item.new_order_cartId,
+  //           productId: item.new_product_id,
+  //           productNum: item.new_product_number,
+  //           productModel: item.new_product_model,
+  //           salesCount: item.new_product_counts,
+  //           salesPrice: item.retailprice,
+  //           stroageLocation: item.new_storage_location,
+  //         };
+  //         this.formData.productGoodsList.push(obj);
+  //       });
+  //       console.log(
+  //         this.formData.productGoodsList,
+  //         "this.formData.productGoodsList"
+  //       );
+  //       // this.formData.stroageLocation=this.selectedLocation.new_storage_location
+  //       if (val) {
+  //         this.onShow();
+  //       }
+  //     },
+  //     deep: true,
+  //     immediate: true,
+  //   },
+  // },
   data() {
     return {
       potopImageurl: [],
@@ -467,7 +457,7 @@ export default {
         logisticVendorName: "",
         logisticVendorCode: "",
         text: "",
-        poNumber: "",
+        poNumber: this.$store.getters.userInfo.username,
         pickupByThemselve: 0, //0：未选中，1：已选中,
         orderAmount: this.totalPrice,
         orderTax: this.totalTaxPrice,
@@ -508,7 +498,20 @@ export default {
       ShipToShow: false,
       payerShow: false,
       allShipToList: [], //下拉选项
+
+      totalNetPrice: 0,
+      totalTaxPrice: 0,
+      totalPrice: 0,
+      list: [],
     };
+  },
+  computed: {
+    ...mapState({
+      orderConfirmData: (state) => state.order.orderConfirmData,
+    }),
+  },
+  created() {
+    this.onShow();
   },
   methods: {
     // 格式化后服务器返回照片
@@ -540,8 +543,7 @@ export default {
         .then((res) => {
           if (res.success) {
             this.$toast.success("success");
-            this.onCancel();
-            this.$emit("getDataListCart");
+            this.$router.push("/order");
           } else {
             this.$toast.fail("Network error");
           }
@@ -552,6 +554,47 @@ export default {
     },
     //获取数据
     onShow() {
+      console.log(this.orderConfirmData);
+      const {
+        selectedDealer,
+        selectedShipTo,
+        selectedLocation,
+        productGoodsList,
+        totalNetPrice,
+        totalTaxPrice,
+        totalPrice,
+      } = this.orderConfirmData;
+      this.formData.shipToId = selectedShipTo.partnerId;
+      this.formData.shipToCode = selectedShipTo.partnerCode;
+      this.formData.shipToName = selectedShipTo.partnerName;
+      this.formData.dealerId = selectedDealer.dealerId;
+      this.formData.dealerCode = selectedDealer.dealerCode;
+      this.formData.dealerName = selectedDealer.dealerName;
+      this.totalNetPrice = totalNetPrice;
+      this.totalTaxPrice = totalTaxPrice;
+      this.totalPrice = totalPrice;
+      this.selectedDealer = selectedDealer;
+      this.selectedShipTo = selectedShipTo;
+      this.selectedLocation = selectedLocation;
+      let arr = productGoodsList;
+      this.list = productGoodsList;
+      this.formData.productGoodsList = [];
+      arr.forEach((item) => {
+        const obj = {
+          cartId: item.new_order_cartId,
+          productId: item.new_product_id,
+          productNum: item.new_product_number,
+          productModel: item.new_product_model,
+          salesCount: item.new_product_counts,
+          salesPrice: item.retailprice,
+          stroageLocation: item.new_storage_location,
+        };
+        this.formData.productGoodsList.push(obj);
+      });
+      console.log(
+        this.formData.productGoodsList,
+        "this.formData.productGoodsList"
+      );
       //下拉框数据
       GetPartnerListByDealer({
         dealer_code: this.selectedDealer.dealerCode,
@@ -588,8 +631,8 @@ export default {
         })
         .catch((e) => {});
       GetDearlerCreditLimitFrom({
-        // dearlerCode: this.selectedDealer.dealerCode,
-        dearlerCode: "6000050431",
+        dearlerCode: this.selectedDealer.dealerCode,
+        // dearlerCode: "6000050431",
       })
         .then((res) => {
           if (res.success) {
@@ -600,9 +643,9 @@ export default {
         .catch((e) => {});
     },
     //关闭弹框
-    onCancel() {
-      this.$emit("confirmShowCencel");
-    },
+    // onCancel() {
+    //   this.$emit("confirmShowCencel");
+    // },
     //选择器弹框
     onLogisticShow() {
       this.LogisticsListShow = true;
@@ -662,7 +705,7 @@ export default {
 <style lang="scss" scoped>
 .confirmBox {
   .fatherBox {
-    position: relative;
+    // position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -672,7 +715,7 @@ export default {
     margin: 0.3rem;
   }
   .scollrBox {
-    height: 80%;
+    height: 60%;
     width: 100%;
     overflow-y: auto !important;
     overflow-x: hidden;
@@ -804,8 +847,9 @@ export default {
   }
   .submitBox {
     width: 100%;
-    // position: fixed;
-    position: absolute;
+    position: fixed;
+    // position: absolute;
+    margin-top: 4rem;
     bottom: 0;
     height: 2.2rem;
     background-color: #ffffff;

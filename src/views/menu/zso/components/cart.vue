@@ -157,32 +157,17 @@
       :selectedShipTo="selectedShipTo"
       :selectedLocation="selectedLocation"
     />
-    <orderConfirm
-      ref="zsoConfirmRef"
-      :orderConfirmShow="confirmShow"
-      @confirmShowCencel="confirmShowCencel"
-      @getDataListCart="getDataListCart"
-      :selectedDealer="selectedDealer"
-      :selectedShipTo="selectedShipTo"
-      :selectedLocation="selectedLocation"
-      :list="productGoodsList"
-      :totalNetPrice="totalNetPrice"
-      :totalTaxPrice="totalTaxPrice"
-      :totalPrice="totalPrice"
-    />
     <!-- <storage-loction ref="storageLoctionSearch" @ok="handlestorageLoctionOk" /> -->
   </div>
 </template>
 <script>
 import DealerSearch from "./dealer.vue";
-import orderConfirm from "./orderConfirm.vue";
 import {
   GetDealerList,
   GetPartnerListByDealer,
   GetCartListByDealer,
   UpdateCartProductCounts,
   DeleteCart,
-  // ReSubmitOrder,
 } from "@/api/order";
 import ShipTo from "./shipTo.vue";
 import ZsoDetail from "./zsoDetail.vue";
@@ -191,7 +176,6 @@ export default {
     ZsoDetail,
     DealerSearch,
     ShipTo,
-    orderConfirm,
     // StorageLoction,
   },
   data() {
@@ -216,7 +200,7 @@ export default {
       allDealerList: [],
       allShipToList: [],
       detailShow: false,
-      confirmShow: false,
+      // confirmShow: false,
       productDetail: {},
       totalNetPrice: 0,
       totalTaxPrice: 0,
@@ -228,10 +212,11 @@ export default {
     // this.getDataListCart();
   },
   methods: {
-    confirmShowCencel() {
-      this.confirmShow = false;
-      // this.radio=false
-    },
+    // confirmShowCencel() {
+    //   // this.confirmShow = false;
+    //   this.$router.push("/orderConfirm");
+    //   // this.radio=false
+    // },
     //确认订单
     confirmClick() {
       let show = true;
@@ -252,7 +237,19 @@ export default {
         this.$toast.fail("Commodity is includes Price id 0 or Stock is 0!");
         return false;
       }
-      this.confirmShow = show ? true : false;
+      // this.confirmShow = show ? true : false;
+      if (show) {
+        this.$router.push("/orderConfirm");
+        this.$store.commit("order/orderConfirmData", {
+          selectedDealer:this.selectedDealer,
+          selectedShipTo:this.selectedShipTo,
+          selectedLocation:this.selectedLocation,
+          productGoodsList:this.productGoodsList,
+          totalNetPrice:this.totalNetPrice,
+          totalTaxPrice:this.totalTaxPrice,
+          totalPrice:this.totalPrice,
+        });
+      }
     },
     //选择商品
     radioBoxItemClick(val, index) {
@@ -454,7 +451,7 @@ export default {
           const { success, data } = res;
           if (success) {
             var Items = data || [];
-            this.allShipToList=[]
+            this.allShipToList = [];
             this.allShipToList = this.allShipToList.concat(Items);
             console.log("allShipToList", this.allShipToList);
             if (this.allShipToList.length > 0) {

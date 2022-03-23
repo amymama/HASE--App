@@ -6,6 +6,7 @@ import user from './modules/user'
 import permission from './modules/permission'
 import app from './modules/app'
 import history from './modules/history'
+import order from './modules/order'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ const store = new Vuex.Store({
     user,
     permission,
     app,
-    history
+    history,
+    order
   },
   getters,
   plugins: [createPersistedState()]

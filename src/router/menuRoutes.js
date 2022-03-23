@@ -24,10 +24,10 @@ export default [
     component: () => import('@/views/menu/order'),
     meta: { title: 'ORDER', module: 'Basic', keepAlive: false }
   },
-  // {
-  //   path: '/orderConfirm',
-  //   name: 'orderConfirm',
-  //   component: () => import('@/views/menu/zso/components/orderConfirm'),
-  //   meta: { title: '', module: 'Basic', keepAlive: false }
-  // },
+  {
+    path: '/orderConfirm',
+    name: 'orderConfirm',
+    component: () => import('@/views/menu/zso/components/orderConfirm'),
+    meta: { title: '', module: 'Basic', keepAlive: false }
+  },
 ]
