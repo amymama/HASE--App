@@ -17,7 +17,7 @@
             v-model="formData.orderType"
             input-align="right"
             clearable
-            label="Order Type"
+            :label="$t('Order Type')"
             placeholder=""
             readonly
             @click-right-icon="$toast('question')"
@@ -27,7 +27,7 @@
             v-model="formData.dealerName"
             clearable
             placeholder=""
-            label="Dealer"
+            :label="$t('Dealer')"
             readonly
           />
           <van-field
@@ -35,7 +35,7 @@
             input-align="right"
             clearable
             placeholder=""
-            label="Current AR Balance"
+            :label="$t('Current AR Balance')"
             readonly
             label-width="120"
           />
@@ -44,7 +44,7 @@
             input-align="right"
             clearable
             placeholder=""
-            label="Bill To"
+            :label="$t('Bill To')"
             is-link
             readonly
             @click="billToShow"
@@ -54,7 +54,7 @@
             v-model="formData.payerName"
             clearable
             placeholder=""
-            label="Payer"
+            :label="$t('Payer')"
             is-link
             readonly
             @click="payerShowClick"
@@ -65,7 +65,7 @@
             clearable
             placeholder=""
             readonly
-            label="Select Delivery Address"
+            :label="$t('Select Delivery Address')"
             label-width="150"
           />
           <van-field
@@ -73,28 +73,28 @@
             clearable
             input-align="right"
             placeholder=""
-            label="Company Name"
+            :label="$t('Company Name')"
           />
           <van-field
             v-model="formData.STREET"
             clearable
             placeholder=""
             input-align="right"
-            label="Street"
+            :label="$t('Street')"
           />
           <van-field
             v-model="formData.HOUSE_NUMBER"
             clearable
             placeholder=""
             input-align="right"
-            label="House Number"
+            :label="$t('House Number')"
           />
           <van-field
             v-model="formData.STREET2"
             clearable
             placeholder=""
             input-align="right"
-            label="Street2"
+            :label="$t('Street2')"
           />
           <!-- <div style="float:left"> -->
           <van-field
@@ -102,14 +102,14 @@
             clearable
             placeholder=""
             input-align="right"
-            label="Postal Code"
+            :label="$t('Postal Code')"
           />
           <van-field
             v-model="formData.CITY"
             clearable
             placeholder=""
             input-align="right"
-            label="City"
+            :label="$t('City')"
           />
           <!-- </div> -->
           <van-field
@@ -117,20 +117,20 @@
             clearable
             placeholder=""
             input-align="right"
-            label="Phone"
+            :label="$t('Phone')"
           />
           <van-field
             v-model="formData.DeliveryDate"
             clearable
             placeholder=""
             input-align="right"
-            label="Delivery Date"
+            :label="$t('Delivery Date')"
             is-link
             @click="currentDateClick"
             readonly
             label-width="110"
           />
-          <van-cell title="Dealer Pickup by themselves">
+          <van-cell :title="$t('Dealer Pickup by themselves')">
             <van-checkbox
               v-model="isLogisticShow"
               @change="isLogisticClick"
@@ -145,7 +145,7 @@
             clearable
             placeholder=""
             input-align="right"
-            label="Logistic vendor"
+            :label="$t('Logistic vendor')"
             label-width="110"
             is-link
             readonly
@@ -156,14 +156,14 @@
             clearable
             placeholder=""
             input-align="right"
-            label="Text"
+            :label="$t('Text')"
           />
           <van-field
             v-model="formData.poNumber"
             clearable
             placeholder=""
             input-align="right"
-            label="PO Number"
+            :label="$t('PO Number')"
             readonly
           />
           <van-field
@@ -171,7 +171,7 @@
             clearable
             placeholder=""
             input-align="right"
-            label="Sale Agent"
+            :label="$t('Sale Agent')"
             readonly
           />
           <van-field
@@ -179,7 +179,7 @@
             clearable
             placeholder=""
             input-align="right"
-            label="Photos"
+            :label="$t('Photos')"
             readonly
           />
           <div class="vanPhotos">
@@ -230,30 +230,38 @@
                       ")"
                     }}
                   </p>
-                  <div class="lietItemBox">
+                  <div class="lietItemBoxNumber">
+                    <div class="itemBoxNumber">
+                      <div>{{ $t("Stock") }}</div>
+                      <div class="itemMargin" style="color: #ef9f61">
+                        {{ item.inventory }}
+                      </div>
+                    </div>
+                    <div class="itemBoxNumber">
+                      <div>{{ $t("Net Price") }}</div>
+                      <div class="itemMargin" style="color: #ef9f61">
+                        SAR:{{ item.retailprice }}
+                      </div>
+                    </div>
+                    <div class="itemBoxNumber discount">
+                      <div>{{ $t("Discount") }}</div>
+                      <div class="itemMargin" style="color: #ef9f61">
+                        {{ item.discountPrice ? item.discountPrice : 0 }}
+                        <span class="itemMarginOff">OFF</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="lietItemBox">
                     <span calss="textBox itemBox" style="color: #ef9f61"
                       >Stock:{{ item.inventory }}</span
                     >
                     <span calss="textBox itemNet" style="color: #ef9f61"
                       >Price:${{ item.retailprice }}</span
                     >
-                  </div>
+                  </div> -->
                   <div class="lietItemBox">X{{ item.new_product_counts }}</div>
                 </div>
               </div>
-              <!-- <div class="numButtonBox">
-                <div class="numButton">
-                  <van-stepper
-                    :disabled="isView"
-                    button-size="24px"
-                    min="1"
-                    max="999"
-                    :integer="true"
-                    v-model.number="item.new_product_counts"
-                    @change="numAddClick(item)"
-                  />
-                </div>
-              </div> -->
             </div>
           </van-swipe-cell>
         </div>
@@ -573,6 +581,9 @@ export default {
       this.totalNetPrice = totalNetPrice;
       this.totalTaxPrice = totalTaxPrice;
       this.totalPrice = totalPrice;
+      this.formData.orderNetAmount = totalNetPrice;
+      this.formData.orderTax = totalTaxPrice;
+      this.formData.orderAmount = totalPrice;
       this.selectedDealer = selectedDealer;
       this.selectedShipTo = selectedShipTo;
       this.selectedLocation = selectedLocation;
@@ -842,6 +853,32 @@ export default {
 
       .textBox {
         margin: 0.2rem 0;
+      }
+    }
+  }
+    .lietItemBoxNumber {
+    // float: left;
+    width: 100%;
+    display: flex;
+    .discount {
+      margin-left: 0.5rem;
+    }
+    .itemBoxNumber {
+      // flex: 1;
+      width: 32%;
+      .itemMargin {
+        margin: 0.1rem 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        .itemMarginOff {
+          width: 0.2rem;
+          height: 0.7rem;
+          background: #ff976a;
+          color: #f5f5f5;
+          font-weight: 700;
+        }
       }
     }
   }

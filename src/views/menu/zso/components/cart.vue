@@ -28,7 +28,7 @@
             >
           </div>
           <van-cell title="" is-link @click="goBack">
-            Continue to Purchase
+            {{ $t("Continue to Purchase") }}
           </van-cell>
         </div>
       </div>
@@ -83,6 +83,38 @@
                   ")"
                 }}
               </p>
+              <div class="lietItemBoxNumber">
+                <div class="itemBoxNumber">
+                  <div>{{ $t("Stock") }}</div>
+                  <div class="itemMargin" style="color: #ef9f61">
+                    {{ item.inventory }}
+                  </div>
+                </div>
+                <div class="itemBoxNumber">
+                  <div>{{ $t("Net Price") }}</div>
+                  <div class="itemMargin" style="color: #ef9f61">
+                    SAR:{{ item.retailprice }}
+                  </div>
+                </div>
+                <div class="itemBoxNumber discount">
+                  <div>{{ $t("Discount") }}</div>
+                  <div class="itemMargin" style="color: #ef9f61">
+                    {{ item.discountPrice ? item.discountPrice : 0 }}
+                    <span class="itemMarginOff">OFF</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="listDetailBox">
+              <h3>{{ item.new_product_model }}</h3>
+              <p class="textBox" style="color: #bcc1c1">
+                {{
+                  item.new_product_number +
+                  "(" +
+                  item.new_storage_location +
+                  ")"
+                }}
+              </p>
               <div class="lietItemBox">
                 <span calss="textBox itemBox" style="color: #ef9f61"
                   >Stock:{{ item.inventory }}</span
@@ -90,8 +122,11 @@
                 <span calss="textBox itemNet" style="color: #ef9f61"
                   >Price:${{ item.retailprice }}</span
                 >
+                <span calss="textBox itemNet" style="color: #ef9f61"
+                  >${{ item.discountPrice?item.discountPrice:0 }} OFF</span
+                >
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="numButtonBox">
             <div class="numButton">
@@ -112,7 +147,6 @@
           >Delete</span
         >
       </van-swipe-cell>
-
       <!-- </van-list> -->
     </div>
     <br />
@@ -241,13 +275,13 @@ export default {
       if (show) {
         this.$router.push("/orderConfirm");
         this.$store.commit("order/orderConfirmData", {
-          selectedDealer:this.selectedDealer,
-          selectedShipTo:this.selectedShipTo,
-          selectedLocation:this.selectedLocation,
-          productGoodsList:this.productGoodsList,
-          totalNetPrice:this.totalNetPrice,
-          totalTaxPrice:this.totalTaxPrice,
-          totalPrice:this.totalPrice,
+          selectedDealer: this.selectedDealer,
+          selectedShipTo: this.selectedShipTo,
+          selectedLocation: this.selectedLocation,
+          productGoodsList: this.productGoodsList,
+          totalNetPrice: this.totalNetPrice,
+          totalTaxPrice: this.totalTaxPrice,
+          totalPrice: this.totalPrice,
         });
       }
     },
@@ -633,7 +667,32 @@ export default {
       z-index: 1;
     }
   }
-
+  .lietItemBoxNumber {
+    // float: left;
+    width: 100%;
+    display: flex;
+    .discount {
+      margin-left: 0.5rem;
+    }
+    .itemBoxNumber {
+      // flex: 1;
+      width: 32%;
+      .itemMargin {
+        margin: 0.1rem 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        .itemMarginOff {
+          width: 0.2rem;
+          height: 0.7rem;
+          background: #ff976a;
+          color: #f5f5f5;
+          font-weight: 700;
+        }
+      }
+    }
+  }
   .submitBox {
     width: 100%;
     position: fixed;

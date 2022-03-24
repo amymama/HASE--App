@@ -128,16 +128,28 @@
             </div>
             <div class="listDetailBox">
               <h3>{{ item.productModel }}</h3>
-              <p class="textBox">{{ item.productNumber }}</p>
-              <div class="lietItemBox">
-                <span calss="textBox itemBox">BKCR</span>
-                <span calss="textBox itemNet">Net Price</span>
+              <div style="display: flex">
+                <p class="textBox">{{ item.productNumber }}</p>
+                <p class="textBox" style="padding-left: 0.4rem">BKCR</p>
               </div>
-              <div class="lietItemBox">
-                <span calss="textBox itemBox">Stock:{{ item.stock }}</span>
-                <span calss="textBox itemNet" style="color: #0000ff"
-                  >$:{{ item.netPrice }}</span
-                >
+              <div class="lietItemBoxNumber">
+                <div class="itemBoxNumber">
+                  <div>{{$t('Stock')}}</div>
+                  <div class="itemMargin">{{ item.stock }}</div>
+                </div>
+                <div class="itemBoxNumber">
+                  <div>{{$t('Net Price')}}</div>
+                  <div class="itemMargin" style="color: #0000ff">
+                    SAR:{{ item.netPrice }}
+                  </div>
+                </div>
+                <div class="itemBoxNumber discount">
+                  <div>{{$t('Discount')}}</div>
+                  <div class="itemMargin">
+                    {{ item.discountPrice ? item.discountPrice : 0 }}
+                    <span class="itemMarginOff">OFF</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -148,7 +160,7 @@
               color="#407FDC"
               @click="addCartClick(item)"
             >
-              Add to Cart
+              {{$t('Add to Cart')}}
             </van-button>
           </div>
         </van-swipe-cell>
@@ -159,7 +171,7 @@
       <div class="addToCartBox">
         <div class="lietItemBox" style="color: #a2a8b2">
           <span calss="textBox itemBox">{{ cartParams.productNumber }}</span>
-          <span calss="textBox itemNet">Stock:{{ cartParams.stock }}</span>
+          <span calss="textBox itemNet">{{$t('Stock')}}:{{ cartParams.stock }}</span>
         </div>
         <div class="numButton">
           <van-stepper
@@ -401,49 +413,49 @@ export default {
       this.onLoad();
     },
     onLoad() {
-      setTimeout(() => {
-        this.page_no++;
-        zsoGetProductList(
-          Object.assign(
-            {
-              // hasStock: true,
-              userId: this.$store.getters.userInfo.id,
-              dealerCode: this.selectedDealer.dealerCode,
-              shipToCode: this.selectedShipTo.partnerCode,
-              catalogueId: this.selectedCategory.categoryId, //catalogueId
-              subCatalogueId: this.selectedCategory.catalogueType, //产品0大类1小类
-              storageLocation: this.selectedLocation.locationCode,
-              // orderby: "",
-              searchValue: this.filterParams.searchValue, //关键字搜索
-              orderType: "ZSO",
-              // subCatalogueId: this.state.selectedSubCatrgory,
-            },
-            {
-              itemsperpage: this.page_size,
-              page: this.page_no,
-            }
-          )
+      // setTimeout(() => {
+      this.page_no++;
+      zsoGetProductList(
+        Object.assign(
+          {
+            // hasStock: true,
+            userId: this.$store.getters.userInfo.id,
+            dealerCode: this.selectedDealer.dealerCode,
+            shipToCode: this.selectedShipTo.partnerCode,
+            catalogueId: this.selectedCategory.categoryId, //catalogueId
+            subCatalogueId: this.selectedCategory.catalogueType, //产品0大类1小类
+            storageLocation: this.selectedLocation.locationCode,
+            // orderby: "",
+            searchValue: this.filterParams.searchValue, //关键字搜索
+            orderType: "ZSO",
+            // subCatalogueId: this.state.selectedSubCatrgory,
+          },
+          {
+            itemsperpage: this.page_size,
+            page: this.page_no,
+          }
         )
-          .then((res) => {
-            const { success, data } = res;
-            if (success) {
-              var Items = data.Items || [];
-              this.loading = false;
-              this.list = this.list.concat(Items);
-              if (this.list.length === 0) {
-                this.noRes = true;
-              }
-              if (Items.length < this.page_size) {
-                this.finished = true;
-              }
-            }
-          })
-          .catch(() => {
-            this.page_no = 0;
+      )
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data.Items || [];
             this.loading = false;
-            this.error = true;
-          });
-      }, 100);
+            this.list = this.list.concat(Items);
+            if (this.list.length === 0) {
+              this.noRes = true;
+            }
+            if (Items.length < this.page_size) {
+              this.finished = true;
+            }
+          }
+        })
+        .catch(() => {
+          this.page_no = 0;
+          this.loading = false;
+          this.error = true;
+        });
+      // }, 100);
     },
     setShowSearch() {
       this.showSearchHistory = true;
@@ -523,7 +535,7 @@ export default {
           const { success, data } = res;
           if (success) {
             var Items = data || [];
-            this.allShipToList=[]
+            this.allShipToList = [];
             this.allShipToList = this.allShipToList.concat(Items);
             console.log("allShipToList", this.allShipToList);
             if (this.allShipToList.length > 0) {
@@ -558,7 +570,7 @@ export default {
     display: flex;
     justify-content: space-between;
     .itemBox {
-      flex: 2;
+      flex: 1;
     }
     .itemNet {
       flex: 1;
@@ -567,11 +579,38 @@ export default {
   .listBox {
     display: flex;
     .listImage {
-      margin: 0.8rem 0.3rem 0.3rem;
+      flex: 1;
+      margin: 0.8rem 0.2rem 0.1rem 0.3rem;
+    }
+    .lietItemBoxNumber {
+      // float: left;
+      width: 100%;
+      display: flex;
+      .discount {
+        margin-left: 0.5rem;
+      }
+      .itemBoxNumber {
+        // flex: 1;
+        width: 32%;
+        .itemMargin {
+          margin: 0.1rem 0 0.3rem;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          .itemMarginOff {
+            width: 0.2rem;
+            height: 0.7rem;
+            background: #ff976a;
+            color: #f5f5f5;
+            font-weight: 700;
+          }
+        }
+      }
     }
     .listDetailBox {
-      margin: 0.4rem 0.1rem 0.2rem 0rem;
-
+      flex: 3;
+      margin: 0.4rem 0.5rem 0rem 0rem;
       .textBox {
         margin: 0.2rem 0;
       }
@@ -583,10 +622,10 @@ export default {
     margin-right: 0.3rem;
   }
   .shop-status-list {
-    height: 60%;
-    padding: 20px;
+    // height: 70%;
+    padding: 18px;
     background: #f5f5f5;
-    overflow: auto;
+    // overflow: auto;
   }
   .shop-status-item {
     margin-bottom: 32px;

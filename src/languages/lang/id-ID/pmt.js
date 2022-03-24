@@ -751,5 +751,31 @@ export default {
     'ZSO No':'ZSO No',
     'Payer':'Payer',
     'Bill To':'Bill To',
-    'Ship To':'Ship To'
+    'Ship To':'Ship To',
+
+    'Net Price':'Net Price',
+    'Discount':'Discount',
+    'Add to cart':'Add to cart',
+    'Continue to Purchase':'Continue to Purchase',
+    'Order Type':'Order Type',
+    'Dealer':'Dealer',
+    'Current AR Balance':'Current AR Balance',
+    'Bill To':'Bill To',
+    'Payer':'Payer',
+    'Select Delivery Address':'Select Delivery Address',
+    'Company Name':'Company Name',
+    'Street':'Street',
+    'House Number':'House Number',
+    'Street2':'Street2',
+    'Postal Code':'Postal Code',
+    'City':'City',
+    'Phone':'Phone',
+    'Delivery Date':'Delivery Date',
+    'Logistic vendor':'Logistic vendor',
+    'Text':'Text',
+    'PO Number':'PO Number',
+    'Sale Agent':'Sale Agent',
+    'Photos':'Photos',
+    'Dealer Pickup by themselves':'Dealer Pickup by themselves'
+
 }

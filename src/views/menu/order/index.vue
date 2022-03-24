@@ -1,6 +1,10 @@
 <template>
   <div class="orderBox">
-    <van-nav-bar left-arrow @click-left="goBack" :title="$t('Order List')" />
+    <van-nav-bar
+      left-arrow
+      @click-left="goRouterLeft"
+      :title="$t('Order List')"
+    />
     <!-- Search bar -->
     <div class="search-top">
       <van-search
@@ -41,7 +45,7 @@
                 <div class="box">
                   <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
                   <p class="text">ZSO</p>
-                  <p class="text">Total Price:{{item.new_order_amount}}</p>
+                  <p class="text">Total Price:{{ item.new_order_amount }}</p>
                 </div>
               </div>
             </van-swipe-cell>
@@ -75,7 +79,7 @@
                 >
                   <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
                   <p class="text">Zso</p>
-                  <p class="text">Total Price:{{item.new_order_amount}}</p>
+                  <p class="text">Total Price:{{ item.new_order_amount }}</p>
                 </div>
                 <div class="buttonBox">
                   <van-button
@@ -184,6 +188,9 @@ export default {
       this.noRes = false;
       this.error = false;
       this.onLoad();
+    },
+    goRouterLeft() {
+      this.$router.push("/menu");
     },
     onSearch() {
       this.initData();
