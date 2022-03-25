@@ -246,7 +246,7 @@
                     <div class="itemBoxNumber discount">
                       <div>{{ $t("Discount") }}</div>
                       <div class="itemMargin" style="color: #ef9f61">
-                        {{ item.discountPrice ? item.discountPrice : 0 }}
+                        {{ item.discountPrice ? item.discountPrice : "0%" }}
                         <span class="itemMarginOff">OFF</span>
                       </div>
                     </div>
@@ -283,7 +283,11 @@
             >
           </p>
         </div>
-        <van-button class="submitButton" color="#407FDC" @click="checkOutClick"
+        <van-button
+          class="submitButton"
+          :loading="checkoutLoading"
+          color="#407FDC"
+          @click="checkOutClick"
           >Check Out</van-button
         >
       </div>
@@ -511,6 +515,7 @@ export default {
       totalTaxPrice: 0,
       totalPrice: 0,
       list: [],
+      checkoutLoading:false
     };
   },
   computed: {
@@ -546,18 +551,23 @@ export default {
     },
     //下单
     checkOutClick() {
+      this.$toast.loading({ duration: 0 });
+      this.checkoutLoading = true;
       console.log(JSON.stringify(this.formData), "下单");
       SubmitOrder(this.formData)
         .then((res) => {
           if (res.success) {
             this.$toast.success("success");
-            this.$router.push("/order");
+            this.checkoutLoading = false;
+            this.$router.push({ name: "Order" });
           } else {
             this.$toast.fail("Network error");
+            this.checkoutLoading = false;
           }
         })
         .catch((e) => {
           this.$toast.fail("Network error");
+          this.checkoutLoading = false;
         });
     },
     //获取数据
@@ -856,7 +866,7 @@ export default {
       }
     }
   }
-    .lietItemBoxNumber {
+  .lietItemBoxNumber {
     // float: left;
     width: 100%;
     display: flex;

@@ -21,6 +21,8 @@
 <script>
 import icon_invoiceSubmit from "@/assets/images/icon/Exhibition_icon.png";
 import TabBar from "@/components/TabBar";
+import icon_aplan from "@/assets/images/shop/icon/aplan.png";
+import icon_shop from "@/assets/images/shop/icon/shop.png";
 export default {
   components: {
     TabBar,
@@ -30,13 +32,13 @@ export default {
       columnNumber: "3",
       memuGridDataSource: [
         {
-          icon: icon_invoiceSubmit,
+          icon: icon_shop,
           text: "ZSO",
           toPath: "/zso",
           // permission: "pmtMenu:retailInvoice",
         },
         {
-          icon: icon_invoiceSubmit,
+          icon: icon_aplan,
           text: "Order",
           toPath: "/order",
           // permission: "pmtMenu:retailInvoice",

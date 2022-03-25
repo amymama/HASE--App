@@ -99,7 +99,8 @@
                 <div class="itemBoxNumber discount">
                   <div>{{ $t("Discount") }}</div>
                   <div class="itemMargin" style="color: #ef9f61">
-                    {{ item.discountPrice ? item.discountPrice : 0 }}
+                    <!-- {{ item.discountPrice}} -->
+                    {{ item.discountPrice?item.discountPrice:'0%'}}
                     <span class="itemMarginOff">OFF</span>
                   </div>
                 </div>
@@ -214,6 +215,7 @@ export default {
   },
   data() {
     return {
+      discountPrice:'',
       confirmDisabled: true,
       selectedLocation: {},
       cartShow: false,
@@ -437,6 +439,7 @@ export default {
                 taxPrice: item.taxPrice,
                 taxRate: item.taxRate,
                 radio: "",
+                discountPrice:item.discountPrice
               };
               this.list.push(obj);
             });

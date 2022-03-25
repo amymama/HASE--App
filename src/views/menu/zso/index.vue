@@ -134,19 +134,19 @@
               </div>
               <div class="lietItemBoxNumber">
                 <div class="itemBoxNumber">
-                  <div>{{$t('Stock')}}</div>
+                  <div>{{ $t("Stock") }}</div>
                   <div class="itemMargin">{{ item.stock }}</div>
                 </div>
                 <div class="itemBoxNumber">
-                  <div>{{$t('Net Price')}}</div>
+                  <div>{{ $t("Net Price") }}</div>
                   <div class="itemMargin" style="color: #0000ff">
                     SAR:{{ item.netPrice }}
                   </div>
                 </div>
                 <div class="itemBoxNumber discount">
-                  <div>{{$t('Discount')}}</div>
+                  <div>{{ $t("Discount") }}</div>
                   <div class="itemMargin">
-                    {{ item.discountPrice ? item.discountPrice : 0 }}
+                    {{ item.discountPrice ? item.discountPrice : "0%" }}
                     <span class="itemMarginOff">OFF</span>
                   </div>
                 </div>
@@ -160,7 +160,7 @@
               color="#407FDC"
               @click="addCartClick(item)"
             >
-              {{$t('Add to Cart')}}
+              {{ $t("Add to Cart") }}
             </van-button>
           </div>
         </van-swipe-cell>
@@ -171,7 +171,9 @@
       <div class="addToCartBox">
         <div class="lietItemBox" style="color: #a2a8b2">
           <span calss="textBox itemBox">{{ cartParams.productNumber }}</span>
-          <span calss="textBox itemNet">{{$t('Stock')}}:{{ cartParams.stock }}</span>
+          <span calss="textBox itemNet"
+            >{{ $t("Stock") }}:{{ cartParams.stock }}</span
+          >
         </div>
         <div class="numButton">
           <van-stepper
@@ -187,7 +189,7 @@
           <van-button class="cancel" @click="onaddCartCancel" type="danger"
             >Cancel</van-button
           >
-          <van-button class="addCart" @click="addCartOk" type="info"
+          <van-button class="addCart" :loading="addLoading"  @click="addCartOk" type="info"
             >Ok</van-button
           >
         </div>
@@ -227,8 +229,6 @@ import DealerSearch from "./components/dealer.vue";
 import ShipTo from "./components/shipTo.vue";
 import StorageLoction from "./components/storageLoction.vue";
 import ZsoDetail from "./components/zsoDetail.vue";
-
-// import { getShopListBySelf, postShopOperation } from "@/api/shop";
 import {
   GetCartCount,
   zsoGetProductList,
@@ -308,6 +308,7 @@ export default {
       error: false,
       finished: false,
       noRes: false,
+      addLoading:false
     };
   },
   created() {
@@ -336,6 +337,7 @@ export default {
     },
     //确认加入购物车
     addCartOk() {
+      this.addLoading=true
       let that = this;
       if (this.num == 0) {
         that.$toast.fail("The quantity cannot be 0");
@@ -363,16 +365,19 @@ export default {
           if (res.success) {
             // this.$toast.clear();
             that.$toast.success("succes");
+            this.addLoading=false
             this.getCartCountNumber();
             that.onaddCartCancel();
           } else {
             // that.$toast.clear();
             that.$toast.fail(res.message);
+            this.addLoading=false
           }
         })
         .catch((e) => {
           that.$toast.fail("Network error");
-        });
+            this.addLoading=false
+        })
     },
     //获取商品件数
     getCartCountNumber() {

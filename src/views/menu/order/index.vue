@@ -6,16 +6,15 @@
       :title="$t('Order List')"
     />
     <!-- Search bar -->
-    <div class="search-top">
+    <div class="search-top-orderlist">
       <van-search
         v-model="keyword"
-        show-action
-        autofocus="false"
         placeholder="Please input keywords"
-        background="#f2f2f2"
+        background="none"
         shape="round"
-        @search="onSearch"
-        @cancel="onCancel"
+        @search="onSearchOrderList"
+        @cancel="onCancelOrderList"
+        clearable
       />
     </div>
     <!-- tabs -->
@@ -85,6 +84,7 @@
                   <van-button
                     type="info"
                     size="mini"
+                    :loading="resubmitLoading"
                     @click="resubmitClick(item.new_order_summaryId)"
                     >Resubmit</van-button
                   >
@@ -117,29 +117,35 @@ export default {
       noRes: false,
       finished: false,
       list: [],
+      resubmitLoading:true
     };
   },
   methods: {
     resubmitClick(id) {
       this.$toast.loading({ duration: 0 });
+      this.resubmitLoading = true;
       ReSubmitOrder({ orderId: id })
         .then((res) => {
           console.log(res, "ss");
           if (res.success) {
             this.$toast.success("Success");
             // this.$toast.clear();
+            this.resubmitLoading = false;
           } else {
             this.$toast.fail("Network error");
+            this.resubmitLoading = false;
           }
         })
         .catch((e) => {
           this.$toast.fail("Network error");
+          this.resubmitLoading = false;
         });
     },
     tabsChange(val) {
+      console.log(val);
       this.keyword = "";
       this.orderState = val == 0 ? 1 : 2;
-      this.initData();
+      this.initDataOrderList();
     },
     onLoad() {
       setTimeout(() => {
@@ -180,7 +186,7 @@ export default {
           });
       }, 100);
     },
-    initData() {
+    initDataOrderList() {
       this.list = [];
       this.page_no = 0;
       this.loading = true;
@@ -192,11 +198,11 @@ export default {
     goRouterLeft() {
       this.$router.push("/menu");
     },
-    onSearch() {
-      this.initData();
+    onSearchOrderList() {
+      this.initDataOrderList();
     },
-    onCancel() {
-      this.initData();
+    onCancelOrderList() {
+      this.initDataOrderList();
     },
   },
 };
