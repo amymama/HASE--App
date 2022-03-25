@@ -1,35 +1,37 @@
 <template>
   <div class="carBox">
-    <van-nav-bar @click-left="goBack" left-arrow fixed title="Cart" />
+    <van-nav-bar @click-left="goBack" left-arrow fixed :title="$t('Cart')" />
     <!-- nav Bar -->
     <div class="topBox">
-      <div class="standardBox">Standard</div>
-      <div>
-        <van-field
-          v-model="selectedDealer.dealerName"
-          input-align="right"
-          :label="$t('Dealer Name')"
-          readonly
-          is-link
-          @click="$refs.dealerSearch.onShow()"
-        />
-        <van-field
-          v-model="selectedShipTo.partnerName"
-          input-align="right"
-          :label="$t('Ship To')"
-          readonly
-          is-link
-          @click="$refs.shipToSearch.onShow()"
-        />
-        <div class="selecAllBox">
-          <div class="radioBox">
-            <van-checkbox v-model="radio" @click="allRadioClick"
-              >All</van-checkbox
-            >
+      <div class="standardBox">{{$t('Standard')}}</div>
+      <div class="searchBox">
+        <div class="searchInputBox">
+          <van-field
+            v-model="selectedDealer.dealerName"
+            input-align="right"
+            :label="$t('Dealer Name')"
+            readonly
+            is-link
+            @click="$refs.dealerSearch.onShow()"
+          />
+          <van-field
+            v-model="selectedShipTo.partnerName"
+            input-align="right"
+            :label="$t('Ship To')"
+            readonly
+            is-link
+            @click="$refs.shipToSearch.onShow()"
+          />
+          <div class="selecAllBox">
+            <div class="radioBox">
+              <van-checkbox v-model="radio" @click="allRadioClick"
+                >{{$t('All')}}</van-checkbox
+              >
+            </div>
+            <van-cell title="" is-link @click="goBack">
+              {{ $t("Continue to Purchase") }}
+            </van-cell>
           </div>
-          <van-cell title="" is-link @click="goBack">
-            {{ $t("Continue to Purchase") }}
-          </van-cell>
         </div>
       </div>
     </div>
@@ -51,12 +53,6 @@
         v-for="(item, index) in list"
         :key="index"
       >
-        <div class="shop-status__header">
-          <div class="shop-status-left approved">
-            <!-- {{ $t("shopStatus.Approved") }} -->
-          </div>
-          <div class="shop-code"></div>
-        </div>
         <van-cell-group class="groupBox">
           <div class="radioBoxItem">
             <van-checkbox
@@ -93,14 +89,14 @@
                 <div class="itemBoxNumber">
                   <div>{{ $t("Net Price") }}</div>
                   <div class="itemMargin" style="color: #ef9f61">
-                    SAR:{{ item.retailprice }}
+                    {{$t('SAR')}}:{{ item.retailprice }}
                   </div>
                 </div>
                 <div class="itemBoxNumber discount">
                   <div>{{ $t("Discount") }}</div>
                   <div class="itemMargin" style="color: #ef9f61">
                     <!-- {{ item.discountPrice}} -->
-                    {{ item.discountPrice?item.discountPrice:'0%'}}
+                    {{ item.discountPrice ? item.discountPrice : "0%" }}
                     <span class="itemMarginOff">OFF</span>
                   </div>
                 </div>
@@ -145,7 +141,7 @@
           </div>
         </van-cell-group>
         <span slot="right" class="slotGroupBox" @click="deleteClick(item)"
-          >Delete</span
+          >{{$t('Delete')}}</span
         >
       </van-swipe-cell>
       <!-- </van-list> -->
@@ -159,11 +155,11 @@
     <!--footer Confirm -->
     <div class="submitBox">
       <div class="submitPrice">
-        <p class="text">Total Net Price :${{ totalNetPrice }}</p>
-        <p class="text">Total Tax Price :${{ totalTaxPrice }}</p>
+        <p class="text">{{$t('Total Net Price')}} :{{$t('SAR')}} {{ totalNetPrice }}</p>
+        <p class="text">{{$t('Total Tax Price')}} :{{$t('SAR')}} {{ totalTaxPrice }}</p>
         <p class="text">
-          Total Price :<span style="color: #fa0e0e; font-weight: 700"
-            >${{ totalPrice }}</span
+          {{$t("Total Price")}} :<span style="color: #fa0e0e; font-weight: 700"
+            >{{$t('SAR')}} {{ totalPrice }}</span
           >
         </p>
       </div>
@@ -172,7 +168,7 @@
         color="#407FDC"
         :disabled="confirmDisabled"
         @click="confirmClick"
-        >Confirm</van-button
+        >{{$t('Confirm')}}</van-button
       >
     </div>
     <!-- 弹框 -->
@@ -215,7 +211,7 @@ export default {
   },
   data() {
     return {
-      discountPrice:'',
+      discountPrice: "",
       confirmDisabled: true,
       selectedLocation: {},
       cartShow: false,
@@ -337,7 +333,7 @@ export default {
     // },
     //增加或减少商品件数
     numAddClick(val) {
-      this.$toast.loading({ duration: 0 });
+      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
       UpdateCartProductCounts({
         new_order_cartId: val.new_order_cartId,
         new_product_counts: val.new_product_counts,
@@ -371,7 +367,7 @@ export default {
     },
     //删除购物车商品
     deleteClick(val) {
-      this.$toast.loading({ duration: 0 });
+      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
       DeleteCart({ new_order_cartId: val.new_order_cartId })
         .then((res) => {
           if (res.success) {
@@ -402,13 +398,13 @@ export default {
       this.initData();
     },
     initData() {
+      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
       this.radio = false;
       this.list = [];
       this.getDataListCart();
     },
     //获取购物车数据
     getDataListCart() {
-      this.$toast.loading({ message: "Loading...", duration: 0 });
       let parms = {
         new_user_id: this.$store.getters.userInfo.id,
         new_dealer_id: this.selectedDealer.dealerId,
@@ -439,7 +435,7 @@ export default {
                 taxPrice: item.taxPrice,
                 taxRate: item.taxRate,
                 radio: "",
-                discountPrice:item.discountPrice
+                discountPrice: item.discountPrice,
               };
               this.list.push(obj);
             });
@@ -464,6 +460,7 @@ export default {
     },
     //dealer Name
     getDataSelect() {
+      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
       GetDealerList({ userId: this.$store.getters.userInfo.id })
         .then((res) => {
           const { success, data } = res;
@@ -507,22 +504,26 @@ export default {
 .carBox {
   .topBox {
     width: 100%;
-    // height: 5rem;
+    height: 3rem;
     position: fixed;
     // overflow: hidden;
     top: 1rem;
     z-index: 1;
+    background: #f5f5f5;
   }
-  .bottomBox {
-    height: 0.2rem;
+  .searchBox {
+    width: 100%;
     background-color: #f5f5f5;
+  }
+  .searchInputBox {
+    margin: 0.2rem;
+    overflow: hidden;
+    border-radius: 20px;
   }
   .shop-status-list {
     padding: 18px;
     padding-top: 6.5rem;
-    background: #f5f5f5;
     overflow-y: auto;
-    clear: both;
   }
   .shop-status-item {
     margin-bottom: 32px;
@@ -531,66 +532,6 @@ export default {
     // background: #fef9f3;
     background: #fff;
     box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
-  }
-  .shop-status__header {
-    display: flex;
-    overflow: hidden;
-    border-bottom: 1px solid #eee;
-    border-radius: 20px 0 0 0;
-    .shop-status-left {
-      width: 370px;
-      height: 40px;
-      line-height: 40px;
-      position: relative;
-      background: #aaa;
-      color: #fff;
-      text-align: center;
-      margin-right: 50px;
-      // border-radius: 20px 0 0 0;
-      font-size: 24px;
-      &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        right: -39px;
-        bottom: 0;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 40px 0 0 40px;
-        border-color: transparent transparent transparent #aaa;
-      }
-      &.draft {
-        background: #aaa;
-        &::after {
-          border-color: transparent transparent transparent #aaa;
-        }
-      }
-      &.wait-approvel {
-        background: #ff976a;
-        &::after {
-          border-color: transparent transparent transparent #ff976a;
-        }
-      }
-      &.approved {
-        background: #07c160;
-        &::after {
-          border-color: transparent transparent transparent #07c160;
-        }
-      }
-      &.reject {
-        background: #ee0a24;
-        &::after {
-          border-color: transparent transparent transparent #ee0a24;
-        }
-      }
-    }
-    .shop-code {
-      flex: 1;
-      line-height: 40px;
-      font-size: $font24;
-      color: #666;
-    }
   }
   .radioBoxItem {
     z-index: 1;
@@ -615,7 +556,7 @@ export default {
     flex-direction: column;
   }
   .listBox {
-    margin: 0 0.6rem;
+    margin: 0 0 0 0.6rem;
     display: flex;
     // .radioBox {
     //   // z-index: 1;
@@ -625,7 +566,7 @@ export default {
       margin: 0.3rem 0.3rem 0rem;
     }
     .listDetailBox {
-      width: 57%;
+      width: 65%;
       margin: 0rem 0.1rem 0.2rem 0rem;
       .lietItemBox {
         margin: 0.2rem 0;
@@ -696,28 +637,46 @@ export default {
       }
     }
   }
-  .submitBox {
+   .submitBox {
     width: 100%;
     position: fixed;
     bottom: 0;
-    // height: 2rem;
     background-color: #ffffff;
-    display: flex;
-    font-size: 0.2rem;
+    font-size: 0.3rem;
     .submitPrice {
-      flex: 2;
-      // height: 100%;
-      padding: 0.3rem 0.1rem;
+      width: 100%;
+      margin: 0.3rem;
       .text {
         margin: 0.1rem;
-        font-size: 28px;
+        font-size: 30px;
       }
     }
     .submitButton {
-      flex: 1;
-      padding: 0.9rem 0.2rem;
-      height: 100%;
+      width: 100%;
     }
   }
+  // .submitBox {
+  //   width: 100%;
+  //   position: fixed;
+  //   bottom: 0;
+  //   // height: 2rem;
+  //   background-color: #ffffff;
+  //   display: flex;
+  //   font-size: 0.2rem;
+  //   .submitPrice {
+  //     flex: 2;
+  //     // height: 100%;
+  //     padding: 0.3rem 0.1rem;
+  //     .text {
+  //       margin: 0.1rem;
+  //       font-size: 28px;
+  //     }
+  //   }
+  //   .submitButton {
+  //     flex: 1;
+  //     padding: 0.9rem 0.2rem;
+  //     height: 100%;
+  //   }
+  // }
 }
 </style>

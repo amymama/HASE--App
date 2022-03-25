@@ -31,41 +31,41 @@
           <van-cell>
             <p>{{ TechDetail.modelName }}</p>
             <div class="detailTitle">
-              <span>Price:${{ TechDetail.retailPrice }}</span>
-              <span>Stock:{{ TechDetail.stock }}</span>
+              <span>{{$t('Price')}}:{{$t('SAR')}}{{ TechDetail.retailPrice }}</span>
+              <span>{{$t('Stock')}}:{{ TechDetail.stock }}</span>
             </div>
           </van-cell>
         </div>
         <div class="bottomBox"></div>
         <!--  tabs-->
         <van-tabs v-model="active" swipeable>
-          <van-tab title="Product Details">
+          <van-tab :title="$t('Product Details')">
             <div v-for="(itemImg, itemImgIndex) in Detail" :key="itemImgIndex">
               <van-image :src="itemImg" />
             </div>
           </van-tab>
-          <van-tab title="Technical Details">
-            <van-cell><p style="color: #1989fa">Basic</p></van-cell>
+          <van-tab :title="$t('Technical Details')">
+            <van-cell><p style="color: #1989fa">{{$t('Basic')}}</p></van-cell>
             <div class="listDetailBox">
               <div class="lietItemBox">
-                <span calss="textBox itemBox">Product Number</span>
+                <span calss="textBox itemBox">{{$t('Product Number')}}</span>
                 <span calss="textBox itemNet">{{
                   TechDetail.productNumber
                 }}</span>
               </div>
               <div class="lietItemBox">
-                <span calss="textBox itemBox">Order Type</span>
+                <span calss="textBox itemBox">{{$t('Order Type')}}</span>
                 <span calss="textBox itemNet">{{ TechDetail.orderType }}</span>
               </div>
               <div class="lietItemBox">
-                <span calss="textBox itemBox">Storage Location</span>
+                <span calss="textBox itemBox">{{$t('Storage Location')}}</span>
                 <span calss="textBox itemNet">{{
                   TechDetail.storageLocation
                 }}</span>
               </div>
             </div>
           </van-tab>
-          <van-tab title="POP">
+          <van-tab :title="$t('POP')">
             <div v-for="(itemImg, itemImgIndex) in pop" :key="itemImgIndex">
               <van-image :src="itemImg" />
             </div>
@@ -93,7 +93,7 @@
             @click="addCartClick"
             size="samll"
             type="info"
-            >Add to Cart</van-button
+            >{{$t('Add to Cart')}}</van-button
           >
         </div>
       </div>
@@ -103,7 +103,7 @@
       <div class="addToCartBox">
         <div class="lietItemBox" style="color: #a2a8b2">
           <span calss="textBox itemBox">{{ TechDetail.productNumber }}</span>
-          <span calss="textBox itemNet">Stock:{{ TechDetail.stock }}</span>
+          <span calss="textBox itemNet">{{$t('Stock')}}:{{ TechDetail.stock }}</span>
         </div>
         <div class="numButton">
           <van-stepper
@@ -117,10 +117,10 @@
         </div>
         <div class="addCartFooter">
           <van-button class="cancel" @click="onaddCartCancel" type="danger"
-            >Cancel</van-button
+            >{{$t('Cancel')}}</van-button
           >
           <van-button class="addCart" @click="addCartOk" type="info"
-            >Ok</van-button
+            >{{$t('Ok')}}</van-button
           >
         </div>
       </div>
@@ -175,7 +175,7 @@ export default {
 
   methods: {
     onShow() {
-      this.$toast.loading({ duration: 0 });
+      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
       GetProductDetail(this.productDetail)
         .then((res) => {
           if (res.success) {
@@ -200,7 +200,7 @@ export default {
         that.$toast.fail("The quantity cannot be 0");
         return false;
       }
-      this.$toast.loading({ duration: 0 });
+      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
       OrderCartAddCart({
         new_user_id: this.$store.getters.userInfo.id,
         new_user_realname: this.$store.getters.userInfo.realname,

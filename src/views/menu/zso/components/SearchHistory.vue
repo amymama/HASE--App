@@ -24,7 +24,7 @@
       <!-- History list -->
       <div class="search-history">
         <div class="search-history-header">
-          <span>Search History</span>
+          <span>{{$t('Search History')}}</span>
           <!-- <van-icon name="delete-o" @click="handleDelete" /> -->
         </div>
 

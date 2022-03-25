@@ -111,7 +111,7 @@ export default {
   methods: {
     onShow(new_order_summaryId) {
       this.dealerShow = true;
-      this.$toast.loading({ duration: 0 });
+      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
       GetOrderDetail({ new_order_summaryId: new_order_summaryId })
         .then((res) => {
           if (res.success) {

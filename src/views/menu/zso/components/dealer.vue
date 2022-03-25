@@ -51,8 +51,8 @@
 </template>
 <script>
 // import { orderGetDealerList } from "@/api/shop";
-import { getShopListBySelf, postShopOperation } from "@/api/shop";
-import { orderGetDealerList, GetDealerList } from "@/api/order";
+// import { getShopListBySelf, postShopOperation } from "@/api/shop";
+// import { orderGetDealerList, GetDealerList } from "@/api/order";
 export default {
   props: {
     allList: {

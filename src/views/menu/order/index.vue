@@ -1,100 +1,151 @@
 <template>
   <div class="orderBox">
-    <van-nav-bar
-      left-arrow
-      @click-left="goRouterLeft"
-      :title="$t('Order List')"
-    />
-    <!-- Search bar -->
-    <div class="search-top-orderlist">
-      <van-search
-        v-model="keyword"
-        placeholder="Please input keywords"
-        background="none"
-        shape="round"
-        @search="onSearchOrderList"
-        @cancel="onCancelOrderList"
-        clearable
-      />
+    <div class="top">
+      <div class="topBox">
+        <van-nav-bar
+          left-arrow
+          @click-left="goRouterLeft"
+          :title="$t('Order List')"
+        />
+        <!-- Search bar -->
+        <div class="search-top-orderlist">
+          <van-search
+            v-model="keyword"
+            :placeholder="$t('Please input keywords')"
+            background="none"
+            shape="round"
+            @search="onSearchOrderList"
+            @cancel="onCancelOrderList"
+            clearable
+          />
+        </div>
+      </div>
     </div>
     <!-- tabs -->
-    <van-tabs v-model="active" swipeable @change="tabsChange">
-      <van-tab title="Success">
-        <!-- list 1 -->
-        <div class="shop-status-list">
-          <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
-          <van-list
-            v-else
-            v-model="loading"
-            :finished="finished"
-            :finished-text="$t('shopCommon.NoMoreData')"
-            @load="onLoad"
-            :error.sync="error"
-            :error-text="$t('shopCommon.RequestErrorText')"
-          >
-            <van-swipe-cell
-              class="shop-status-item"
-              v-for="(item, index) in list"
-              :key="index"
+    <div class="oederListBox">
+      <van-tabs v-model="active" swipeable @change="tabsChange">
+        <van-tab :title="$t('Success')">
+          <!-- list 1 -->
+          <div class="shop-status-list">
+            <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
+            <van-list
+              v-else
+              v-model="loading"
+              :finished="finished"
+              :finished-text="$t('NoMoreData')"
+              @load="onLoad"
+              :error.sync="error"
+              :error-text="$t('shopCommon.RequestErrorText')"
             >
-              <div
-                class="detailBox"
-                @click="$refs.orderDetailShow.onShow(item.new_order_summaryId)"
+              <van-swipe-cell
+                class="shop-status-item"
+                v-for="(item, index) in list"
+                :key="index"
               >
-                <div class="box">
-                  <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
-                  <p class="text">ZSO</p>
-                  <p class="text">Total Price:{{ item.new_order_amount }}</p>
-                </div>
-              </div>
-            </van-swipe-cell>
-          </van-list>
-        </div>
-      </van-tab>
-      <van-tab title="Pending">
-        <!-- list2-->
-        <div class="shop-status-list">
-          <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
-          <van-list
-            v-else
-            v-model="loading"
-            :finished="finished"
-            :finished-text="$t('shopCommon.NoMoreData')"
-            @load="onLoad"
-            :error.sync="error"
-            :error-text="$t('shopCommon.RequestErrorText')"
-          >
-            <van-swipe-cell
-              class="shop-status-item"
-              v-for="(item, index) in list"
-              :key="index"
-            >
-              <div class="detailBox">
                 <div
-                  class="box"
+                  class="detailBox"
                   @click="
                     $refs.orderDetailShow.onShow(item.new_order_summaryId)
                   "
                 >
-                  <h4 class="text">Dealer Name:{{ item.new_dealer_name }}</h4>
-                  <p class="text">Zso</p>
-                  <p class="text">Total Price:{{ item.new_order_amount }}</p>
+                  <div class="box">
+                    <h4 class="text">{{$t('Dealer Name')}}:{{ item.new_dealer_name }}</h4>
+                    <p class="text">{{$t('ZSO')}}</p>
+                    <p class="text">{{$t('Total Price')}}:{{ item.new_order_amount }}</p>
+
+                    <div class="prouctTitleBox">
+                      <h3 class="text">HSU-18CTB03T_SET(PIPE):TE</h3>
+                      <div class="text">
+                        ABB146E09invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.12630</span>
+                      </div>
+                      <div class="prouctNumberBox">X1</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="buttonBox">
-                  <van-button
-                    type="info"
-                    size="mini"
-                    :loading="resubmitLoading"
-                    @click="resubmitClick(item.new_order_summaryId)"
-                    >Resubmit</van-button
+              </van-swipe-cell>
+            </van-list>
+          </div>
+        </van-tab>
+        <van-tab :title="$t('Pending')">
+          <!-- list2-->
+          <div class="shop-status-list">
+            <van-empty v-if="noRes" :description="$t('NoMoreData')" />
+            <van-list
+              v-else
+              v-model="loading"
+              :finished="finished"
+              :finished-text="$t('NoMoreData')"
+              @load="onLoad"
+              :error.sync="error"
+              :error-text="$t('shopCommon.RequestErrorText')"
+            >
+              <van-swipe-cell
+                class="shop-status-item"
+                v-for="(item, index) in list"
+                :key="index"
+              >
+                <div class="detailBox">
+                  <div
+                    class="box"
+                    @click="
+                      $refs.orderDetailShow.onShow(item.new_order_summaryId)
+                    "
                   >
+                    <h3 class="text">
+                      {{ $t("Dealer Name") }}:{{ item.new_dealer_name }}
+                    </h3>
+                    <p class="text">{{ $t("Zso") }}</p>
+                    <p class="text">
+                      {{ $t("Total Price") }}:{{ item.new_order_amount }}
+                    </p>
+                    <div class="prouctTitleBox">
+                      <h3 class="text">HSU-18CTB03T_SET(PIPE):TE</h3>
+                      <div class="text">
+                        ABB146E09invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.12630</span>
+                      </div>
+                      <div class="prouctNumberBox">X1</div>
+                    </div>
+                  </div>
+                  <div class="buttonBox">
+                    <!-- :loading="resubmitLoading" -->
+                    <van-button
+                      type="info"
+                      size="small"
+                      @click="resubmitShow(item.new_order_summaryId)"
+                      >{{$t('Resubmit')}}</van-button
+                    >
+                    <!-- @click="resubmitClick(item.new_order_summaryId)" -->
+                  </div>
                 </div>
-              </div>
-            </van-swipe-cell>
-          </van-list>
+              </van-swipe-cell>
+            </van-list>
+          </div>
+        </van-tab>
+      </van-tabs>
+    </div>
+    <van-action-sheet v-model="resubmitIsShow" :title="$t('Confirm')">
+      <div class="addToCartBox">
+        <div class="lietItemBox">
+          <!-- <span calss="textBox itemBox">{{ cartParams.productNumber }}</span>
+        <span calss="textBox itemNet"
+          >{{ $t("Stock") }}:{{ cartParams.stock }}</span
+        > -->
+          {{ $t("Confirm the submission of the order?") }}
         </div>
-      </van-tab>
-    </van-tabs>
+        <div class="addCartFooter">
+          <van-button class="cancel" @click="resubmitCancel" type="danger"
+            >Cancel</van-button
+          >
+          <van-button
+            class="addCart"
+            :loading="resubmitLoading"
+            @click="resubmitClick"
+            type="info"
+            >Ok</van-button
+          >
+        </div>
+      </div>
+    </van-action-sheet>
     <orderDetail ref="orderDetailShow" />
   </div>
 </template>
@@ -117,29 +168,40 @@ export default {
       noRes: false,
       finished: false,
       list: [],
-      resubmitLoading:false
+      resubmitLoading: false,
+      resubmitIsShow: false,
+      orderSummaryId: "",
     };
   },
   methods: {
     resubmitClick(id) {
-      this.$toast.loading({ duration: 0 });
+      this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.resubmitLoading = true;
       ReSubmitOrder({ orderId: id })
         .then((res) => {
           console.log(res, "ss");
           if (res.success) {
             this.$toast.success("Success");
-            // this.$toast.clear();
+            this.$toast.clear();
             this.resubmitLoading = false;
           } else {
             this.$toast.fail("Network error");
             this.resubmitLoading = false;
+            this.$toast.clear();
           }
         })
         .catch((e) => {
           this.$toast.fail("Network error");
           this.resubmitLoading = false;
+          this.$toast.clear();
         });
+    },
+    resubmitShow(id) {
+      this.resubmitIsShow = true;
+      this.orderSummaryId = id;
+    },
+    resubmitCancel() {
+      this.resubmitIsShow = false;
     },
     tabsChange(val) {
       console.log(val);
@@ -208,27 +270,76 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.shop-status-list {
-  padding: 20px;
-  background: #f5f5f5;
-}
-.shop-status-item {
-  margin-bottom: 32px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
-}
-.detailBox {
-  margin: 0.5rem 0.3rem;
-  position: relative;
-  .text {
-    margin: 0.3rem;
+.orderBox {
+  // width: 100%;
+  // height: 100%;
+  // overflow: hidden;
+  .top {
+    height: 3rem;
+    width: 100%;
   }
-  .buttonBox {
-    position: absolute;
-    left: 7.2rem;
-    bottom: 0rem;
+  .topBox {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    .search-top-orderlist {
+      background: #f5f5f5;
+    }
+  }
+  .oederListBox {
+    overflow: auto;
+    height: 90%;
+  }
+  .shop-status-list {
+    padding: 20px;
+    background: #f5f5f5;
+  }
+  .shop-status-item {
+    margin-bottom: 32px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
+  }
+  .detailBox {
+    margin: 0.5rem 0.3rem;
+    position: relative;
+    .text {
+      margin: 0.3rem;
+    }
+    .prouctTitleBox {
+      margin: 0.6rem 0.5rem;
+      position: relative;
+      .prouctNumberBox {
+        position: absolute;
+        left: 7rem;
+        bottom: 0rem;
+      }
+    }
+    .buttonBox {
+      position: absolute;
+      left: 7rem;
+      top: 0.9rem;
+    }
+  }
+  .lietItemBox {
+    text-align: center;
+    font-size: 28px;
+    margin: 0.9rem;
+  }
+  .addCartFooter {
+    display: flex;
+    margin: 0.4rem 0.7rem;
+    justify-content: space-between;
+
+    .addCart {
+      width: 47%;
+      margin-left: 0.4rem;
+    }
+    .cancel {
+      width: 47%;
+    }
   }
 }
 </style>

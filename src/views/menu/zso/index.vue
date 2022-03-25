@@ -2,18 +2,8 @@
   <div class="zsoListBox">
     <div class="top">
       <div class="topBox">
-        <!-- 搜索 -->
-        <van-nav-bar left-arrow @click-left="goBack">
-          <div slot="title" style="padding-right: 22px">
-            <van-field
-              readonly
-              v-model="filterParams.searchValue"
-              clearable
-              style="height: 0.8rem; border-radius: 20px; line-height: 0.4rem"
-              :placeholder="$t('Enter Product Name/Code/Model')"
-              @click="$refs.searchHistory.handleShow()"
-            />
-          </div>
+        <!-- navbar -->
+        <van-nav-bar left-arrow @click-left="goBack" :title="$t('ZSO')">
           <div slot="right">
             <span
               style="color: #ffffff"
@@ -46,125 +36,147 @@
             </span>
           </div>
         </van-nav-bar>
-        <!-- 查询 -->
-        <div class="searchColor">
-          <van-cell-group>
-            <!-- <template #icon>
-              <i class="iconfont icon-dealer"></i>
-            </template> -->
-            <van-field
-              v-model="selectedDealer.dealerName"
-              input-align="right"
-              :label="$t('Dealer Name')"
-              readonly
-              is-link
-              @click="$refs.dealerSearch.onShow()"
-            />
-            <van-field
-              v-model="selectedShipTo.partnerName"
-              input-align="right"
-              :label="$t('Ship To')"
-              readonly
-              is-link
-              @click="$refs.shipToSearch.onShow()"
-            />
-            <van-field
-              v-model="selectedLocation.locationName"
-              input-align="right"
-              label-width="110"
-              :label="$t('Storage Location')"
-              readonly
-              is-link
-              @click="$refs.storageLoctionSearch.onShow()"
-            />
-            <!-- <template #icon>
-              <i class="iconfont icon-type"></i>
-            </template> -->
-          </van-cell-group>
-        </div>
-        <!-- 图片分类 -->
-        <div class="imgBox">
-          <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
-            <div class="imgitem" @click="imgClick(itemImg)">
-              <img :src="itemImg.iconPath" />
-            </div>
-          </div>
+        <!-- <div slot="title" style="padding-right: 22px">
+          <van-field
+            readonly
+            v-model="filterParams.searchValue"
+            clearable
+            style="height: 0.8rem; border-radius: 20px; line-height: 0.4rem"
+            :placeholder="$t('Enter Product Name/Code/Model')"
+            @click="$refs.searchHistory.handleShow()"
+          />
+        </div> -->
+        <!-- 搜索 -->
+        <div style="margin: 0px 0">
+          <van-search
+            readonly
+            v-model="filterParams.searchValue"
+            :placeholder="$t('Enter Product Name/Code/Model')"
+            background="#f2f2f2"
+            shape="round"
+            @click="$refs.searchHistory.handleShow()"
+          />
         </div>
       </div>
     </div>
-    <!-- <div style="clear: both"></div> -->
-    <!-- list -->
-    <div class="shop-status-list">
-      <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
-      <van-list
-        v-else
-        v-model="loading"
-        :finished="finished"
-        :finished-text="$t('shopCommon.NoMoreData')"
-        @load="onLoad"
-        :error.sync="error"
-        :error-text="$t('shopCommon.RequestErrorText')"
-      >
-        <van-swipe-cell
-          class="shop-status-item"
-          v-for="(item, index) in list"
-          :key="index"
+    <!-- 查询 -->
+    <div class="sollrBox">
+      <div class="searchColor">
+        <van-cell-group>
+          <!-- <template #icon>
+              <i class="iconfont icon-dealer"></i>
+            </template> -->
+          <van-field
+            v-model="selectedDealer.dealerName"
+            input-align="right"
+            :label="$t('Dealer Name')"
+            readonly
+            is-link
+            @click="$refs.dealerSearch.onShow()"
+          />
+          <van-field
+            v-model="selectedShipTo.partnerName"
+            input-align="right"
+            :label="$t('Ship To')"
+            readonly
+            is-link
+            @click="$refs.shipToSearch.onShow()"
+          />
+          <van-field
+            v-model="selectedLocation.locationName"
+            input-align="right"
+            label-width="120"
+            :label="$t('Storage Location')"
+            readonly
+            is-link
+            @click="$refs.storageLoctionSearch.onShow()"
+          />
+          <!-- <template #icon>
+              <i class="iconfont icon-type"></i>
+            </template> -->
+        </van-cell-group>
+      </div>
+      <!-- 图片分类 -->
+      <div class="imgBox">
+        <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
+          <div class="imgitem" @click="imgClick(itemImg)">
+            <img :src="itemImg.iconPath" />
+          </div>
+        </div>
+      </div>
+      <!-- <div style="clear: both"></div> -->
+      <!-- list -->
+      <div class="shop-status-list">
+        <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
+        <van-list
+          v-else
+          v-model="loading"
+          :finished="finished"
+          :finished-text="$t('shopCommon.NoMoreData')"
+          @load="onLoad"
+          :error.sync="error"
+          :error-text="$t('shopCommon.RequestErrorText')"
         >
-          <div class="shop-status__header">
+          <van-swipe-cell
+            class="shop-status-item"
+            v-for="(item, index) in list"
+            :key="index"
+          >
+            <!-- <div class="shop-status__header">
             <div class="shop-status-left approved">
-              <!-- {{ $t("shopStatus.Approved") }} -->
             </div>
             <div class="shop-code"></div>
-          </div>
+          </div> -->
 
-          <div class="listBox" @click="detailShowModel(item)">
-            <div class="listImage">
-              <van-image
-                width="2.2rem"
-                height="1.3rem"
-                fit="cover"
-                :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
-              />
-            </div>
-            <div class="listDetailBox">
-              <h3>{{ item.productModel }}</h3>
-              <div style="display: flex">
-                <p class="textBox">{{ item.productNumber }}</p>
-                <p class="textBox" style="padding-left: 0.4rem">BKCR</p>
+            <div class="listBox" @click="detailShowModel(item)">
+              <div class="listImage">
+                <van-image
+                  width="2.2rem"
+                  height="1.3rem"
+                  fit="cover"
+                  :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
+                />
               </div>
-              <div class="lietItemBoxNumber">
-                <div class="itemBoxNumber">
-                  <div>{{ $t("Stock") }}</div>
-                  <div class="itemMargin">{{ item.stock }}</div>
+              <div class="listDetailBox">
+                <h3>{{ item.productModel }}</h3>
+                <div style="display: flex">
+                  <p class="textBox">{{ item.productNumber }}</p>
+                  <p class="textBox" style="padding-left: 0.4rem">BKCR</p>
                 </div>
-                <div class="itemBoxNumber">
-                  <div>{{ $t("Net Price") }}</div>
-                  <div class="itemMargin" style="color: #0000ff">
-                    SAR:{{ item.netPrice }}
+                <div class="lietItemBoxNumber">
+                  <div class="itemBoxNumber">
+                    <div>{{ $t("Stock") }}</div>
+                    <div class="itemMargin">{{ item.stock }}</div>
+                  </div>
+                  <div class="itemBoxNumber">
+                    <div>{{ $t("Net Price") }}</div>
+                    <div class="itemMargin" style="color: #0000ff">
+                      {{ $t("SAR") }}:{{ item.netPrice }}
+                    </div>
+                  </div>
+                  <div class="itemBoxNumber discount">
+                    <div>{{ $t("Discount") }}</div>
+                    <div class="itemMargin">
+                      {{ item.discountPrice ? item.discountPrice : "0%" }}
+                      <span class="itemMarginOff">{{ $t("OFF") }}</span>
+                    </div>
                   </div>
                 </div>
-                <div class="itemBoxNumber discount">
-                  <div>{{ $t("Discount") }}</div>
-                  <div class="itemMargin">
-                    {{ item.discountPrice ? item.discountPrice : "0%" }}
-                    <span class="itemMarginOff">OFF</span>
-                  </div>
-                </div>
               </div>
             </div>
-          </div>
-          <div class="addCartButton">
-            <van-button
-              size="mini"
-              style="padding: 0rem 0.3rem"
-              color="#407FDC"
-              @click="addCartClick(item)"
-            >
-              {{ $t("Add to Cart") }}
-            </van-button>
-          </div>
-        </van-swipe-cell>
-      </van-list>
+            <div class="addCartButton">
+              <van-button
+                size="mini"
+                style="padding: 0rem 0.3rem"
+                color="#407FDC"
+                @click="addCartClick(item)"
+              >
+                {{ $t("Add to Cart") }}
+              </van-button>
+            </div>
+          </van-swipe-cell>
+        </van-list>
+      </div>
     </div>
     <!-- addCart弹框 -->
     <van-action-sheet v-model="addToCartShow" :title="cartParams.productModel">
@@ -187,10 +199,14 @@
         </div>
         <div class="addCartFooter">
           <van-button class="cancel" @click="onaddCartCancel" type="danger"
-            >Cancel</van-button
+            >{{$t('Cancel')}}</van-button
           >
-          <van-button class="addCart" :loading="addLoading"  @click="addCartOk" type="info"
-            >Ok</van-button
+          <van-button
+            class="addCart"
+            :loading="addLoading"
+            @click="addCartOk"
+            type="info"
+            >{{$t('Ok')}}</van-button
           >
         </div>
       </div>
@@ -308,7 +324,7 @@ export default {
       error: false,
       finished: false,
       noRes: false,
-      addLoading:false
+      addLoading: false,
     };
   },
   created() {
@@ -337,13 +353,13 @@ export default {
     },
     //确认加入购物车
     addCartOk() {
-      this.addLoading=true
+      this.addLoading = true;
       let that = this;
       if (this.num == 0) {
         that.$toast.fail("The quantity cannot be 0");
         return false;
       }
-      this.$toast.loading({ duration: 0 });
+      this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       OrderCartAddCart({
         new_user_id: this.$store.getters.userInfo.id,
         new_user_realname: this.$store.getters.userInfo.realname,
@@ -365,19 +381,19 @@ export default {
           if (res.success) {
             // this.$toast.clear();
             that.$toast.success("succes");
-            this.addLoading=false
+            this.addLoading = false;
             this.getCartCountNumber();
             that.onaddCartCancel();
           } else {
             // that.$toast.clear();
             that.$toast.fail(res.message);
-            this.addLoading=false
+            this.addLoading = false;
           }
         })
         .catch((e) => {
           that.$toast.fail("Network error");
-            this.addLoading=false
-        })
+          this.addLoading = false;
+        });
     },
     //获取商品件数
     getCartCountNumber() {
@@ -446,6 +462,7 @@ export default {
           if (success) {
             var Items = data.Items || [];
             this.loading = false;
+            this.$toast.clear();
             this.list = this.list.concat(Items);
             if (this.list.length === 0) {
               this.noRes = true;
@@ -458,6 +475,7 @@ export default {
         .catch(() => {
           this.page_no = 0;
           this.loading = false;
+          this.$toast.clear();
           this.error = true;
         });
       // }, 100);
@@ -482,21 +500,25 @@ export default {
     },
     // 确认dealer
     handleDealerOk(val) {
+      // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.selectedDealer = val;
-      this.getShipTo();
       this.selectedShipTo = {};
-      this.initData();
+      this.getShipTo();
+      // this.initData();
     },
     // 关闭dealer
     handleshipToOk(val) {
+      // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.selectedShipTo = val;
       this.initData();
     },
     handlestorageLoctionOk(val) {
+      // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.selectedLocation = val;
       this.initData();
     },
     getData() {
+      // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
         (res) => {
           if (res.success) {
@@ -558,8 +580,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .zsoListBox {
+  // width: 100%;
+  // height: 100%;
+  // overflow: hidden;
   .top {
-    height: 7rem;
+    height: 2.8rem;
     .topBox {
       width: 100%;
       position: fixed;
@@ -568,7 +593,10 @@ export default {
     }
   }
   .searchColor {
-    background-color: #2058ab;
+    margin: 0 0.3rem;
+    border-radius: 20px;
+    overflow: hidden;
+    // background-color: #2058ab;
   }
   .lietItemBox {
     margin: 0.2rem 0;
@@ -582,6 +610,7 @@ export default {
     }
   }
   .listBox {
+    border-radius: 20px;
     display: flex;
     .listImage {
       flex: 1;
@@ -626,11 +655,13 @@ export default {
     margin-bottom: 0.3rem;
     margin-right: 0.3rem;
   }
+  .sollrBox {
+    overflow: auto;
+    height: 85%;
+  }
   .shop-status-list {
-    // height: 70%;
-    padding: 18px;
+    padding: 0 18px;
     background: #f5f5f5;
-    // overflow: auto;
   }
   .shop-status-item {
     margin-bottom: 32px;
@@ -764,6 +795,11 @@ export default {
     overflow-x: auto;
     .imgitem {
       margin: 0.1rem 0.1rem;
+    }
+    .imgitem:hover,
+    .imgitem:active {
+      padding: 0.1rem 0.15rem;
+      background-color: #e0e0e0;
     }
     img {
       width: 0.8rem;
