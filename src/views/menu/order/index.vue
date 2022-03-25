@@ -117,7 +117,7 @@ export default {
       noRes: false,
       finished: false,
       list: [],
-      resubmitLoading:true
+      resubmitLoading:false
     };
   },
   methods: {
