@@ -1,16 +1,16 @@
 <template>
-  <div class="zsoListBox">
+  <div class="zsoListBox" @scroll="handleScroll">
     <div class="top">
       <div class="topBox">
         <!-- navbar -->
         <van-nav-bar left-arrow @click-left="goBack" :title="$t('ZSO')">
           <div slot="right">
-            <span
+            <!-- <span
               style="color: #ffffff"
               v-show="filterParams.searchValue ? true : false"
               @click="searchCancel"
               >Cancel</span
-            >
+            > -->
             <span @click="clickright">
               <img
                 style="float: right; width: 0.6rem"
@@ -25,11 +25,11 @@
                   top: -0.1rem;
                   height: 0.4rem;
                   line-height: 0.4rem;
-                  width: 0.3rem;
                   background: red;
                   border-radius: 0.1rem;
                   color: #ffffff;
                   font-size: 12px;
+                  padding:0 0.05rem
                 "
                 >{{ cartCount }}</span
               >
@@ -54,7 +54,10 @@
             :placeholder="$t('Enter Product Name/Code/Model')"
             background="#f2f2f2"
             shape="round"
+            show-action
             @click="$refs.searchHistory.handleShow()"
+            @cancel="searchCancel"
+
           />
         </div>
       </div>
@@ -98,8 +101,18 @@
       </div>
       <!-- 图片分类 -->
       <div class="imgBox">
-        <div v-for="(itemImg, indexImg) in categoryList" :key="indexImg">
-          <div class="imgitem" @click="imgClick(itemImg)">
+        <!-- <div class="imgitem" @click="imgClickAll">
+          <img src="../../../assets/images/icon/Exhibition_icon.png" />
+        </div> -->
+        <div v-for="itemImg in categoryList" :key="itemImg.categoryId">
+          <div
+            :class="
+              selectedCategory.categoryId == itemImg.categoryId
+                ? 'imgitemFoucs'
+                : 'imgitem'
+            "
+            @click="imgClick(itemImg)"
+          >
             <img :src="itemImg.iconPath" />
           </div>
         </div>
@@ -198,15 +211,15 @@
           />
         </div>
         <div class="addCartFooter">
-          <van-button class="cancel" @click="onaddCartCancel" type="danger"
-            >{{$t('Cancel')}}</van-button
-          >
+          <van-button class="cancel" @click="onaddCartCancel" type="danger">{{
+            $t("Cancel")
+          }}</van-button>
           <van-button
             class="addCart"
             :loading="addLoading"
             @click="addCartOk"
             type="info"
-            >{{$t('Ok')}}</van-button
+            >{{ $t("Ok") }}</van-button
           >
         </div>
       </div>
@@ -329,8 +342,12 @@ export default {
   },
   created() {
     this.getData();
+    console.log(document.body.scrollTop, "aaaaaaaaa");
   },
   methods: {
+    handleScroll() {
+      console.log(document.body.scrollTop, "aaaaaaaaa");
+    },
     searchCancel() {
       this.filterParams.searchValue = "";
       this.initData();
@@ -422,6 +439,10 @@ export default {
     imgClick(val) {
       this.selectedCategory = val;
       console.log(this.selectedCategory, "1212");
+      this.initData();
+    },
+    imgClickAll() {
+      this.selectedCategory = {};
       this.initData();
     },
     initData() {
@@ -522,6 +543,17 @@ export default {
       GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
         (res) => {
           if (res.success) {
+            // this.categoryList = [
+            //   {
+            //     catalogueType: "",
+            //     categoryId: "",
+            //     categoryName: "",
+            //     iconPath:
+            //       "@/assets/images/icon/Exhibition_icon.png",
+            //     parentCategoryId: "",
+            //   },
+            // ];
+            // this.categoryList = [...this.categoryList, ...res.data];
             this.categoryList = res.data;
           }
         }
@@ -579,10 +611,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 .zsoListBox {
-  // width: 100%;
   // height: 100%;
+  // width: 100%;
   // overflow: hidden;
+  // display: flex;
+  // flex-direction: column;
   .top {
     height: 2.8rem;
     .topBox {
@@ -656,8 +696,11 @@ export default {
     margin-right: 0.3rem;
   }
   .sollrBox {
-    overflow: auto;
-    height: 85%;
+    width: 100%;
+    // overflow: auto;
+    // height: 600px;
+    // min-height: 70rem;
+    // flex: 1;
   }
   .shop-status-list {
     padding: 0 18px;
@@ -669,65 +712,6 @@ export default {
     overflow: hidden;
     background: #fff;
     box-shadow: 0 5px 15px rgba($color: #000000, $alpha: 0.1);
-    .shop-status__header {
-      display: flex;
-      overflow: hidden;
-      border-radius: 20px 0 0 0;
-      border-bottom: 1px solid #eee;
-      .shop-status-left {
-        width: 370px;
-        height: 40px;
-        line-height: 40px;
-        position: relative;
-        background: #aaa;
-        color: #fff;
-        text-align: center;
-        margin-right: 50px;
-        font-size: 24px;
-        &::after {
-          content: "";
-          display: block;
-          position: absolute;
-          right: -39px;
-          bottom: 0;
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 40px 0 0 40px;
-          border-color: transparent transparent transparent #aaa;
-        }
-        &.draft {
-          background: #aaa;
-          &::after {
-            border-color: transparent transparent transparent #aaa;
-          }
-        }
-        &.wait-approvel {
-          background: #ff976a;
-          &::after {
-            border-color: transparent transparent transparent #ff976a;
-          }
-        }
-        &.approved {
-          background: #07c160;
-          &::after {
-            border-color: transparent transparent transparent #07c160;
-          }
-        }
-        &.reject {
-          background: #ee0a24;
-          &::after {
-            border-color: transparent transparent transparent #ee0a24;
-          }
-        }
-      }
-      .shop-code {
-        flex: 1;
-        line-height: 40px;
-        font-size: $font24;
-        color: #666;
-      }
-    }
     .shop-status__body {
       background: #fff;
       padding: 20px;
@@ -794,11 +778,10 @@ export default {
     overflow-y: hidden;
     overflow-x: auto;
     .imgitem {
-      margin: 0.1rem 0.1rem;
+      margin: 0.1rem 0.2rem;
     }
-    .imgitem:hover,
-    .imgitem:active {
-      padding: 0.1rem 0.15rem;
+    .imgitemFoucs {
+      padding: 0.1rem 0.2rem;
       background-color: #e0e0e0;
     }
     img {

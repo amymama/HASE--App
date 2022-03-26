@@ -1,9 +1,9 @@
 <template>
   <div class="carBox">
-    <van-nav-bar @click-left="goBack" left-arrow fixed :title="$t('Cart')" />
+    <van-nav-bar @click-left="goBack" left-arrow :title="$t('Cart')" />
     <!-- nav Bar -->
     <div class="topBox">
-      <div class="standardBox">{{$t('Standard')}}</div>
+      <div class="standardBox">{{ $t("Standard") }}</div>
       <div class="searchBox">
         <div class="searchInputBox">
           <van-field
@@ -24,9 +24,9 @@
           />
           <div class="selecAllBox">
             <div class="radioBox">
-              <van-checkbox v-model="radio" @click="allRadioClick"
-                >{{$t('All')}}</van-checkbox
-              >
+              <van-checkbox v-model="radio" @click="allRadioClick">{{
+                $t("All")
+              }}</van-checkbox>
             </div>
             <van-cell title="" is-link @click="goBack">
               {{ $t("Continue to Purchase") }}
@@ -36,9 +36,10 @@
       </div>
     </div>
     <!-- list -->
-    <div class="shop-status-list" style="height: 90%; overflow: auto">
-      <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
-      <!-- <van-list
+    <div class="scollrBox">
+      <div class="shop-status-list">
+        <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
+        <!-- <van-list
         v-else
         v-model="loading"
         :finished="finished"
@@ -47,62 +48,62 @@
         :error.sync="error"
         :error-text="$t('shopCommon.RequestErrorText')"
       > -->
-      <van-swipe-cell
-        :right-width="68"
-        class="shop-status-item"
-        v-for="(item, index) in list"
-        :key="index"
-      >
-        <van-cell-group class="groupBox">
-          <div class="radioBoxItem">
-            <van-checkbox
-              v-model="item.radio"
-              @click="radioBoxItemClick(item, index)"
-            ></van-checkbox>
-          </div>
-          <div class="listBox" @click="detailShowModel(item)">
-            <div class="listImage">
-              <van-image
-                width="2.2rem"
-                height="1.3rem"
-                fit="cover"
-                :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
-              />
+        <van-swipe-cell
+          :right-width="68"
+          class="shop-status-item"
+          v-for="(item, index) in list"
+          :key="index"
+        >
+          <van-cell-group class="groupBox">
+            <div class="radioBoxItem">
+              <van-checkbox
+                v-model="item.radio"
+                @click="radioBoxItemClick(item, index)"
+              ></van-checkbox>
             </div>
-            <div class="listDetailBox">
-              <h3>{{ item.new_product_model }}</h3>
-              <p class="textBox" style="color: #bcc1c1">
-                {{
-                  item.new_product_number +
-                  "(" +
-                  item.new_storage_location +
-                  ")"
-                }}
-              </p>
-              <div class="lietItemBoxNumber">
-                <div class="itemBoxNumber">
-                  <div>{{ $t("Stock") }}</div>
-                  <div class="itemMargin" style="color: #ef9f61">
-                    {{ item.inventory }}
+            <div class="listBox" @click="detailShowModel(item)">
+              <div class="listImage">
+                <van-image
+                  width="2.2rem"
+                  height="1.3rem"
+                  fit="cover"
+                  :src="item.imgUrl ? item.imgUrl.split(',')[0] : ''"
+                />
+              </div>
+              <div class="listDetailBox">
+                <h3>{{ item.new_product_model }}</h3>
+                <p class="textBox" style="color: #bcc1c1">
+                  {{
+                    item.new_product_number +
+                    "(" +
+                    item.new_storage_location +
+                    ")"
+                  }}
+                </p>
+                <div class="lietItemBoxNumber">
+                  <div class="itemBoxNumber">
+                    <div>{{ $t("Stock") }}</div>
+                    <div class="itemMargin" style="color: #ef9f61">
+                      {{ item.inventory }}
+                    </div>
                   </div>
-                </div>
-                <div class="itemBoxNumber">
-                  <div>{{ $t("Net Price") }}</div>
-                  <div class="itemMargin" style="color: #ef9f61">
-                    {{$t('SAR')}}:{{ item.retailprice }}
+                  <div class="itemBoxNumber">
+                    <div>{{ $t("Net Price") }}</div>
+                    <div class="itemMargin" style="color: #ef9f61">
+                      {{ $t("SAR") }}:{{ item.retailprice }}
+                    </div>
                   </div>
-                </div>
-                <div class="itemBoxNumber discount">
-                  <div>{{ $t("Discount") }}</div>
-                  <div class="itemMargin" style="color: #ef9f61">
-                    <!-- {{ item.discountPrice}} -->
-                    {{ item.discountPrice ? item.discountPrice : "0%" }}
-                    <span class="itemMarginOff">OFF</span>
+                  <div class="itemBoxNumber discount">
+                    <div>{{ $t("Discount") }}</div>
+                    <div class="itemMargin" style="color: #ef9f61">
+                      <!-- {{ item.discountPrice}} -->
+                      {{ item.discountPrice ? item.discountPrice : "0%" }}
+                      <span class="itemMarginOff">OFF</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- <div class="listDetailBox">
+              <!-- <div class="listDetailBox">
               <h3>{{ item.new_product_model }}</h3>
               <p class="textBox" style="color: #bcc1c1">
                 {{
@@ -124,42 +125,42 @@
                 >
               </div>
             </div> -->
-          </div>
-          <div class="numButtonBox">
-            <div class="numButton">
-              <van-stepper
-                :disabled="isView"
-                button-size="24px"
-                min="1"
-                max="999"
-                :integer="true"
-                v-model.number="item.new_product_counts"
-                @change="numAddClick(item)"
-              />
-              <!-- @minus="minusNum(item)"  -->
             </div>
-          </div>
-        </van-cell-group>
-        <span slot="right" class="slotGroupBox" @click="deleteClick(item)"
-          >{{$t('Delete')}}</span
-        >
-      </van-swipe-cell>
-      <!-- </van-list> -->
+            <div class="numButtonBox">
+              <div class="numButton">
+                <van-stepper
+                  :disabled="isView"
+                  button-size="24px"
+                  min="1"
+                  max="999"
+                  :integer="true"
+                  v-model.number="item.new_product_counts"
+                  @change="numAddClick(item)"
+                />
+                <!-- @minus="minusNum(item)"  -->
+              </div>
+            </div>
+          </van-cell-group>
+          <span slot="right" class="slotGroupBox" @click="deleteClick(item)">{{
+            $t("Delete")
+          }}</span>
+        </van-swipe-cell>
+        <!-- </van-list> -->
+      </div>
     </div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
     <!--footer Confirm -->
     <div class="submitBox">
       <div class="submitPrice">
-        <p class="text">{{$t('Total Net Price')}} :{{$t('SAR')}} {{ totalNetPrice }}</p>
-        <p class="text">{{$t('Total Tax Price')}} :{{$t('SAR')}} {{ totalTaxPrice }}</p>
         <p class="text">
-          {{$t("Total Price")}} :<span style="color: #fa0e0e; font-weight: 700"
-            >{{$t('SAR')}} {{ totalPrice }}</span
+          {{ $t("Total Net Price") }} :{{ $t("SAR") }} {{ totalNetPrice }}
+        </p>
+        <p class="text">
+          {{ $t("Total Tax Price") }} :{{ $t("SAR") }} {{ totalTaxPrice }}
+        </p>
+        <p class="text">
+          {{ $t("Total Price") }} :<span
+            style="color: #fa0e0e; font-weight: 700"
+            >{{ $t("SAR") }} {{ totalPrice }}</span
           >
         </p>
       </div>
@@ -168,7 +169,7 @@
         color="#407FDC"
         :disabled="confirmDisabled"
         @click="confirmClick"
-        >{{$t('Confirm')}}</van-button
+        >{{ $t("Confirm") }}</van-button
       >
     </div>
     <!-- 弹框 -->
@@ -333,7 +334,7 @@ export default {
     // },
     //增加或减少商品件数
     numAddClick(val) {
-      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
+      this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       UpdateCartProductCounts({
         new_order_cartId: val.new_order_cartId,
         new_product_counts: val.new_product_counts,
@@ -367,7 +368,7 @@ export default {
     },
     //删除购物车商品
     deleteClick(val) {
-      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
+      this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       DeleteCart({ new_order_cartId: val.new_order_cartId })
         .then((res) => {
           if (res.success) {
@@ -398,7 +399,7 @@ export default {
       this.initData();
     },
     initData() {
-      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
+      this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.radio = false;
       this.list = [];
       this.getDataListCart();
@@ -460,7 +461,7 @@ export default {
     },
     //dealer Name
     getDataSelect() {
-      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
+      this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       GetDealerList({ userId: this.$store.getters.userInfo.id })
         .then((res) => {
           const { success, data } = res;
@@ -501,31 +502,60 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 .carBox {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
   .topBox {
     width: 100%;
-    height: 3rem;
-    position: fixed;
-    // overflow: hidden;
-    top: 1rem;
-    z-index: 1;
+    height: 100%;
+    flex: 1;
     background: #f5f5f5;
+    // height:28%;
+    // position: fixed;
+    // // overflow: hidden;
+    // top: 1rem;
+    // z-index: 1;
+  }
+  .scollrBox {
+    flex: 3;
+    overflow: auto !important;
+    //   height: 50%;
+    // padding-top: 6rem;
+    //   padding-bottom: 3.5rem;
+    //   width: 100%;
+    //   overflow-x: hidden;
   }
   .searchBox {
     width: 100%;
     background-color: #f5f5f5;
+    margin-bottom: 0.2rem;
   }
   .searchInputBox {
-    margin: 0.2rem;
+    margin: 0 0.2rem;
     overflow: hidden;
     border-radius: 20px;
   }
   .shop-status-list {
     padding: 18px;
-    padding-top: 6.5rem;
-    overflow-y: auto;
+    // margin-top: 6.5rem;
+    // height: 30%;
+    // overflow: auto
   }
   .shop-status-item {
+    .van-swipe-cell,.van-swipe-cell__wrapper {
+      border-radius: 20px !important;
+      overflow: hidden;
+    }
     margin-bottom: 32px;
     border-radius: 20px;
     overflow: hidden;
@@ -540,9 +570,6 @@ export default {
     top: 1.5rem;
     left: 0.2rem;
   }
-  // .groupBox {
-  //   // background-color: #fef9f3;
-  // }
   .slotGroupBox {
     color: #f5f5f5;
     font-weight: 700;
@@ -567,7 +594,7 @@ export default {
     }
     .listDetailBox {
       width: 65%;
-      margin: 0rem 0.1rem 0.2rem 0rem;
+      // margin: 0rem 0.1rem 0.2rem 0rem;
       .lietItemBox {
         margin: 0.2rem 0;
         display: flex;
@@ -593,11 +620,11 @@ export default {
     }
   }
   .standardBox {
-    padding-top: 20px;
+    padding-top: 10px;
     height: 1rem;
     line-height: 1rem;
-    background-color: #2058ab;
-    color: #ffffff;
+    // background-color: #2058ab;
+    // color: #ffffff;
     font-size: 0.4rem;
     padding-left: 0.9rem;
   }
@@ -637,15 +664,17 @@ export default {
       }
     }
   }
-   .submitBox {
+  .submitBox {
     width: 100%;
-    position: fixed;
-    bottom: 0;
+    // position: fixed;
+    // bottom: 0;
+    // height: 3.3rem;
+    // flex: 1;
     background-color: #ffffff;
     font-size: 0.3rem;
     .submitPrice {
       width: 100%;
-      margin: 0.3rem;
+      margin: 0.3rem 0.3rem 0;
       .text {
         margin: 0.1rem;
         font-size: 30px;
@@ -655,28 +684,5 @@ export default {
       width: 100%;
     }
   }
-  // .submitBox {
-  //   width: 100%;
-  //   position: fixed;
-  //   bottom: 0;
-  //   // height: 2rem;
-  //   background-color: #ffffff;
-  //   display: flex;
-  //   font-size: 0.2rem;
-  //   .submitPrice {
-  //     flex: 2;
-  //     // height: 100%;
-  //     padding: 0.3rem 0.1rem;
-  //     .text {
-  //       margin: 0.1rem;
-  //       font-size: 28px;
-  //     }
-  //   }
-  //   .submitButton {
-  //     flex: 1;
-  //     padding: 0.9rem 0.2rem;
-  //     height: 100%;
-  //   }
-  // }
 }
 </style>

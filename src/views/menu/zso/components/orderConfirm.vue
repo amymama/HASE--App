@@ -889,7 +889,7 @@ export default {
     font-size: 0.3rem;
     .submitPrice {
       width: 100%;
-      margin: 0.3rem;
+      margin: 0.3rem 0.3rem 0;
       .text {
         margin: 0.1rem;
         font-size: 30px;

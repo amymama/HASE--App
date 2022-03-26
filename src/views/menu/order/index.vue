@@ -287,10 +287,10 @@ export default {
       background: #f5f5f5;
     }
   }
-  .oederListBox {
-    overflow: auto;
-    height: 90%;
-  }
+  // .oederListBox {
+    // overflow: auto;
+    // height: 90%;
+  // }
   .shop-status-list {
     padding: 20px;
     background: #f5f5f5;
