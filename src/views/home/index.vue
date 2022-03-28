@@ -23,12 +23,12 @@
         <div class="home-tools-item"
           v-action:homePageButton:ModelPolicy>
           <img src="@/assets/images/home/dollar.png">
-          <div class="home-tools-item__text">{{ $t('home.button.ModelPolicy') }}</div>
+          <div class="home-tools-item__text">Model Policy</div>
         </div>
         <div class="home-tools-item"
           v-action:homePageButton:PolicyScheme>
           <img src="@/assets/images/home/dollar.png">
-          <div class="home-tools-item__text">{{ $t('home.button.PolicyScheme') }}</div>
+          <div class="home-tools-item__text">Policy Scheme</div>
         </div>
       </div>
 
