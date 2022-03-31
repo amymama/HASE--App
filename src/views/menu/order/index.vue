@@ -53,12 +53,12 @@
                     <p class="text">{{$t('ZSO')}}</p>
                     <p class="text">{{$t('Total Price')}}:{{ item.new_order_amount }}</p>
 
-                    <div class="prouctTitleBox">
-                      <h3 class="text">HSU-18CTB03T_SET(PIPE):TE</h3>
+                    <div class="prouctTitleBox" v-for="(orderItem,orderIndex) in item.OrderdGoodsList" :key="orderIndex">  
+                      <h3 class="text">{{orderItem.new_product_model}}</h3>
                       <div class="text">
-                        ABB146E09invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.12630</span>
+                        {{orderItem.new_product_number}} invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.{{orderItem.new_sales_price}}</span>
                       </div>
-                      <div class="prouctNumberBox">X1</div>
+                      <div class="prouctNumberBox">X{{orderItem.new_sales_counts}}</div>
                     </div>
                   </div>
                 </div>
@@ -98,12 +98,12 @@
                     <p class="text">
                       {{ $t("Total Price") }}:{{ item.new_order_amount }}
                     </p>
-                    <div class="prouctTitleBox">
-                      <h3 class="text">HSU-18CTB03T_SET(PIPE):TE</h3>
+                    <div class="prouctTitleBox" v-for="(orderItem,orderIndex) in item.OrderdGoodsList" :key="orderIndex">
+                      <h3 class="text">{{orderItem.new_product_model}}</h3>
                       <div class="text">
-                        ABB146E09invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.12630</span>
+                        {{orderItem.new_product_number}} invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.{{orderItem.new_sales_price}}</span>
                       </div>
-                      <div class="prouctNumberBox">X1</div>
+                      <div class="prouctNumberBox">X{{orderItem.new_sales_counts}}</div>
                     </div>
                   </div>
                   <div class="buttonBox">
@@ -174,29 +174,28 @@ export default {
     };
   },
   methods: {
-    resubmitClick(id) {
+    resubmitClick() {
       this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.resubmitLoading = true;
-      ReSubmitOrder({ orderId: id })
+      ReSubmitOrder({ orderId: this.orderSummaryId })
         .then((res) => {
           console.log(res, "ss");
           if (res.success) {
             this.$toast.success("Success");
-            this.$toast.clear();
             this.resubmitLoading = false;
+            this.initDataOrderList()
           } else {
             this.$toast.fail("Network error");
             this.resubmitLoading = false;
-            this.$toast.clear();
           }
         })
         .catch((e) => {
           this.$toast.fail("Network error");
           this.resubmitLoading = false;
-          this.$toast.clear();
         });
     },
     resubmitShow(id) {
+      console.log('11')
       this.resubmitIsShow = true;
       this.orderSummaryId = id;
     },

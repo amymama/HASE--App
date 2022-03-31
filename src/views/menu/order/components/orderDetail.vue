@@ -9,81 +9,116 @@
       }"
     >
       <van-nav-bar left-arrow @click-left="onCancel" title="Order detail" />
-      <van-cell-group size="small">
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_dealer_name"
-          :label="$t('Dealer Name')"
-        />
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_order_user_no"
-          :label="$t('Po Number')"
-        />
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_order_auto_no"
-          :label="$t('GTM Order No')"
-        />
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_order_sap_no"
-          :label="$t('ZSO No')"
-        />
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_order_amount"
-          label-width="150"
-          :label="$t('Total Invoice Value')"
-        />
-
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_payer_name"
-          :label="$t('Payer')"
-        />
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_bill_to_name"
-          :label="$t('Bill To')"
-        />
-        <van-field
-          input-align="right"
-          readonly
-          v-model="formDataDetail.new_ship_to_name"
-          :label="$t('Ship To')"
-        />
-
-        <van-field input-align="right" readonly v-model="name" label="DN" />
-        <van-field
-          input-align="right"
-          readonly
-          v-model="name"
-          label="INVOICED"
-        />
-
-        <van-cell>
-          <div class="bottomBox">
-            <div class="bottomBoxLeft">
-              <div>
-                <h4>HWM-T140N2:twin tuble/14KG</h4>
+      <!-- <van-cell-group size="small"> -->
+      <div class="cardBagBox">
+        <div class="cardBox">
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.dealerName"
+            :label="$t('Dealer Name')"
+          />
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.gtmPoNumber"
+            :label="$t('Po Number')"
+          />
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.appOrder"
+            :label="$t('GTM Order No')"
+            label-width="150"
+          />
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.zsoNo"
+            :label="$t('ZSO No')"
+          />
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.TotalInvoiveValue"
+            label-width="150"
+            :label="$t('Total Invoice Value')"
+          />
+        </div>
+        <div class="cardBox">
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.payerName"
+            :label="$t('Payer')"
+          />
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.billToName"
+            :label="$t('Bill To')"
+          />
+          <van-field
+            input-align="right"
+            readonly
+            v-model="formDataDetail.shipToName"
+            :label="$t('Ship To')"
+          />
+        </div>
+        <div class="cardBox">
+          <div v-for="(item, index) in orderDNsList" :key="index">
+            <van-collapse v-model="activeNames" accordion>
+              <div v-for="(dnItem, dnIndex) in item.DNItems" :key="dnIndex">
+                <van-collapse-item :title="item.itemCode" :name="index">
+                  <template #title>
+                    <div class="dnTitleBox">
+                      <div>{{ item.itemCode }}</div>
+                      <div>{{ item.dnNum }}</div>
+                      <div>{{ item.dnDate }}</div>
+                    </div>
+                  </template>
+                  <van-cell :value="dnItem.dnDate">
+                  <!-- <van-cell value="2022-03-31"> -->
+                    <template #title>
+                      <div class="dnTitleBox">
+                        <div>{{ dnItem.itemCode }}</div>
+                        <div>{{ dnItem.invoiceNum }}</div>
+                        <!-- <div>5555</div> -->
+                      </div>
+                    </template>
+                  </van-cell>
+                </van-collapse-item>
               </div>
-              <div style="padding-top:0.3rem">
-                <span>CAABX0E00</span>
-                <span style="padding-left:0.6rem">Invoice <span style="color:#100aff;padding-left:0.2rem">RS.THB 30800.00</span></span>
-              </div>
-            </div>
-            <div class="bottomBoxRight">X5</div>
+            </van-collapse>
           </div>
-        </van-cell>
-      </van-cell-group>
+        </div>
+        <div class="cardBox" v-show="orderGoodsList.length>0">
+          <van-cell>
+            <div
+              class="bottomBox"
+              v-for="(item, index) in orderGoodsList"
+              :key="index"
+            >
+              <div class="bottomBoxLeft">
+                <div>
+                  <h4>{{ item.orderProductModel }}</h4>
+                </div>
+                <div style="padding-top: 0.3rem">
+                  <div>{{ item.orderProductNum }}</div>
+                  <div style="padding-top: 0.3rem">
+                    Invoice
+                    <span style="color: #100aff; padding-left: 0.2rem"
+                      >RS.THB {{ item.invoice }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="bottomBoxRight">X{{ item.count }}</div>
+            </div>
+          </van-cell>
+        </div>
+      </div>
+      <!-- </van-cell-group> -->
     </van-popup>
   </div>
 </template>
@@ -97,34 +132,41 @@ export default {
       dealerShow: false,
       name: "",
       formDataDetail: {
-        new_dealer_name: "",
-        new_bill_to_name: "",
-        new_payer_name: "",
-        new_ship_to_name: "",
-        new_order_user_no: "",
-        new_order_auto_no: "",
-        new_order_sap_no: "",
-        new_order_amount: "",
+        dealerName: "",
+        billToName: "",
+        payerName: "",
+        shipToName: "",
+        gtmPoNumber: "",
+        zsoNo: "",
+        TotalInvoiveValue: "",
+        appOrder: "",
       },
+      orderGoodsList: [],
+      orderDNsList: [],
+      activeNames: "0",
     };
   },
   methods: {
     onShow(new_order_summaryId) {
       this.dealerShow = true;
-      this.$toast.loading({ duration: 0,forbidClick:true,mask:true });
+      this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       GetOrderDetail({ new_order_summaryId: new_order_summaryId })
         .then((res) => {
           if (res.success) {
-            this.formDataDetail.new_dealer_name = res.data.new_dealer_name;
-            this.formDataDetail.new_bill_to_name = res.data.new_bill_to_name;
-            this.formDataDetail.new_payer_name = res.data.new_payer_name;
-            this.formDataDetail.new_ship_to_name = res.data.new_ship_to_name;
-            this.formDataDetail.new_order_user_no = res.data.new_order_user_no;
-            this.formDataDetail.new_order_user_no = res.data.new_order_user_no;
-            this.formDataDetail.new_order_sap_no = res.data.new_order_sap_no;
-            this.formDataDetail.new_order_amount = res.data.new_order_amount;
+            this.formDataDetail.dealerName = res.data.dealerName;
+            this.formDataDetail.billToName = res.data.billToName;
+            this.formDataDetail.payerName = res.data.payerName;
+            this.formDataDetail.shipToName = res.data.shipToName;
+            this.formDataDetail.gtmPoNumber = res.data.gtmPoNumber;
+            this.formDataDetail.appOrder = res.data.appOrder;
+            this.formDataDetail.zsoNo = res.data.zsoNo;
+            this.formDataDetail.TotalInvoiveValue = res.data.TotalInvoiveValue;
+            this.orderGoodsList = res.data.orderGoodsList;
+            this.orderDNsList = res.data.orderDNs;
+            this.$toast.clear();
+          } else {
+            this.$toast.clear();
           }
-          this.$toast.clear();
         })
         .catch((e) => {
           this.$toast.clear();
@@ -137,16 +179,32 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.bottomBox {
-  margin: 0.2rem;
-  width: 100%;
-  display: flex;
-  .bottomBoxLeft {
-    width: 90%;
+.search-bar {
+  .cardBagBox {
+    background-color: #f1f1f1;
+    padding: 0.2rem 0.3rem;
   }
-  .bottomBoxRight {
-    width: 10%;
-    padding-top: 0.5rem;
+  .cardBox {
+    // background-color: #f1f1f1;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 0.3rem 0;
+  }
+  .bottomBox {
+    margin: 0.2rem;
+    width: 100%;
+    display: flex;
+    .bottomBoxLeft {
+      width: 90%;
+    }
+    .bottomBoxRight {
+      width: 10%;
+      padding-top: 0.5rem;
+    }
+  }
+  .dnTitleBox {
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>

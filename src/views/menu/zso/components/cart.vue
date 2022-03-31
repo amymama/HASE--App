@@ -445,11 +445,11 @@ export default {
               this.noRes = true;
             }
           } else {
-            this.$toast.clear();
+            this.$toast.fail('Network error');
           }
         })
         .catch((e) => {
-          this.$toast.clear();
+            this.$toast.fail('Network error');
         });
     },
     // 确认dealer

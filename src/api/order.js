@@ -22,7 +22,8 @@ const api = {
     SubmitOrder: 'api/Order/SubmitOrder',
     
     GetOrderList:'api/Order/GetOrderList',
-    GetOrderDetail:'api/Order/GetOrderDetail',
+    // GetOrderDetail:'api/Order/GetOrderDetail',
+    GetOrderDetail:'api/Order/GetOrderDetailByApp',
     ReSubmitOrder: 'api/Order/ReSubmitOrder',
 
 
