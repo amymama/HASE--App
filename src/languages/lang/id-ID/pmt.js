@@ -1,7 +1,7 @@
 export default {
-    'home.button.ModelPolicy': 'Chính sách Model',
-    'home.button.policyScheme': 'Chính sách thưởng',
-    'home.lable.toDoTask': 'Nhiệm vụ việc cần làm',
+    'home.button.ModelPolicy': 'Model Policy',
+    'home.button.policyScheme': 'policy Scheme',
+    'home.lable.toDoTask': 'قائمة المهام',
     'home.lable.toDoTaskItemPmt': 'FF',
     'home.lable.toDoTaskItemShop': 'FF',
     'home.lable.toDoTaskItemCompetitorsSellOut': 'SO Đối thủ',

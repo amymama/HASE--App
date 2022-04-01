@@ -7,6 +7,9 @@ export default {
     RememberPwd: 'Remember Password'
   },
   uCenter: {
+    RefreshData: 'Refresh Data',
+    RefreshSuccess: 'Refresh Success',
+    AlreadyTheLatestVersion: 'Already the latest version', 
     UserCode: 'User Code',
     Shop: 'Shop',
     Dealer: 'Dealer',

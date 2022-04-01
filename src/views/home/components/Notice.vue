@@ -22,10 +22,10 @@
           v-for="(item, index) in list"
           :key="index"
           @click="$refs.noticeDetail.show(item)">
-          <van-tag v-if="item.new_announce_type == 0" type="primary">
+          <van-tag v-if="item.new_announce_type == 0" type="primary" style="margin-right: 10px">
             Announce
           </van-tag>
-          <van-tag v-if="item.new_announce_type == 1" type="warning">
+          <van-tag v-if="item.new_announce_type == 1" type="warning" style="margin-right: 10px">
             Policy
           </van-tag>
           {{ item.new_title }}

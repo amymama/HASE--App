@@ -34,7 +34,7 @@
                 maxlength="200"
                 :rules="[{ required: true }]"
               />
-              <van-field required input-align="right" label="Whether Haier Joined In This Shop">
+              <van-field required input-align="right" :label="$t('shopMaster.WhetherAQUA')">
                 <template #input>
                   <van-radio-group
                     style="margin-right: -0.3rem"
@@ -73,12 +73,13 @@
                 required
                 clickable
                 :value="form.new_shop_type"
-                label="Shop Type"
+                :label="$t('shopMaster.ShopType')"
                 :placeholder="$t('shopCommon.PleaseSelect')"
                 @click="showShopType = true"
                 :rules="[{ required: true }]"
               />
               <van-field
+                :required="form.new_aqua_enterin"
                 input-align="right"
                 readonly
                 clickable
@@ -86,6 +87,7 @@
                 :label="$t('shopMaster.CustomerCode')"
                 :placeholder="$t('shopCommon.PleaseSelect')"
                 @click="$refs.selectCustomer.show()"
+                :rules="[{ required: form.new_aqua_enterin }]"
               >
                 <template #right-icon>{{ (new_mdm_accountgroup) }}</template>
               </van-field>
@@ -94,7 +96,7 @@
                 readonly
                 clickable
                 :value="form.new_local_shop_code"
-                label="MDM Ship To Code"
+                :label="$t('shopMaster.MDMShipToCode')"
                 :placeholder="$t('shopCommon.PleaseSelect')"
                 @click="showPartner = true"
               />
@@ -204,17 +206,10 @@
               <div class="shop-group__title">{{ $t("shopMaster.ShopNetwork") }}</div>
             </div>
             <div class="shop-form-group">
-              <van-field
-                input-align="right"
-                clearable
-                required
-                readonly
-                clickable
-                :value="saleRegion"
-                :label="$t('shopMaster.ShopSaleRegion')"
-                :placeholder="$t('shopCommon.PleaseSelect')"
-                :rules="[{ required: true }]"
-              />
+              <van-cell
+                class="van-cell--required"
+                :title="$t('shopMaster.ShopSaleRegion')"
+                :value="saleRegion" />
               <van-field
                 input-align="right"
                 clearable

@@ -6,6 +6,9 @@ export default {
     RememberPwd: 'تذكر كلمه المرور'
   },
   uCenter: {
+    RefreshData: 'تحديث البيانات',
+    RefreshSuccess: 'تحديث بنجاح',
+    AlreadyTheLatestVersion: 'هذا هو أحدث نسخة',
     UserCode: 'كود المستخدم',
     Shop: 'محل',
     Dealer: 'تاجر',

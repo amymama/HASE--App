@@ -17,7 +17,13 @@ export default {
     PleaseSelect: 'Please select',
     PlanTips: 'Monthly Visit Plan only can submit once by one person, once you submited, can not submit monthly Visit Plan again. Ensure your plan already covered all your shops',
     LeavePageTip: 'Are you sure leave this page?',
-    SubmitTips: 'Once submitted, sysytem will generate Asset Code auto, and you can not delete it.'
+    SubmitTips: 'Once submitted, sysytem will generate Asset Code auto, and you can not delete it.',
+    HaveNotAnyVisitRecords: 'Have not any visit records',
+    NewShopProcessesNeedYourApproval: 'New shop processes need your approval',
+    CloseShopProcessesNeedYourApproval: 'Close shop processes need your approval',
+    VisitPlansNeedYourApproval: 'Visit plans need your approval',
+    Announce: 'Announce',
+    Policy: 'Policy',
   },
   select: {
     InputTip: 'Please Input',
@@ -105,6 +111,9 @@ export default {
     ShopSign: 'Shop Sign',
     ShopDoor: 'Shop Door',
     ShopInside: 'Shop Inside',
+    ShopType: 'Shop Type',
+    ShopRegion: 'Shop Region',
+    MDMShipToCode: 'MDM Ship to code'
   },
   shopApprove: {
     ToDoList: 'To Do List',
