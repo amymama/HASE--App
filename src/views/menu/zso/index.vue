@@ -258,6 +258,8 @@ import DealerSearch from "./components/dealer.vue";
 import ShipTo from "./components/shipTo.vue";
 import StorageLoction from "./components/storageLoction.vue";
 import ZsoDetail from "./components/zsoDetail.vue";
+import isAll from '@/assets/images/icon/isAll.png'
+import All from '@/assets/images/icon/All.png'
 import {
   GetCartCount,
   zsoGetProductList,
@@ -424,7 +426,7 @@ export default {
           const { success, data } = res;
           if (success) {
             this.cartCount = data;
-          }
+          }else{}
         })
         .catch(() => {});
     },
@@ -543,18 +545,17 @@ export default {
       GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
         (res) => {
           if (res.success) {
-            // this.categoryList = [
-            //   {
-            //     catalogueType: "",
-            //     categoryId: "",
-            //     categoryName: "",
-            //     iconPath:
-            //       "@/assets/images/icon/Exhibition_icon.png",
-            //     parentCategoryId: "",
-            //   },
-            // ];
-            // this.categoryList = [...this.categoryList, ...res.data];
-            this.categoryList = res.data;
+            this.categoryList = [
+              {
+                catalogueType: "",
+                categoryId: "",
+                categoryName: "",
+                iconPath:All,
+                parentCategoryId: "",
+              },
+            ];
+            this.categoryList = [...this.categoryList, ...res.data];
+            // this.categoryList = res.data;
           }
         }
       );
@@ -569,7 +570,7 @@ export default {
               this.selectedDealer = this.allDealerList[0];
               this.getShipTo();
             }
-          }
+          }else{}
         })
         .catch(() => {});
       GetStorageLocationList()

@@ -46,7 +46,7 @@ export default {
           title: "MENU",
           path: "/menu",
           icon: "icon-pmt",
-          // permission: "tabBar:MENU",
+          permission: "tabBar:MENU",
           replace: true,
         },
         {

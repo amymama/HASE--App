@@ -152,15 +152,17 @@
     <div class="submitBox">
       <div class="submitPrice">
         <p class="text">
-          {{ $t("Total Net Price") }} :{{ $t("SAR") }} {{ totalNetPrice }}
+          {{ $t("Total Net Price") }} :{{ $t("SAR") }}
+          {{ priceSwitch(totalNetPrice) }}
         </p>
         <p class="text">
-          {{ $t("Total Tax Price") }} :{{ $t("SAR") }} {{ totalTaxPrice }}
+          {{ $t("Total Tax Price") }} :{{ $t("SAR") }}
+          {{ priceSwitch(totalTaxPrice) }}
         </p>
         <p class="text">
           {{ $t("Total Price") }} :<span
             style="color: #fa0e0e; font-weight: 700"
-            >{{ $t("SAR") }} {{ totalPrice }}</span
+            >{{ $t("SAR") }} {{ priceSwitch(totalPrice) }}</span
           >
         </p>
       </div>
@@ -445,11 +447,11 @@ export default {
               this.noRes = true;
             }
           } else {
-            this.$toast.fail('Network error');
+            this.$toast.fail("Network error");
           }
         })
         .catch((e) => {
-            this.$toast.fail('Network error');
+          this.$toast.fail("Network error");
         });
     },
     // 确认dealer
@@ -498,6 +500,47 @@ export default {
         })
         .catch(() => {});
     },
+        //价格处理
+      priceSwitch(x) {
+        //强制保留两位小数
+        var f = parseFloat(x);
+        if (isNaN(f)) return false;
+        var f = Math.round(x * 100) / 100;
+        var s = f.toString();
+        var rs = s.indexOf('.');
+        if (rs < 0) {
+            rs = s.length;
+            s += '.';
+        }
+        while (s.length < (rs + 1) + 2) {
+            s += '0';
+        }
+        //每三位用一个逗号隔开
+        var leftNum=s.split(".")[0];
+        var rightNum="."+s.split(".")[1];
+        var result;
+        //定义数组记录截取后的价格
+        var resultArray=new Array();
+        if(leftNum.length>3){
+            var i=true;
+            while (i){
+                resultArray.push(leftNum.slice(-3));
+                leftNum=leftNum.slice(0,leftNum.length-3);
+                if(leftNum.length<4){
+                    i=false;
+                }
+            }
+            //由于从后向前截取，所以从最后一个开始遍历并存到一个新的数组，顺序调换
+            var sortArray=new Array();
+            for(var i=resultArray.length-1;i>=0;i--){
+                sortArray.push(resultArray[i]);
+            }
+            result=leftNum+","+sortArray.join(",")+rightNum;
+        }else {
+            result=s;
+        }
+        return result;
+    }
   },
 };
 </script>
@@ -552,10 +595,6 @@ body {
     // overflow: auto
   }
   .shop-status-item {
-    .van-swipe-cell,.van-swipe-cell__wrapper {
-      border-radius: 20px !important;
-      overflow: hidden;
-    }
     margin-bottom: 32px;
     border-radius: 20px;
     overflow: hidden;
@@ -573,7 +612,7 @@ body {
   .slotGroupBox {
     color: #f5f5f5;
     font-weight: 700;
-    height: 6rem;
+    // height: 6rem;
     line-height: 4rem;
     width: 100%;
     padding-right: 1rem;
@@ -683,6 +722,21 @@ body {
     .submitButton {
       width: 100%;
     }
+  }
+  .van-hairline--top-bottom::after,
+  .van-hairline-unset--top-bottom::after {
+    border-radius: 20px 0 0 20px;
+    overflow: hidden;
+  }
+  .van-swipe-cell__right {
+    border-radius: 0 20px 0;
+    overflow: hidden;
+  }
+  .shop-status-item van-swipe-cell .groupBox .van-swipe-cell,
+  .van-swipe-cell__wrapper,
+  .van-cell-group {
+    border-radius: 20px !important;
+    overflow: hidden;
   }
 }
 </style>
