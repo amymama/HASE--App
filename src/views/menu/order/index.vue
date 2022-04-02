@@ -44,21 +44,32 @@
               >
                 <div
                   class="detailBox"
-                  @click="
-                    $refs.orderDetailShow.onShow(item.new_order_summaryId)
-                  "
+                  @click="orderDetailShow(item.new_order_summaryId)"
                 >
                   <div class="box">
-                    <h4 class="text">{{$t('Dealer Name')}}:{{ item.new_dealer_name }}</h4>
-                    <p class="text">{{$t('ZSO')}}</p>
-                    <p class="text">{{$t('Total Price')}}:{{ item.new_order_amount }}</p>
+                    <h4 class="text">
+                      {{ $t("Dealer Name") }}:{{ item.new_dealer_name }}
+                    </h4>
+                    <p class="text">{{ $t("ZSO") }}</p>
+                    <p class="text">
+                      {{ $t("Total Price") }}:{{ item.new_order_amount }}
+                    </p>
 
-                    <div class="prouctTitleBox" v-for="(orderItem,orderIndex) in item.OrderdGoodsList" :key="orderIndex">  
-                      <h3 class="text">{{orderItem.new_product_model}}</h3>
+                    <div
+                      class="prouctTitleBox"
+                      v-for="(orderItem, orderIndex) in item.OrderdGoodsList"
+                      :key="orderIndex"
+                    >
+                      <h3 class="text">{{ orderItem.new_product_model }}</h3>
                       <div class="text">
-                        {{orderItem.new_product_number}} invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.{{orderItem.new_sales_price}}</span>
+                        {{ orderItem.new_product_number }} invoice
+                        <span style="color: #5151ff; padding-left: 0.2rem"
+                          >{{ $t("SAR") }}.{{ orderItem.new_sales_price }}</span
+                        >
                       </div>
-                      <div class="prouctNumberBox">X{{orderItem.new_sales_counts}}</div>
+                      <div class="prouctNumberBox">
+                        X{{ orderItem.new_sales_counts }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -87,9 +98,7 @@
                 <div class="detailBox">
                   <div
                     class="box"
-                    @click="
-                      $refs.orderDetailShow.onShow(item.new_order_summaryId)
-                    "
+                    @click="orderDetailShow(item.new_order_summaryId)"
                   >
                     <h3 class="text">
                       {{ $t("Dealer Name") }}:{{ item.new_dealer_name }}
@@ -98,12 +107,21 @@
                     <p class="text">
                       {{ $t("Total Price") }}:{{ item.new_order_amount }}
                     </p>
-                    <div class="prouctTitleBox" v-for="(orderItem,orderIndex) in item.OrderdGoodsList" :key="orderIndex">
-                      <h3 class="text">{{orderItem.new_product_model}}</h3>
+                    <div
+                      class="prouctTitleBox"
+                      v-for="(orderItem, orderIndex) in item.OrderdGoodsList"
+                      :key="orderIndex"
+                    >
+                      <h3 class="text">{{ orderItem.new_product_model }}</h3>
                       <div class="text">
-                        {{orderItem.new_product_number}} invoice <span style="color:#5151ff;padding-left:0.2rem">{{$t('SAR')}}.{{orderItem.new_sales_price}}</span>
+                        {{ orderItem.new_product_number }} invoice
+                        <span style="color: #5151ff; padding-left: 0.2rem"
+                          >{{ $t("SAR") }}.{{ orderItem.new_sales_price }}</span
+                        >
                       </div>
-                      <div class="prouctNumberBox">X{{orderItem.new_sales_counts}}</div>
+                      <div class="prouctNumberBox">
+                        X{{ orderItem.new_sales_counts }}
+                      </div>
                     </div>
                   </div>
                   <div class="buttonBox">
@@ -112,7 +130,7 @@
                       type="info"
                       size="small"
                       @click="resubmitShow(item.new_order_summaryId)"
-                      >{{$t('Resubmit')}}</van-button
+                      >{{ $t("Resubmit") }}</van-button
                     >
                     <!-- @click="resubmitClick(item.new_order_summaryId)" -->
                   </div>
@@ -146,16 +164,11 @@
         </div>
       </div>
     </van-action-sheet>
-    <orderDetail ref="orderDetailShow" />
   </div>
 </template>
 <script>
 import { GetOrderList, ReSubmitOrder } from "@/api/order";
-import orderDetail from "./components/orderDetail.vue";
 export default {
-  components: {
-    orderDetail,
-  },
   data() {
     return {
       active: 0,
@@ -174,6 +187,14 @@ export default {
     };
   },
   methods: {
+    orderDetailShow(id) {
+      this.$router.push({
+        name: "orderDetail",
+        params: {
+          id: id,
+        },
+      });
+    },
     resubmitClick() {
       this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.resubmitLoading = true;
@@ -183,7 +204,7 @@ export default {
           if (res.success) {
             this.$toast.success("Success");
             this.resubmitLoading = false;
-            this.initDataOrderList()
+            this.initDataOrderList();
           } else {
             this.$toast.fail("Network error");
             this.resubmitLoading = false;
@@ -195,7 +216,7 @@ export default {
         });
     },
     resubmitShow(id) {
-      console.log('11')
+      console.log("11");
       this.resubmitIsShow = true;
       this.orderSummaryId = id;
     },
@@ -287,8 +308,8 @@ export default {
     }
   }
   // .oederListBox {
-    // overflow: auto;
-    // height: 90%;
+  // overflow: auto;
+  // height: 90%;
   // }
   .shop-status-list {
     padding: 20px;

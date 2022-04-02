@@ -1,14 +1,14 @@
 <template>
   <div class="search-bar">
-    <van-popup
+    <!-- <van-popup
       v-model="dealerShow"
       :close-on-click-overlay="false"
       :style="{
         width: '100%',
         height: '100%',
       }"
-    >
-      <van-nav-bar left-arrow @click-left="onCancel" title="Order detail" />
+    > -->
+      <van-nav-bar left-arrow @click-left="goBack" title="Order detail" />
       <!-- <van-cell-group size="small"> -->
       <div class="cardBagBox">
         <div class="cardBox">
@@ -119,7 +119,7 @@
         </div>
       </div>
       <!-- </van-cell-group> -->
-    </van-popup>
+    <!-- </van-popup> -->
   </div>
 </template>
 <script>
@@ -129,7 +129,7 @@ export default {
   components: { cart },
   data() {
     return {
-      dealerShow: false,
+      // dealerShow: false,
       name: "",
       formDataDetail: {
         dealerName: "",
@@ -146,11 +146,14 @@ export default {
       activeNames: "0",
     };
   },
+  created(){
+     this.onShow()
+  },
   methods: {
-    onShow(new_order_summaryId) {
-      this.dealerShow = true;
+    onShow() {
       this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
-      GetOrderDetail({ new_order_summaryId: new_order_summaryId })
+      console.log('this.$route.params.id',this.$route.params.id)
+      GetOrderDetail({ new_order_summaryId: this.$route.params.id })
         .then((res) => {
           if (res.success) {
             this.formDataDetail.dealerName = res.data.dealerName;
@@ -173,7 +176,7 @@ export default {
         });
     },
     onCancel() {
-      this.dealerShow = false;
+      // this.dealerShow = false;
     },
   },
 };

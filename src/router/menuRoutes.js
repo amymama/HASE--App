@@ -30,4 +30,16 @@ export default [
     component: () => import('@/views/menu/zso/components/orderConfirm'),
     meta: { title: '', module: 'Basic', keepAlive: false }
   },
+  {
+    path: '/zsoDetail',
+    name: 'zsoDetail',
+    component: () => import('@/views/menu/zso/components/zsoDetail'),
+    meta: { title: '', module: 'Basic', keepAlive: false }
+  },
+  {
+    path: '/orderDetail',
+    name: 'orderDetail',
+    component: () => import('@/views/menu/order/components/orderDetail'),
+    meta: { title: '', module: 'Basic', keepAlive: false }
+  },
 ]

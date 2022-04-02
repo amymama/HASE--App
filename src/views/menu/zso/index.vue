@@ -3,7 +3,7 @@
     <div class="top">
       <div class="topBox">
         <!-- navbar -->
-        <van-nav-bar left-arrow @click-left="goBack" :title="$t('ZSO')">
+        <van-nav-bar left-arrow @click-left="goClickLeft" :title="$t('ZSO')">
           <div slot="right">
             <!-- <span
               style="color: #ffffff"
@@ -29,7 +29,7 @@
                   border-radius: 0.1rem;
                   color: #ffffff;
                   font-size: 12px;
-                  padding:0 0.05rem
+                  padding: 0 0.05rem;
                 "
                 >{{ cartCount }}</span
               >
@@ -57,7 +57,6 @@
             show-action
             @click="$refs.searchHistory.handleShow()"
             @cancel="searchCancel"
-
           />
         </div>
       </div>
@@ -240,7 +239,7 @@
       :allList="allStorageList"
       @ok="handlestorageLoctionOk"
     />
-    <ZsoDetail
+    <!-- <ZsoDetail
       ref="zsodetailRef"
       v-if="detailShow"
       :detailShow="detailShow"
@@ -249,7 +248,7 @@
       :selectedDealer="selectedDealer"
       :selectedShipTo="selectedShipTo"
       :selectedLocation="selectedLocation"
-    />
+    /> -->
   </div>
 </template>
 <script>
@@ -258,8 +257,8 @@ import DealerSearch from "./components/dealer.vue";
 import ShipTo from "./components/shipTo.vue";
 import StorageLoction from "./components/storageLoction.vue";
 import ZsoDetail from "./components/zsoDetail.vue";
-import isAll from '@/assets/images/icon/isAll.png'
-import All from '@/assets/images/icon/All.png'
+// import isAll from "@/assets/images/icon/isAll.png";
+import All from "@/assets/images/icon/All.png";
 import {
   GetCartCount,
   zsoGetProductList,
@@ -279,8 +278,8 @@ export default {
   },
   data() {
     return {
-      productDetail: {},
-      detailShow: false,
+      // productDetail: {},
+      // detailShow: false,
       allDealerList: [],
       allShipToList: [],
       allStorageList: [],
@@ -347,6 +346,7 @@ export default {
     console.log(document.body.scrollTop, "aaaaaaaaa");
   },
   methods: {
+    goClickLeft(){this.$router.push('/menu')},
     handleScroll() {
       console.log(document.body.scrollTop, "aaaaaaaaa");
     },
@@ -356,19 +356,23 @@ export default {
     },
     //查看shangpin详情
     detailShowModel(val) {
-      this.detailShow = true;
-      this.productDetail = {
+      this.$router.push("/zsoDetail");
+      this.$store.commit("order/productDetail", {
         productId: val.productId,
         orderType: "ZSO",
-        dealerCode: this.selectedDealer.dealerCode,
-        shipToCode: this.selectedShipTo.partnerCode,
-        storageLocationName: this.selectedLocation.locationName,
-      };
+        selectedDealer: this.selectedDealer,
+        selectedShipTo: this.selectedShipTo,
+        selectedLocation: this.selectedLocation,
+      });
+      // this.detailShow = true;
+      // this.productDetail = {
+      //   productId: val.productId,
+      //   orderType: "ZSO",
+      //   dealerCode: this.selectedDealer.dealerCode,
+      //   shipToCode: this.selectedShipTo.partnerCode,
+      //   storageLocationName: this.selectedLocation.locationName,
+      // };
       console.log(val, "2223", this.cartParams);
-      // this.$refs.zsodetailRef.onShow();
-    },
-    detailShowModelCencel() {
-      this.detailShow = false;
     },
     //确认加入购物车
     addCartOk() {
@@ -426,7 +430,8 @@ export default {
           const { success, data } = res;
           if (success) {
             this.cartCount = data;
-          }else{}
+          } else {
+          }
         })
         .catch(() => {});
     },
@@ -508,7 +513,10 @@ export default {
     },
     //跳转到购物车
     clickright() {
-      this.$router.push("/zso/cart");
+      this.$router.push('/zso/cart');
+      this.$store.commit("order/zsoselectedLocation", {
+         selectedLocation: this.selectedLocation,
+      });
     },
     // clear search
     clearSearch() {
@@ -550,7 +558,7 @@ export default {
                 catalogueType: "",
                 categoryId: "",
                 categoryName: "",
-                iconPath:All,
+                iconPath: All,
                 parentCategoryId: "",
               },
             ];
@@ -570,7 +578,8 @@ export default {
               this.selectedDealer = this.allDealerList[0];
               this.getShipTo();
             }
-          }else{}
+          } else {
+          }
         })
         .catch(() => {});
       GetStorageLocationList()

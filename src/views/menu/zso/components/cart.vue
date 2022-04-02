@@ -1,6 +1,6 @@
 <template>
   <div class="carBox">
-    <van-nav-bar @click-left="goBack" left-arrow :title="$t('Cart')" />
+    <van-nav-bar @click-left="goLeft" left-arrow :title="$t('Cart')" />
     <!-- nav Bar -->
     <div class="topBox">
       <div class="standardBox">{{ $t("Standard") }}</div>
@@ -181,7 +181,7 @@
       :allList="allDealerList"
     />
     <ship-to ref="shipToSearch" @ok="handleshipToOk" :allList="allShipToList" />
-    <ZsoDetail
+    <!-- <ZsoDetail
       ref="zsodetailRef"
       v-if="detailShow"
       :detailShow="detailShow"
@@ -190,7 +190,7 @@
       :selectedDealer="selectedDealer"
       :selectedShipTo="selectedShipTo"
       :selectedLocation="selectedLocation"
-    />
+    /> -->
     <!-- <storage-loction ref="storageLoctionSearch" @ok="handlestorageLoctionOk" /> -->
   </div>
 </template>
@@ -204,13 +204,19 @@ import {
   DeleteCart,
 } from "@/api/order";
 import ShipTo from "./shipTo.vue";
-import ZsoDetail from "./zsoDetail.vue";
+import { mapState } from "vuex";
+// import ZsoDetail from "./zsoDetail.vue";
 export default {
   components: {
-    ZsoDetail,
+    // ZsoDetail,
     DealerSearch,
     ShipTo,
     // StorageLoction,
+  },
+  computed: {
+    ...mapState({
+      zsoselectedLocation: (state) => state.order.zsoselectedLocation,
+    }),
   },
   data() {
     return {
@@ -234,7 +240,7 @@ export default {
       selectedShipTo: {},
       allDealerList: [],
       allShipToList: [],
-      detailShow: false,
+      // detailShow: false,
       // confirmShow: false,
       productDetail: {},
       totalNetPrice: 0,
@@ -244,9 +250,14 @@ export default {
   },
   created() {
     this.getDataSelect();
+    this.selectedLocation = this.zsoselectedLocation.selectedLocation
+    console.log(this.zsoselectedLocation.selectedLocation,'zsoselectedLocation')
     // this.getDataListCart();
   },
   methods: {
+    goLeft() {
+      this.$router.push("/zso");
+    },
     // confirmShowCencel() {
     //   // this.confirmShow = false;
     //   this.$router.push("/orderConfirm");
@@ -384,17 +395,15 @@ export default {
     },
     //查看shangpin详情
     detailShowModel(val) {
-      this.detailShow = true;
-      this.productDetail = {
+      console.log(this.selectedLocation,'this.selectedLocationthis.selectedLocationthis.selectedLocation')
+      this.$router.push("/zsoDetail");
+      this.$store.commit("order/productDetail", {
         productId: val.new_product_id,
         orderType: "ZSO",
-        dealerCode: this.selectedDealer.dealerCode,
-        shipToCode: this.selectedShipTo.partnerCode,
-        storageLocationName: this.selectedLocation.new_storage_location,
-      };
-    },
-    detailShowModelCencel() {
-      this.detailShow = false;
+        selectedDealer: this.selectedDealer,
+        selectedShipTo: this.selectedShipTo,
+        selectedLocation: this.selectedLocation,
+      });
     },
     handleshipToOk(val) {
       this.selectedShipTo = val;
@@ -500,47 +509,47 @@ export default {
         })
         .catch(() => {});
     },
-        //价格处理
-      priceSwitch(x) {
-        //强制保留两位小数
-        var f = parseFloat(x);
-        if (isNaN(f)) return false;
-        var f = Math.round(x * 100) / 100;
-        var s = f.toString();
-        var rs = s.indexOf('.');
-        if (rs < 0) {
-            rs = s.length;
-            s += '.';
+    //价格处理
+    priceSwitch(x) {
+      //强制保留两位小数
+      var f = parseFloat(x);
+      if (isNaN(f)) return false;
+      var f = Math.round(x * 100) / 100;
+      var s = f.toString();
+      var rs = s.indexOf(".");
+      if (rs < 0) {
+        rs = s.length;
+        s += ".";
+      }
+      while (s.length < rs + 1 + 2) {
+        s += "0";
+      }
+      //每三位用一个逗号隔开
+      var leftNum = s.split(".")[0];
+      var rightNum = "." + s.split(".")[1];
+      var result;
+      //定义数组记录截取后的价格
+      var resultArray = new Array();
+      if (leftNum.length > 3) {
+        var i = true;
+        while (i) {
+          resultArray.push(leftNum.slice(-3));
+          leftNum = leftNum.slice(0, leftNum.length - 3);
+          if (leftNum.length < 4) {
+            i = false;
+          }
         }
-        while (s.length < (rs + 1) + 2) {
-            s += '0';
+        //由于从后向前截取，所以从最后一个开始遍历并存到一个新的数组，顺序调换
+        var sortArray = new Array();
+        for (var i = resultArray.length - 1; i >= 0; i--) {
+          sortArray.push(resultArray[i]);
         }
-        //每三位用一个逗号隔开
-        var leftNum=s.split(".")[0];
-        var rightNum="."+s.split(".")[1];
-        var result;
-        //定义数组记录截取后的价格
-        var resultArray=new Array();
-        if(leftNum.length>3){
-            var i=true;
-            while (i){
-                resultArray.push(leftNum.slice(-3));
-                leftNum=leftNum.slice(0,leftNum.length-3);
-                if(leftNum.length<4){
-                    i=false;
-                }
-            }
-            //由于从后向前截取，所以从最后一个开始遍历并存到一个新的数组，顺序调换
-            var sortArray=new Array();
-            for(var i=resultArray.length-1;i>=0;i--){
-                sortArray.push(resultArray[i]);
-            }
-            result=leftNum+","+sortArray.join(",")+rightNum;
-        }else {
-            result=s;
-        }
-        return result;
-    }
+        result = leftNum + "," + sortArray.join(",") + rightNum;
+      } else {
+        result = s;
+      }
+      return result;
+    },
   },
 };
 </script>
