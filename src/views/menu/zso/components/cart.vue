@@ -426,12 +426,16 @@ export default {
       };
       GetCartListByDealer(parms)
         .then((res) => {
-          const { success, data } = res;
-          if (success) {
-            console.log("res", res);
+            console.log("res11", res);
+          if (res.success) {
+            if(res.data==null||res.data.ProductItems==[]){
+            this.$toast.fail("No goods");
+              return false
+            }
             this.list = [];
             // this.list = data.ProductItems;
-            let arr = data.ProductItems;
+            console.log("res222", res);
+            let arr = res.data.ProductItems;
             arr.forEach((item) => {
               const obj = {
                 imgUrl: item.imgUrl,
@@ -456,11 +460,11 @@ export default {
               this.noRes = true;
             }
           } else {
-            this.$toast.fail("Network error");
+            this.$toast.fail("Network error11");
           }
         })
         .catch((e) => {
-          this.$toast.fail("Network error");
+          this.$toast.fail("Network error22");
         });
     },
     // 确认dealer

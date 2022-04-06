@@ -163,7 +163,7 @@
                   <div class="itemBoxNumber">
                     <div>{{ $t("Net Price") }}</div>
                     <div class="itemMargin" style="color: #0000ff">
-                      {{ $t("SAR") }}:{{ item.netPrice }}
+                      {{ $t("SAR") }}:{{ item.retailPrice }}
                     </div>
                   </div>
                   <div class="itemBoxNumber discount">
@@ -363,6 +363,7 @@ export default {
         selectedDealer: this.selectedDealer,
         selectedShipTo: this.selectedShipTo,
         selectedLocation: this.selectedLocation,
+        cartParams:val
       });
       // this.detailShow = true;
       // this.productDetail = {

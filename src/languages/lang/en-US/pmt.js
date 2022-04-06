@@ -804,6 +804,8 @@ export default {
     'Confirm': 'Confirm',
     'Check Out ': 'Check Out ',
     'Search History':'Search History',
+    'No goods':'No goods',
+
 
 
 }

@@ -807,7 +807,7 @@ export default {
     'Confirm':'Confirm',
     'Check Out ':'Check Out ',
     'Search History':'Search History',
-    // 'Resubmit':'Resubmit',
+    'No goods':'No goods',
     // 'Resubmit':'Resubmit',
     // 'Resubmit':'Resubmit',
     // 'Resubmit':'Resubmit',
