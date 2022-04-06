@@ -460,11 +460,11 @@ export default {
               this.noRes = true;
             }
           } else {
-            this.$toast.fail("Network error11");
+            this.$toast.fail("Network error");
           }
         })
         .catch((e) => {
-          this.$toast.fail("Network error22");
+          this.$toast.fail("Network error");
         });
     },
     // 确认dealer
