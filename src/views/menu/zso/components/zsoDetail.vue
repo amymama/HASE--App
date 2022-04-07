@@ -74,9 +74,9 @@
       <div class="buttonBox" @click="clickright">
         <img src="../../../../assets/images/icon/cartBlue_icon.png" />
       </div>
-      <div class="buttonBox" @click="liekClick">
+      <!-- <div class="buttonBox" @click="liekClick">
         <img src="../../../../assets/images/icon/like_icon@2x.png" />
-      </div>
+      </div> -->
       <div class="buttonBox">
         <van-button
           class="buttonBoxbun"

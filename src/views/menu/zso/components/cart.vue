@@ -386,7 +386,8 @@ export default {
         .then((res) => {
           if (res.success) {
             this.$toast.success("success");
-            this.getDataListCart();
+            // this.getDataListCart();
+            this.initData() 
           }
         })
         .catch((e) => {
