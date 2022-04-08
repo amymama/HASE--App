@@ -111,6 +111,22 @@
                       >RS.THB {{ item.invoice }}</span
                     >
                   </div>
+                  <!-- <div style="padding-top: 0.3rem;display:flex;justify-content: space-between;">
+                    <div>{{ item.deliveryStatus }}aa</div>
+                    <div>{{ item.rejectReason }}bb</div>
+                  </div> -->
+                  <div style="padding-top: 0.3rem" v-show="item.deliveryStatus">
+                    Delivery Status
+                    <span style="padding-left: 0.2rem"
+                      >{{ item.deliveryStatus }}</span
+                    >
+                  </div>
+                  <div style="padding-top: 0.3rem" v-show="item.rejectReason">
+                    Reject Reason
+                    <span style="padding-left: 0.2rem"
+                      >{{ item.rejectReason }}</span
+                    >
+                  </div>
                 </div>
               </div>
               <div class="bottomBoxRight">X{{ item.count }}</div>
