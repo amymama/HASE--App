@@ -806,6 +806,20 @@ export default {
     'Search History':'Search History',
     'No goods':'No goods',
 
+    'Please input Company Name': 'Please input Company Name',
+    'Please input Street': 'Please input Street',
+    'Please input Street2': 'Please input Street2',
+    'Please input House Number': 'Please input House Number',
+    'Please input Postal Code': 'Please input Postal Code',
+    'Please input Please selecet Logistic vendor': 'Please input Please selecet Logistic vendor',
+    'Please input Sale Agent': 'Please input Sale Agent',
+    'Please input City': 'Please input City',
+    'Please input Phone': 'Please input Phone',
+    'Please selecet Delivery Date': 'Please selecet Delivery Date',
+    'Please input PO Number': 'Please input PO Number',
+    'Please selecet Logistic vendor': 'Please selecet Logistic vendor',
+    'Please selecet Bill To': 'Please selecet Bill To',
+    'Please selecet Payer': 'Please selecet Payer',
 
 
 }

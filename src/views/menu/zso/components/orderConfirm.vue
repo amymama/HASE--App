@@ -45,7 +45,7 @@
               v-model="formData.billToName"
               input-align="right"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Bill To')"
               :label="$t('Bill To')"
               is-link
               readonly
@@ -55,7 +55,7 @@
               input-align="right"
               v-model="formData.payerName"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Payer')"
               :label="$t('Payer')"
               is-link
               readonly
@@ -79,39 +79,38 @@
               v-model="formData.CompanyName"
               clearable
               input-align="right"
-              placeholder=""
+              :placeholder="$t('Please input Company Name')"
               label-width="130"
               :label="$t('Company Name')"
             />
             <van-field
               v-model="formData.STREET"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Street')"
               input-align="right"
               :label="$t('Street')"
             />
             <van-field
               v-model="formData.STREET2"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Street2')"
               input-align="right"
               :label="$t('Street2')"
             />
             <van-field
               v-model="formData.HOUSE_NUMBER"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input House Number')"
               input-align="right"
               :label="$t('House Number')"
               label-width="130"
             />
 
             <!-- <div style="float:left"> -->
-
             <van-field
               v-model="formData.POST_CODE"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Postal Code')"
               input-align="right"
               :label="$t('Postal Code')"
             />
@@ -120,21 +119,21 @@
             <van-field
               v-model="formData.CITY"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input City')"
               input-align="right"
               :label="$t('City')"
             />
             <van-field
               v-model="formData.Phone"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Phone')"
               input-align="right"
               :label="$t('Phone')"
             />
             <van-field
               v-model="formData.DeliveryDate"
               clearable
-              placeholder=""
+              :placeholder="$t('Please selecet Delivery Date')"
               input-align="right"
               :label="$t('Delivery Date')"
               is-link
@@ -155,7 +154,7 @@
               v-show="isLogisticShow"
               v-model="formData.logisticVendorName"
               clearable
-              placeholder=""
+              :placeholder="$t('Please selecet Logistic vendor')"
               input-align="right"
               :label="$t('Logistic vendor')"
               label-width="130"
@@ -166,14 +165,14 @@
             <van-field
               v-model="formData.text"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Text')"
               input-align="right"
               :label="$t('Text')"
             />
             <van-field
               v-model="formData.poNumber"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input PO Number')"
               input-align="right"
               :label="$t('PO Number')"
               readonly
@@ -181,7 +180,7 @@
             <van-field
               v-model="formData.userRealname"
               clearable
-              placeholder=""
+              :placeholder="$t('Please input Sale Agent')"
               input-align="right"
               :label="$t('Sale Agent')"
               readonly
