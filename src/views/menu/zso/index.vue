@@ -154,20 +154,24 @@
                 <div style="display: flex">
                   <p class="textBox">{{ item.productNumber }}</p>
                   <p class="textBox" style="padding-left: 0.4rem">BKCR</p>
+                   <!-- <div class="stockBoxNumber"> -->
+                    <p  class="textBox" style="font-weight:700;padding-left: 0.4rem;">{{ $t("Stock") +' '}}</p>
+                    <div class="stockBox">{{ item.stock }}</div>
+                  <!-- </div> -->
                 </div>
                 <div class="lietItemBoxNumber">
-                  <div class="itemBoxNumber">
+                  <!-- <div class="itemBoxNumber">
                     <div>{{ $t("Stock") }}</div>
                     <div class="itemMargin">{{ item.stock }}</div>
-                  </div>
+                  </div> -->
                   <div class="itemBoxNumber">
-                    <div>{{ $t("Net Price") }}</div>
+                    <div style="font-weight:700;">{{ $t("Net Price") }}</div>
                     <div class="itemMargin" style="color: #0000ff">
                       {{ $t("SAR") }}:{{ item.retailPrice }}
                     </div>
                   </div>
                   <div class="itemBoxNumber discount">
-                    <div>{{ $t("Discount") }}</div>
+                    <div style="font-weight:700;">{{ $t("Discount") }}</div>
                     <div class="itemMargin">
                       {{ item.discountPrice ? item.discountPrice : "0%" }}
                       <span class="itemMarginOff">{{ $t("OFF") }}</span>
@@ -676,7 +680,7 @@ body {
       }
       .itemBoxNumber {
         // flex: 1;
-        width: 32%;
+        width: 50%;
         .itemMargin {
           margin: 0.1rem 0 0.3rem;
           display: -webkit-box;
@@ -694,10 +698,19 @@ body {
       }
     }
     .listDetailBox {
+      overflow: hidden;
       flex: 3;
       margin: 0.4rem 0.5rem 0rem 0rem;
       .textBox {
+        flex: 1;
         margin: 0.2rem 0;
+      }
+      .stockBox{
+        flex: 2;
+        margin: 0.2rem 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
     }
   }

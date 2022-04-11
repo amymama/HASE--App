@@ -230,29 +230,47 @@
                 </div>
                 <div class="listDetailBox">
                   <h3>{{ item.new_product_model }}</h3>
-                  <p class="textBox" style="color: #bcc1c1">
+                          <div class="stocklistBox">
+                  <div class="textbox" style="color: #bcc1c1">
                     {{
                       item.new_product_number +
                       "(" +
                       item.new_storage_location +
                       ")"
                     }}
-                  </p>
+                  </div>
+                  <div class="stockBox">
+                    <span style="font-weight:700;"
+                      >{{ $t("Stock") }}
+                      <span style="color: #ef9f61" >
+                        {{ item.inventory }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                  <!-- <p class="textBox" style="color: #bcc1c1">
+                    {{
+                      item.new_product_number +
+                      "(" +
+                      item.new_storage_location +
+                      ")"
+                    }}
+                  </p> -->
                   <div class="lietItemBoxNumber">
-                    <div class="itemBoxNumber">
+                    <!-- <div class="itemBoxNumber">
                       <div>{{ $t("Stock") }}</div>
                       <div class="itemMargin" style="color: #ef9f61">
                         {{ item.inventory }}
                       </div>
-                    </div>
+                    </div> -->
                     <div class="itemBoxNumber">
-                      <div>{{ $t("Net Price") }}</div>
+                      <div style="font-weight:700;">{{ $t("Net Price") }}</div>
                       <div class="itemMargin" style="color: #ef9f61">
                         {{ $t("SAR") }}:{{ item.retailprice }}
                       </div>
                     </div>
                     <div class="itemBoxNumber discount">
-                      <div>{{ $t("Discount") }}</div>
+                      <div style="font-weight:700;">{{ $t("Discount") }}</div>
                       <div class="itemMargin" style="color: #ef9f61">
                         {{ item.discountPrice ? item.discountPrice : "0%" }}
                         <span class="itemMarginOff">OFF</span>
@@ -894,6 +912,20 @@ export default {
       .textBox {
         margin: 0.2rem 0;
       }
+      .stocklistBox{
+        display: flex;
+        margin: 0.1rem 0;
+      }
+      .textbox{
+        flex: 1;
+      }
+      .stockBox {
+        padding-left: 0.2rem;
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
   }
   .lietItemBoxNumber {
@@ -905,7 +937,7 @@ export default {
     }
     .itemBoxNumber {
       // flex: 1;
-      width: 32%;
+      width: 50%;
       .itemMargin {
         margin: 0.1rem 0;
         display: -webkit-box;

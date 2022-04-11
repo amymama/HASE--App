@@ -72,29 +72,39 @@
               </div>
               <div class="listDetailBox">
                 <h3>{{ item.new_product_model }}</h3>
-                <p class="textBox" style="color: #bcc1c1">
-                  {{
-                    item.new_product_number +
-                    "(" +
-                    item.new_storage_location +
-                    ")"
-                  }}
-                </p>
+                <div class="stocklistBox">
+                  <div class="textbox" style="color: #bcc1c1">
+                    {{
+                      item.new_product_number +
+                      "(" +
+                      item.new_storage_location +
+                      ")"
+                    }}
+                  </div>
+                  <div class="stockBox">
+                    <span style="font-weight:700;"
+                      >{{ $t("Stock") }}
+                      <span style="color: #ef9f61" >
+                        {{ item.inventory }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
                 <div class="lietItemBoxNumber">
-                  <div class="itemBoxNumber">
+                  <!-- <div class="itemBoxNumber">
                     <div>{{ $t("Stock") }}</div>
                     <div class="itemMargin" style="color: #ef9f61">
                       {{ item.inventory }}
                     </div>
-                  </div>
+                  </div> -->
                   <div class="itemBoxNumber">
-                    <div>{{ $t("Net Price") }}</div>
+                    <div style="font-weight:700;">{{ $t("Net Price") }}</div>
                     <div class="itemMargin" style="color: #ef9f61">
                       {{ $t("SAR") }}:{{ item.retailprice }}
                     </div>
                   </div>
                   <div class="itemBoxNumber discount">
-                    <div>{{ $t("Discount") }}</div>
+                    <div style="font-weight:700;">{{ $t("Discount") }}</div>
                     <div class="itemMargin" style="color: #ef9f61">
                       <!-- {{ item.discountPrice}} -->
                       {{ item.discountPrice ? item.discountPrice : "0%" }}
@@ -250,8 +260,11 @@ export default {
   },
   created() {
     this.getDataSelect();
-    this.selectedLocation = this.zsoselectedLocation.selectedLocation
-    console.log(this.zsoselectedLocation.selectedLocation,'zsoselectedLocation')
+    this.selectedLocation = this.zsoselectedLocation.selectedLocation;
+    console.log(
+      this.zsoselectedLocation.selectedLocation,
+      "zsoselectedLocation"
+    );
     // this.getDataListCart();
   },
   methods: {
@@ -387,7 +400,7 @@ export default {
           if (res.success) {
             this.$toast.success("success");
             // this.getDataListCart();
-            this.initData() 
+            this.initData();
           }
         })
         .catch((e) => {
@@ -396,7 +409,10 @@ export default {
     },
     //查看shangpin详情
     detailShowModel(val) {
-      console.log(this.selectedLocation,'this.selectedLocationthis.selectedLocationthis.selectedLocation')
+      console.log(
+        this.selectedLocation,
+        "this.selectedLocationthis.selectedLocationthis.selectedLocation"
+      );
       this.$router.push("/zsoDetail");
       this.$store.commit("order/productDetail", {
         productId: val.new_product_id,
@@ -427,11 +443,11 @@ export default {
       };
       GetCartListByDealer(parms)
         .then((res) => {
-            console.log("res11", res);
+          console.log("res11", res);
           if (res.success) {
-            if(res.data==null||res.data.ProductItems==[]){
-            this.$toast.fail("No goods");
-              return false
+            if (res.data == null || res.data.ProductItems == []) {
+              this.$toast.fail("No goods");
+              return false;
             }
             this.list = [];
             // this.list = data.ProductItems;
@@ -659,7 +675,20 @@ body {
           flex: 1;
         }
       }
-
+      .stocklistBox{
+        display: flex;
+        margin: 0.1rem 0;
+      }
+      .textbox{
+        flex: 1;
+      }
+      .stockBox {
+        padding-left: 0.2rem;
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
       .textBox {
         margin: 0.2rem 0;
       }
@@ -700,7 +729,7 @@ body {
     }
     .itemBoxNumber {
       // flex: 1;
-      width: 32%;
+      width: 50%;
       .itemMargin {
         margin: 0.1rem 0;
         display: -webkit-box;
