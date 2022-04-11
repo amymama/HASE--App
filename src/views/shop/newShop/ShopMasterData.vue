@@ -190,6 +190,28 @@
                 @click="showLocation = true"
                 :rules="[{ required: true }]"
               />
+              <van-field
+                required
+                readonly
+                clickable
+                input-align="right"
+                :value="form.new_shop_classification"
+                :label="$t('shopMaster.Classification')"
+                :placeholder="$t('shopCommon.PleaseSelect')"
+                @click="showClassification = true"
+                :rules="[{ required: true }]"
+              />
+              <van-field
+                required
+                readonly
+                clickable
+                input-align="right"
+                :value="pic"
+                :label="$t('shopMaster.PIC')"
+                :placeholder="$t('shopCommon.PleaseSelect')"
+                @click="$refs.selectPic.show(picList)"
+                :rules="[{ required: true }]"
+              />
             </div>
             <div class="shop-group__header">
               <div class="shop-group__title">GPS</div>
@@ -310,10 +332,20 @@
           </van-popup>
           <!-- SELECT CUSTOMER -->
           <select-customer ref="selectCustomer" @selectCustomerOk="handleSelectCustomerOk" />
+          <select-pic ref="selectPic" @selectPicOK="handleSelectPicOk" />
           <!-- SELECT PRODUCT CATEGORYS -->
           <select-product ref="selectProdduct" @selectProductOk="handleSelectProductOk" />
           <!-- Modal -->
           <shop-gps ref="shopGps" @ok="handleOk" :GPSeditable="GPSeditable" />
+          <van-popup v-model="showClassification" round position="bottom">
+            <van-picker
+              title="Select Shop Classification"
+              show-toolbar
+              :columns="shopClassificationList"
+              @confirm="onConfirmClassification"
+              @cancel="showClassification = false"
+            />
+          </van-popup>
         </van-tab>
         <van-tab title="Contact" class="shop-master-contact">
           <van-cell-group v-if="contactList.length > 0">
@@ -362,9 +394,11 @@
 <script>
 import SelectCustomer from "./components/SelectCustomer";
 import SelectProduct from "./components/SelectProduct";
+import SelectPic from "./components/SelectPic";
 import UploadImgs from "@/components/UploadImgs";
 import ShopGps from "./components/ShopGps";
 import { getEntityConditions, getDict } from "@/api/common";
+import { getPiclist } from "@/api/user";
 import {
   getShopLocation,
   getShopSize,
@@ -380,6 +414,7 @@ export default {
   components: {
     SelectCustomer,
     SelectProduct,
+    SelectPic,
     UploadImgs,
     ShopGps,
   },
@@ -430,6 +465,8 @@ export default {
         new_status: "",
         new_approve_status: "",
         new_shop_status: "",
+        new_shop_classification: '',
+        new_pic_userid: ''
       },
       new_mdm_accountgroup: '',
       // btn loading
@@ -468,6 +505,13 @@ export default {
       // select customer partner
       showPartner: false,
       partnerList: [],
+      // piclist
+      pic: '',
+      showPic: false,
+      picList: [],
+      // ClassificationList
+      showClassification: false,
+      shopClassificationList: [],
       // shop photos
       active: 0,
       photoTypes: [
@@ -499,7 +543,6 @@ export default {
     // get shop info
     if (this.$route.query.shop_id) {
       this.form.new_shopid = this.$route.query.shop_id;
-      this.handleGetShopDetail();
       this.initData();
     }
   },
@@ -629,7 +672,39 @@ export default {
             reject();
           });
       });
+      // SHOP TYPE
+      const getShopClassification = new Promise((resolve, reject) => {
+        getDict({ key: "ShopClassification" })
+          .then((res) => {
+            const { data, success } = res;
+            if (success) {
+              this.shopClassificationList = data.Items;
+              resolve(this.shopClassificationList);
+            } else {
+              reject();
+            }
+          })
+          .catch(() => {
+            reject();
+          });
+      });
 
+      // SHOP TYPE
+      const getPic = new Promise((resolve, reject) => {
+        getPiclist()
+          .then((res) => {
+            const { data, success } = res;
+            if (success) {
+              this.picList = data.Items;
+              resolve(this.picList);
+            } else {
+              reject();
+            }
+          })
+          .catch(() => {
+            reject();
+          });
+      });
       // GET SHOP BASE DATA
       this.$toast.loading({ duration: 0, forbidClick: true });
       Promise.all([
@@ -637,8 +712,11 @@ export default {
         getChannels,
         getShopType,
         getShopsizes,
-        getLocation
+        getLocation,
+        getShopClassification,
+        getPic
       ]).then(() => {
+        this.handleGetShopDetail();
         this.$toast.clear();
       })
       .catch((e) => {
@@ -738,8 +816,11 @@ export default {
             new_status: item.new_status,
             new_approve_status: item.new_approve_status,
             new_shop_status: item.new_shop_status,
+            new_shop_classification: item.new_shop_classification,
+            new_pic_userid: item.new_pic_userid
           };
           this.new_mdm_accountgroup = item.new_mdm_accountgroup
+          item.new_pic_userid && this.handleSelectPicOk(item.new_pic_userid)
           // SHOP PIC LIST
           this.photoTypes.map((item) => {
             item.list = [];
@@ -801,6 +882,10 @@ export default {
         this.showPartner = false;
       }
     },
+    onConfirmClassification(record) {
+      this.form.new_shop_classification = record.value
+      this.showClassification = false;
+    },
     // Confirm Channel
     onConfirmChannel(record) {
       this.form.new_channel_parentid = record.new_parentid || "";
@@ -818,6 +903,13 @@ export default {
       this.form.new_customer_id = id
       this.new_mdm_accountgroup = group
       this.handleGetPartner(code)
+    },
+    // select pic ok
+    handleSelectPicOk (id) {
+      let item = this.picList.find(item => item.id === id)
+      const value = item ? `${item.username}_${item.realname}_${item.picrole}` : ''
+      this.form.new_pic_userid = id
+      this.pic = value
     },
     // select product ok
     handleSelectProductOk(values, name) {

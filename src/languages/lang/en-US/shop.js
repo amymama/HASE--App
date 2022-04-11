@@ -113,7 +113,9 @@ export default {
     ShopInside: 'Shop Inside',
     ShopType: 'Shop Type',
     ShopRegion: 'Shop Region',
-    MDMShipToCode: 'MDM Ship to code'
+    MDMShipToCode: 'MDM Ship to code',
+    Classification: 'Shop Classification',
+    PIC: 'PIC',
   },
   shopApprove: {
     ToDoList: 'To Do List',

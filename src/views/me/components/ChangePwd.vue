@@ -81,7 +81,7 @@ export default {
     },
     // Change Password
     onSubmit() {
-      const headers = this.token ? { Authorization: `Bearer ${this.token}` } : null
+      const headers = this.token ? { Authorization: `Bearer ${this.token}` } : {}
       // password validation
       if (this.newPassword != this.newPasswordConfirm) {
         this.$toast('Two passwords are different')

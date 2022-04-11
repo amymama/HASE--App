@@ -113,6 +113,8 @@ export default {
     ShopType: 'نوع المحل',
     ShopRegion: 'منطقة المحل',
     MDMShipToCode: 'MDM خدمة الطرف',
+    Classification: 'Shop Classification',
+    PIC: 'PIC',
   },
   shopApprove: {
     ToDoList: 'قائمة المهام',
