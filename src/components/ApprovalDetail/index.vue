@@ -113,7 +113,8 @@ export default {
       this.list = [];
       getApproveNodeHistory(null, {
         new_business_primarykey: record.new_shop_id,
-        new_flow_type: record.new_process_type
+        new_flow_type: record.new_process_type,
+        new_process_num: record.new_process_num
       })
         .then((res) => {
           this.$toast.clear();

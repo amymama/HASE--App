@@ -178,6 +178,34 @@
               {{ shop_location_level }}
             </template>
           </van-field>
+          <van-field
+            required
+            readonly
+            clickable
+            :value="form.new_shop_classification"
+            :label="$t('shopMaster.Classification')"
+            :placeholder="$t('shopCommon.PleaseSelect')"
+            @click="showClassification = true"
+            :rules="[{ required: true }]"
+          >
+            <template #right-icon>
+              {{ shop_location_level }}
+            </template>
+          </van-field>
+          <van-field
+            required
+            readonly
+            clickable
+            :value="pic"
+            :label="$t('shopMaster.PIC')"
+            :placeholder="$t('shopCommon.PleaseSelect')"
+             @click="$refs.selectPic.show(picList)"
+            :rules="[{ required: true }]"
+          >
+            <template #right-icon>
+              {{ shop_location_level }}
+            </template>
+          </van-field>
         </div>
         <div class="shop-group__header">
           <div class="shop-group__title">GPS</div>
@@ -362,6 +390,9 @@
         ref="selectCustomer"
         @selectCustomerOk="handleSelectCustomerOk"
       />
+      <select-pic
+        ref="selectPic"
+        @selectPicOK="handleSelectPicOk" />
       <!-- SELECT PRODUCT CATEGORYS -->
       <select-product
         ref="selectProdduct"
@@ -369,6 +400,15 @@
       />
       <!-- Modal -->
       <shop-gps ref="shopGps" @ok="handleOk" />
+      <van-popup v-model="showClassification" round position="bottom">
+        <van-picker
+          title="Select Shop Classification"
+          show-toolbar
+          :columns="shopClassificationList"
+          @confirm="onConfirmClassification"
+          @cancel="showClassification = false"
+        />
+      </van-popup>
     </div>
     <div class="flex-layout__footer">
       <van-row>
@@ -402,9 +442,11 @@
 <script>
 import SelectCustomer from "./components/SelectCustomer";
 import SelectProduct from "./components/SelectProduct";
+import SelectPic from "./components/SelectPic";
 import UploadImgs from "@/components/UploadImgs";
 import ShopGps from "./components/ShopGps";
 import { getEntityConditions, getDict } from "@/api/common";
+import { getPiclist } from "@/api/user";
 import {
   getShopLocation,
   getShopSize,
@@ -420,6 +462,7 @@ export default {
   components: {
     SelectCustomer,
     SelectProduct,
+    SelectPic,
     UploadImgs,
     ShopGps,
   },
@@ -463,7 +506,11 @@ export default {
         new_local_shop_code: "",
         new_local_shop_name: "",
         new_name: "",
+        new_shop_classification: '',
+        new_pic_userid: '',
         new_status: null,
+        new_approve_status: "",
+        new_shop_status: ""
       },
       new_mdm_accountgroup: '',
       // btn loading
@@ -507,6 +554,13 @@ export default {
       // select customer partner
       showPartner: false,
       partnerList: [],
+      // piclist
+      pic: '',
+      showPic: false,
+      picList: [],
+      // ClassificationList
+      showClassification: false,
+      shopClassificationList: [],
       // shop photos
       active: 0,
       photoTypes: [
@@ -535,12 +589,6 @@ export default {
   created() {
     // init data
     this.initData();
-    if (this.$route.query.shop_id) {
-      this.form.new_shopid = this.$route.query.shop_id;
-      this.handleGetShopDetail();
-    } else {
-      this.isView = false;
-    }
   },
   watch: {
     "form.new_shop_size": {
@@ -724,7 +772,41 @@ export default {
             const { data, success } = res;
             if (success) {
               this.shopTypeList = data.Items;
-              resolve();
+              resolve(this.shopTypeList);
+            } else {
+              reject();
+            }
+          })
+          .catch(() => {
+            reject();
+          });
+      });
+
+      // SHOP TYPE
+      const getShopClassification = new Promise((resolve, reject) => {
+        getDict({ key: "ShopClassification" })
+          .then((res) => {
+            const { data, success } = res;
+            if (success) {
+              this.shopClassificationList = data.Items;
+              resolve(this.shopClassificationList);
+            } else {
+              reject();
+            }
+          })
+          .catch(() => {
+            reject();
+          });
+      });
+
+      // SHOP TYPE
+      const getPic = new Promise((resolve, reject) => {
+        getPiclist()
+          .then((res) => {
+            const { data, success } = res;
+            if (success) {
+              this.picList = data.Items;
+              resolve(this.picList);
             } else {
               reject();
             }
@@ -745,7 +827,15 @@ export default {
         getShopType,
         getShopsizes,
         getLocation,
+        getShopClassification,
+        getPic
       ]).then(() => {
+        if (this.$route.query.shop_id) {
+          this.form.new_shopid = this.$route.query.shop_id;
+          this.handleGetShopDetail();
+        } else {
+          this.isView = false;
+        }
         this.$toast.clear();
       })
       .catch((e) => {
@@ -845,10 +935,14 @@ export default {
               new_local_shop_code: item.new_local_shop_code,
               new_local_shop_name: item.new_local_shop_name,
               new_name: item.new_name,
-              new_shop_status: item.new_shop_status,
+              new_shop_classification: item.new_shop_classification,
+              new_pic_userid: item.new_pic_userid,
               new_status: item.new_status,
+              new_approve_status: item.new_approve_status,
+              new_shop_status: item.new_shop_status,
             };
             this.new_mdm_accountgroup = item.new_mdm_accountgroup
+            item.new_pic_userid && this.handleSelectPicOk(item.new_pic_userid)
             // SHOP PIC LIST
             this.photoTypes.map((item) => {
               item.list = [];
@@ -905,6 +999,10 @@ export default {
       this.new_shop_location = record.text;
       this.shop_location_level = record.new_level;
       this.showLocation = false;
+    },
+    onConfirmClassification(record) {
+      this.form.new_shop_classification = record.value
+      this.showClassification = false;
     },
     // Confirm Location
     onConfirmPartner(record) {
@@ -1033,6 +1131,13 @@ export default {
       this.form.new_customer_id = id
       this.new_mdm_accountgroup = group
       this.handleGetPartner(code)
+    },
+    // select pic ok
+    handleSelectPicOk (id) {
+      let item = this.picList.find(item => item.id === id)
+      const value = item ? `${item.username}_${item.realname}_${item.picrole}` : ''
+      this.form.new_pic_userid = id
+      this.pic = value
     },
     // select product ok
     handleSelectProductOk(values, name) {
