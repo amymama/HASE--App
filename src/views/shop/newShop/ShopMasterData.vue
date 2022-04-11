@@ -908,6 +908,7 @@ export default {
     handleSelectPicOk (id) {
       let item = this.picList.find(item => item.id === id)
       const value = item ? `${item.username}_${item.realname}_${item.picrole}` : ''
+      this.form.new_pic_userid = id
       this.pic = value
     },
     // select product ok
