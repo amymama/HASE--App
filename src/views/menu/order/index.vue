@@ -202,7 +202,7 @@ export default {
         .then((res) => {
           console.log(res, "ss");
           if (res.success) {
-            this.$toast.success("Success");
+            this.$toast.success(res.success);
             this.resubmitLoading = false;
             this.initDataOrderList();
           } else {

@@ -175,7 +175,6 @@
               :placeholder="$t('Please input PO Number')"
               input-align="right"
               :label="$t('PO Number')"
-              readonly
             />
             <van-field
               v-model="formData.userRealname"
@@ -183,7 +182,6 @@
               :placeholder="$t('Please input Sale Agent')"
               input-align="right"
               :label="$t('Sale Agent')"
-              readonly
             />
             <van-field
               v-model="username"
@@ -525,7 +523,7 @@ export default {
       SubmitOrder(this.formData)
         .then((res) => {
           if (res.success) {
-            this.$toast.success("success");
+            this.$toast.success(res.success);
             this.checkoutLoading = false;
             this.$router.push({ name: "Order" });
           } else {

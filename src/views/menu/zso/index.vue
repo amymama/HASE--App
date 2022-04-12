@@ -152,11 +152,20 @@
               <div class="listDetailBox">
                 <h3>{{ item.productModel }}</h3>
                 <div style="display: flex">
-                  <p class="textBox">{{ item.productNumber }}</p>
-                  <p class="textBox" style="padding-left: 0.4rem">BKCR</p>
-                   <!-- <div class="stockBoxNumber"> -->
-                    <p  class="textBox" style="font-weight:700;padding-left: 0.4rem;">{{ $t("Stock") +' '}}</p>
-                    <div class="stockBox">{{ item.stock }}</div>
+                  <p class="textBox">
+                    {{ item.productNumber }}{{ item.storageLocation }}
+                  </p>
+                  <p class="textBox" style="padding-left: 0.4rem">
+                    {{ item.storageLocation }}
+                  </p>
+                  <!-- <div class="stockBoxNumber"> -->
+                  <p
+                    class="textBox"
+                    style="font-weight: 700; padding-left: 0.4rem"
+                  >
+                    {{ $t("Stock") + " " }}
+                  </p>
+                  <div class="stockBox">{{ item.stock }}</div>
                   <!-- </div> -->
                 </div>
                 <div class="lietItemBoxNumber">
@@ -165,13 +174,13 @@
                     <div class="itemMargin">{{ item.stock }}</div>
                   </div> -->
                   <div class="itemBoxNumber">
-                    <div style="font-weight:700;">{{ $t("Net Price") }}</div>
+                    <div style="font-weight: 700">{{ $t("Net Price") }}</div>
                     <div class="itemMargin" style="color: #0000ff">
                       {{ $t("SAR") }}:{{ item.retailPrice }}
                     </div>
                   </div>
                   <div class="itemBoxNumber discount">
-                    <div style="font-weight:700;">{{ $t("Discount") }}</div>
+                    <div style="font-weight: 700">{{ $t("Discount") }}</div>
                     <div class="itemMargin">
                       {{ item.discountPrice ? item.discountPrice : "0%" }}
                       <span class="itemMarginOff">{{ $t("OFF") }}</span>
@@ -323,7 +332,7 @@ export default {
       //   proDataSource: new ListView.DataSource({
       //     rowHasChanged: (row1, row2) => row1 !== row2,
       //   }),
-      loading: false,
+      loading: true,
       refreshing: false,
       submitting: false,
       //   pageTotal: 1,
@@ -350,7 +359,9 @@ export default {
     console.log(document.body.scrollTop, "aaaaaaaaa");
   },
   methods: {
-    goClickLeft(){this.$router.push('/menu')},
+    goClickLeft() {
+      this.$router.push("/menu");
+    },
     handleScroll() {
       console.log(document.body.scrollTop, "aaaaaaaaa");
     },
@@ -367,7 +378,7 @@ export default {
         selectedDealer: this.selectedDealer,
         selectedShipTo: this.selectedShipTo,
         selectedLocation: this.selectedLocation,
-        cartParams:val
+        cartParams: val,
       });
       // this.detailShow = true;
       // this.productDetail = {
@@ -467,7 +478,7 @@ export default {
       this.onLoad();
     },
     onLoad() {
-      // setTimeout(() => {
+      setTimeout(() => {
       this.page_no++;
       zsoGetProductList(
         Object.assign(
@@ -511,16 +522,16 @@ export default {
           this.$toast.clear();
           this.error = true;
         });
-      // }, 100);
+      }, 100);
     },
     setShowSearch() {
       this.showSearchHistory = true;
     },
     //跳转到购物车
     clickright() {
-      this.$router.push('/zso/cart');
+      this.$router.push("/zso/cart");
       this.$store.commit("order/zsoselectedLocation", {
-         selectedLocation: this.selectedLocation,
+        selectedLocation: this.selectedLocation,
       });
     },
     // clear search
@@ -553,9 +564,9 @@ export default {
       this.selectedLocation = val;
       this.initData();
     },
-    getData() {
+  async getData() {
       // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
-      GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
+    await GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
         (res) => {
           if (res.success) {
             this.categoryList = [
@@ -573,7 +584,7 @@ export default {
         }
       );
       //dealer Name
-      GetDealerList({ userId: this.$store.getters.userInfo.id })
+     await GetDealerList({ userId: this.$store.getters.userInfo.id })
         .then((res) => {
           const { success, data } = res;
           if (success) {
@@ -581,13 +592,13 @@ export default {
             this.allDealerList = this.allDealerList.concat(Items);
             if (this.allDealerList.length > 0) {
               this.selectedDealer = this.allDealerList[0];
-              this.getShipTo();
+              // this.getShipTo();
             }
           } else {
           }
         })
         .catch(() => {});
-      GetStorageLocationList()
+     await GetStorageLocationList()
         .then((res) => {
           const { success, data } = res;
           if (success) {
@@ -599,9 +610,8 @@ export default {
           }
         })
         .catch(() => {});
-    },
-    getShipTo() {
-      GetPartnerListByDealer({
+
+      await GetPartnerListByDealer({
         dealer_code: this.selectedDealer.dealerCode,
         type: "SH",
       })
@@ -616,12 +626,15 @@ export default {
               this.selectedShipTo = this.allShipToList[0];
               console.log("selectedShipTo", this.selectedShipTo);
             }
-            this.initData();
-            this.getCartCountNumber();
+              this.initData();
+              this.getCartCountNumber();
           }
         })
         .catch(() => {});
     },
+    // getShipTo() {
+
+    // },
   },
 };
 </script>
@@ -705,7 +718,7 @@ body {
         flex: 1;
         margin: 0.2rem 0;
       }
-      .stockBox{
+      .stockBox {
         flex: 2;
         margin: 0.2rem 0;
         overflow: hidden;
