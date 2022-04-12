@@ -146,6 +146,8 @@ export default {
               this.canSubmit = false
             }
           })
+          console.log(this.canSubmit)
+          this.canSubmit && this.handleSubmit() // 自动提交
         }
       })
     },

@@ -38,13 +38,14 @@ export default {
   .product-visit-categorys{
     background: #F5F5F5;
     display: flex;
-    padding: 24px 0;
+    padding:5px 24px 24px 24px;
+    justify-content: space-between;
     .product-visit-category-item{
       background: #FFF;
-      flex: 1;
       text-align: center;
       box-sizing: border-box;
       margin: 0 12px;
+      max-width: 64px;
       &.category-active{
         position: relative;
         box-shadow: 0 2px 30px rgba($color: #000000, $alpha: .2);
@@ -59,7 +60,7 @@ export default {
         }
       }
       img{
-        max-width: 64px;
+        max-width: 48px;
         height: auto;
       }
     }

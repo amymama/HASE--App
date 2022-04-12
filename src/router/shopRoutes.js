@@ -19,6 +19,18 @@ export default [
     meta: { title: 'New Shop', module: 'HiShop', keepAlive: false }
   },
   {
+    path: "report",
+    name: "ReportList",
+    component: () => import("@/views/shop/report/ReportList"),
+    meta: { title: "report", module: "HiShop", keepAlive: false },
+  },
+  {
+    path: "report",
+    name: "ReportDetail",
+    component: () => import("@/views/shop/report/ReportEmbed"),
+    meta: { title: "Report Detail", module: "HiShop", keepAlive: false },
+  },
+  {
     path: 'newShopList',
     name: 'NewShopList',
     component: () => import('@/views/shop/newShop/NewShopList'),

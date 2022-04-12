@@ -10,10 +10,13 @@
       </div>
     </div>
     <div class="login__body">
+      <!-- FORM -->
       <van-form class="login__form" @submit="onSubmit">
         <van-field
           v-model="username"
           size="large"
+          class="field-item"
+          :border="false"
           :placeholder="$t('uLogin.UserName')"
           :rules="[{ required: true, message: ' ' }]"
         >
@@ -24,6 +27,8 @@
         <van-field
           v-model="password"
           size="large"
+          class="field-item"
+          :border="false"
           :type="passwordType"
           :right-icon="passwordType == 'password' ? 'closed-eye' : 'eye-o'"
           :placeholder="$t('uLogin.Password')"
@@ -35,54 +40,58 @@
             <i class="iconfont icon-password"></i>
           </template>
         </van-field>
-        <div class="remember-account">
-          <van-checkbox
-            v-model="checked"
-            shape="square"
-            checked-color="#2058AB"
-            icon-size=".36rem"
-          >
-            <span style="color: #999">
-              {{ $t("uLogin.RememberPwd") }}
-            </span>
-          </van-checkbox>
+        <div class="login-forget">
+          <!-- <router-link :to="{ name: 'ForgetPassword' }">Forgot Password?</router-link> -->
         </div>
         <div class="login-btn">
           <van-button
             block
-            round
             :loading="submitLoading"
             size="large"
-            color="linear-gradient(to right, #5390ea, #2058AB)"
+            color="#0a3c78"
             native-type="submit"
           >
             {{ $t("uLogin.Login") }}
           </van-button>
         </div>
+        <div class="login-policy">
+          <van-checkbox checked-color="#03a9f4" icon-size=".32rem" v-model="checked"/>
+          <span class="login-policy__text" @click="$refs.Policy.show()">I have checked & agreed with &lt;<i>Privacy Information Protection Policy</i>&gt;</span>
+        </div>
       </van-form>
-    </div>
-
-    <!-- footer -->
-    <div class="login__footer">
-      <login-footer />
+      <div class="login-register-box" >
+          <van-divider :style="{ color: '#FFF', fontSize: '14px' }">No Account? Register Now!</van-divider>
+          <van-grid :column-num="2" :border="false">
+            <van-grid-item
+              v-for="(item, index) in registerList"
+              :key="index"
+              :icon="item.icon"
+              :text="item.name"
+              :to="{ name: item.routeName }"
+            />
+          </van-grid>
+      </div>
     </div>
     <!-- changeLang -->
     <change-lang ref="changeLang" />
     <!-- edite pwd -->
     <change-pwd ref="changePwd" />
+    <privacy-policy ref="Policy"/>
   </div>
 </template>
 <script>
-import LoginFooter from "./components/Footer";
 import ChangeLang from "@/components/ChangeLang";
 import ChangePwd from "@/views/me/components/ChangePwd";
+import PrivacyPolicy from "@/components/PrivacyPolicy";
+import icon_internal from "@/assets/images/user/register_icon1.png";
+import icon_partner from "@/assets/images/user/register_icon2.png";
 
 export default {
   name: "Login",
   components: {
-    LoginFooter,
     ChangeLang,
     ChangePwd,
+    PrivacyPolicy
   },
   data() {
     return {
@@ -91,6 +100,18 @@ export default {
       checked: false,
       passwordType: "password",
       submitLoading: false,
+      registerList: [
+        {
+          icon: icon_internal,
+          name: 'Internal',
+          routeName: ""
+        },
+        {
+          icon: icon_partner,
+          name: 'Partner',
+          routeName: ""
+        }
+      ]
     };
   },
   created() {
@@ -111,12 +132,12 @@ export default {
     togglePwd() {
       this.passwordType = this.passwordType == "password" ? "text" : "password";
     },
-    // submit
+    // Login APP
     onSubmit() {
-      const { username, password } = this;
-      this.submitLoading = true;
-      this.$store
-        .dispatch("user/Login", {
+      if (this.checked) {
+        const { username, password } = this;
+        this.submitLoading = true;
+        this.$store.dispatch("user/Login", {
           username,
           password,
         })
@@ -141,17 +162,21 @@ export default {
           this.submitLoading = false;
           this.$toast.fail("Netwoke error");
         });
+      } else {
+        this.$toast("Please agree with Privacy Policy firstly!")
+      }
     }
-  },
-};
+  }
+}
 </script>
 <style lang="scss" scoped>
 .login {
   min-height: 100%;
-  background: #fff;
+  background-image: linear-gradient(to bottom, #2c85ee, #114c92);
   box-sizing: border-box;
-  padding-bottom: 240px;
   position: relative;
+  color: #FFF;
+  padding-bottom: 240px;
   .login__header {
     color: #2058ab;
     .login__lang {
@@ -160,13 +185,15 @@ export default {
       top: 60px;
       display: flex;
       align-items: center;
+      color: #FFF;
       .iconfont {
         font-size: 40px !important;
         margin-right: 10px;
+        color: #FFF;
       }
     }
     .login__logo {
-      padding: 180px 120px 32px 120px;
+      padding: 180px 150px 32px 150px;
       font-size: 90px;
       font-weight: bold;
       text-align: center;
@@ -177,45 +204,64 @@ export default {
     }
   }
   .login__body {
-    border-radius: 32px;
-    background: #fff;
-    margin: 24px;
+    padding: 42px;
     overflow: hidden;
+    .field-item{
+      background: #0a3c78;
+      margin-top: 32px;
+      border-radius: 12px;
+    }
     .iconfont {
       font-size: 34px !important;
-      color: #2058ab;
+      color: #FFF;
     }
-    .remember-account {
-      padding: 34px;
-      font-size: 28px;
+    .login-forget{
+      padding: 24px 0;
+      text-align: right;
+      color: #FFF;
+      font-size: 18px;
+      a{
+        color: #FFF;
+      }
     }
-    .login-btn,
-    .reg-btn {
-      padding: 24px 34px;
+    .login-policy{
+      display: flex;
+      padding: 24px 0;
+      font-size: 18px;
+      .login-policy__text{
+        margin-left: 15px;
+        i{
+          text-decoration: underline;
+          font-style: italic;
+        }
+      }
+    }
+    .login-btn{
       font-weight: bold;
-    }
-    .foget_pass {
-      padding: 24px 34px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .foget_pass a {
-      color: red;
-    }
-    .register {
-      font-weight: bold;
-      text-align: center;
+      font-size: 34px;
+      border-radius: 12px;
+      overflow: hidden;
     }
   }
-  .login__footer {
+  .login-register-box{
     position: absolute;
-    color: #fff;
-    width: 100%;
-    bottom: 34px;
-    line-height: 38px;
-    font-size: 24px;
+    bottom: 0;
     left: 0;
+    width: 100%;
   }
 }
+</style>
+<style lang="scss">
+  .login__body .van-field__control{
+    color: #FFF !important;
+  }
+  .login-register-box{
+    .van-grid-item__content{
+      background: none;
+      color: #FFF;
+    }
+    .van-grid-item__text{
+      color: #FFF;
+    }
+  }
 </style>

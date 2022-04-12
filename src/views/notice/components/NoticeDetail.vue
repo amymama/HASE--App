@@ -20,10 +20,10 @@
           <h2>{{ new_title }}</h2>
           <div class="notice-detail__desc">
             <van-tag v-if="new_announce_type == 0" type="primary">
-              Announce
+              {{ $t('shopCommon.Announce') }}
             </van-tag>
             <van-tag v-if="new_announce_type == 1" type="warning">
-              Policy
+              {{ $t('shopCommon.Policy') }}
             </van-tag>
             <span style="margin-left: 10px">{{ new_publish_time }}</span>
           </div>

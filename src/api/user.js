@@ -9,7 +9,8 @@ const api = {
   userSendVerifyCode: '/api/login/SendVerifyCode',
   userChangePasswordConfirm: '/api/login/ChangePsw',
   userPermission: '/api/userpermission/getuserpermission',
-  Register: '/api/login/Register'
+  Register: '/api/login/Register',
+  Piclist: '/api/user/getpiclist'
 }
 
 // [登录|POST]
@@ -55,4 +56,9 @@ export function postUserPermission(data) {
 //注册
 export function postRegister(data) {
   return http.post(api.Register, data)
+}
+
+//注册
+export function getPiclist(params) {
+  return http.get(api.Piclist, { params })
 }

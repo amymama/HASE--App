@@ -15,7 +15,10 @@ function appUpdate (ismanual) {
           var nv = data.Items.new_version  // online version
           if (ov == nv) {
             if (ismanual) {
-              plus.nativeUI.toast('Already the latest version!')
+              var localStore = JSON.parse(localStorage.getItem('vuex'))
+              const lang = localStore.app.lang || 'en'
+              const latest = lang === 'en' ? 'Already the latest version' : 'هذا هو أحدث نسخة'
+              plus.nativeUI.toast(latest)
             }
           } else {
             plus.nativeUI.alert(`Found new version:v${nv}`, (e) => {

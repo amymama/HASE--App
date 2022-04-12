@@ -67,3 +67,7 @@ export function postGetCategory(data) {
 export function postGetSubCategory(data) {
   return http.post(api.getSubCategory, {}, { params: data })
 }
+
+export function postEmbedReport(params, data) {
+  return http.post('/api/AppOwnsEmbed/EmbedReport', data, { params })
+}

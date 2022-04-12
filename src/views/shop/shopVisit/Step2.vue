@@ -5,39 +5,65 @@
       <van-nav-bar left-arrow @click-left="goBack" title="Display sample" />
       <!-- SHOP HEADER -->
       <shop-header :shopInfo="query" />
+      <!-- PRODUCT CATEGORY -->
+      <product-category
+        :list="categorys"
+        @changeCategroy="handleChangeCategroy"
+      />
+      <!-- SHOP STATISTICS -->
+      <shop-statistics
+        :record="currentCategory"
+        :new_max_display_quantity="new_max_display_quantity"
+        :new_ood_quantity="new_ood_quantity"
+      />
+      <!-- ACTION-STEPS -->
+      <div class="action-steps">
+        <div
+          class="action-step-item"
+          :class="{ 'action-step-item-active': index == stepActive }"
+          v-for="(item, index) in stepList"
+          :key="index"
+        >
+          {{ item }}
+        </div>
+      </div>
     </div>
     <div class="flex-layout__body page-content">
       <!-- STEP1 -->
       <div class="step2-content">
-        <!-- PRODUCT CATEGORY -->
-        <product-category
-          :list="categorys"
-          @changeCategroy="handleChangeCategroy"
-        />
-        <!-- SHOP STATISTICS -->
-        <shop-statistics
-          :record="currentCategory"
-          :new_max_display_quantity="new_max_display_quantity"
-          :new_ood_quantity="new_ood_quantity"
-        />
-        <!-- ACTION-STEPS -->
-        <div class="action-steps">
-          <div
-            class="action-step-item"
-            :class="{ 'action-step-item-active': index == stepActive }"
-            v-for="(item, index) in stepList"
-            :key="index"
-          >
-            {{ item }}
-          </div>
-        </div>
         <!-- PRODUCT SUB-CATEGORY -->
         <div v-if="stepActive == 0">
           <template
             v-if="currentCategory.subList && currentCategory.subList.length > 0"
           >
             <div class="visit-step2-1">
-              <div class="action-panel-item action-panel">
+              <div class="display-imgs">
+                <upload-imgs
+                  folder="VisitDisplaySample"
+                  prefix="Display"
+                  :max="4"
+                  :fileList="currentCategory.new_urllist"
+                  :isTakePhoto="true"
+                  :hasWallet="true"
+                  :walletText="walletText"
+                  :showUploader="new_process == 1"
+                  @fileUploadOk="handleFileUploadOk"
+                  @fileDelete="handleFileDelete"
+                />
+              </div>
+              <div class="display-remark">
+                <van-field
+                  v-model="currentCategory.new_remark"
+                  rows="2"
+                  autosize
+                  type="textarea"
+                  :disabled="new_process != 1"
+                  maxlength="200"
+                  :placeholder="$t('shopVisit.Remark')"
+                  show-word-limit
+                />
+              </div>
+              <div class="action-panel-item action-panel" style="margin-top: 10px">
                 <div class="filter-search">
                   <van-search
                     style="padding: 0; border: 1px solid #EEE;"
@@ -61,7 +87,7 @@
                   </van-col>
                 </van-row>
                 <div class="models-item-con">
-                  <div v-for="(sitem, sindex) in currentCategory.subList">
+                  <div v-for="(sitem, sindex) in currentCategory.subList" :key="sindex">
                     <div
                       class="models-group"
                       v-for="(
@@ -95,7 +121,7 @@
                   </van-col>
                 </van-row>
                 <div class="models-item-con">
-                  <div v-for="(sitem, sindex) in currentCategory.subList">
+                  <div v-for="(sitem, sindex) in currentCategory.subList" :key="sindex">
                     <model-item
                       v-for="(item, index) in sitem.othermodels"
                       :record="item"
@@ -116,32 +142,6 @@
                   </div>
                 </div>
               </div>
-              <div class="display-imgs">
-                <upload-imgs
-                  folder="VisitDisplaySample"
-                  prefix="Display"
-                  :max="4"
-                  :fileList="currentCategory.new_urllist"
-                  :isTakePhoto="true"
-                  :hasWallet="true"
-                  :walletText="walletText"
-                  :showUploader="new_process == 1"
-                  @fileUploadOk="handleFileUploadOk"
-                  @fileDelete="handleFileDelete"
-                />
-              </div>
-              <div class="display-remark">
-                <van-field
-                  v-model="currentCategory.new_remark"
-                  rows="2"
-                  autosize
-                  type="textarea"
-                  :disabled="new_process != 1"
-                  maxlength="200"
-                  :placeholder="$t('shopVisit.Remark')"
-                  show-word-limit
-                />
-              </div>
             </div>
             <filter-model ref="filterModel" :currentCategory="currentCategory" @ok="filterModelOk" />
           </template>
@@ -149,7 +149,7 @@
         <div v-if="stepActive == 1">
           <div class="visit-step2-1">
             <div class="booth-models">
-              <van-cell-group inset @click="handleShowMoveToBooth">
+              <van-cell-group inset @click="handleShowMoveToBooth" style="margin: 0">
                 <van-cell
                   title="Sample not in Booth"
                   :value="$t('shopVisit.MoveTo')"
@@ -609,7 +609,7 @@ export default {
         isoos: "",
         ispop: ""
       }
-      this.$refs.filterModel.reset()
+      this.stepActive == 0 && this.$refs.filterModel.reset()
     },
     // GET DISPLAY MODALS
     handleGetDisplayModels() {
@@ -855,7 +855,7 @@ export default {
           });
         }
         form.new_displaymodellist.push(record);
-        if (record.new_modelrecords.length > 0 && record.new_urllist.length != 1) {
+        if (record.new_modelrecords.length > 0 && record.new_urllist.length === 0) {
           isFourImg = false
         }
       });
@@ -1007,47 +1007,47 @@ export default {
 </script>
 <style lang="scss" scoped>
 .visit-step2 {
-  .step2-content {
-    background: #f5f5f5;
-    .action-steps {
-      display: flex;
-      .action-step-item {
-        flex: 1;
-        background: #a4e3ff;
-        color: #333;
-        height: 60px;
-        line-height: 60px;
-        margin-right: 29px;
-        position: relative;
-        text-indent: 6px;
-        white-space: nowrap;
-        &::after {
-          content: "";
-          background: #027db4;
-          position: absolute;
-          right: -29px;
-          top: 0;
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 30px 0 30px 30px;
-          border-color: transparent transparent transparent #a4e3ff;
-        }
-        &:last-child {
-          &::after {
-            background: none;
-          }
-        }
-      }
-      .action-step-item-active {
+  .action-steps {
+    display: flex;
+    .action-step-item {
+      flex: 1;
+      background: #a4e3ff;
+      color: #333;
+      height: 60px;
+      line-height: 60px;
+      margin-right: 29px;
+      position: relative;
+      text-indent: 6px;
+      white-space: nowrap;
+      &::after {
+        content: "";
         background: #027db4;
-        color: #fff;
+        position: absolute;
+        right: -29px;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 30px 0 30px 30px;
+        border-color: transparent transparent transparent #a4e3ff;
+      }
+      &:last-child {
         &::after {
-          background: #a4e3ff;
-          border-color: transparent transparent transparent #027db4;
+          background: none;
         }
       }
     }
+    .action-step-item-active {
+      background: #027db4;
+      color: #fff;
+      &::after {
+        background: #a4e3ff;
+        border-color: transparent transparent transparent #027db4;
+      }
+    }
+  }
+  .step2-content {
+    background: #f5f5f5;
     .action-panel {
       display: flex;
       align-items: center;
@@ -1150,6 +1150,16 @@ export default {
     background: #fff;
     .item {
       flex: 1;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.visit-step2 {
+  .step2-content{
+    .sun-uploader__preview-image, .sun-upload-icon{
+      width: 100px !important;
+      height: 100px !important;
     }
   }
 }
