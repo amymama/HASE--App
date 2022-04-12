@@ -176,8 +176,8 @@
               </div>
             </div>
             <div class="shop-form-group">
-              <van-cell :title="$t('shopMaster.Longitude')" :value="form.new_latitude" />
-              <van-cell :title="$t('shopMaster.Latitude')" :value="form.new_longitude" />
+              <van-cell :title="$t('shopMaster.Longitude')" :value="form.new_longitude" />
+              <van-cell :title="$t('shopMaster.Latitude')" :value="form.new_latitude" />
               <van-cell :title="$t('shopMaster.Address')" :value="form.new_address" />
             </div>
             <div class="shop-group__header">
