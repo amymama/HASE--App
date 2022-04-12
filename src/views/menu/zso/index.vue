@@ -532,6 +532,8 @@ export default {
       this.$router.push("/zso/cart");
       this.$store.commit("order/zsoselectedLocation", {
         selectedLocation: this.selectedLocation,
+        selectedDealer: this.selectedDealer,
+        selectedShipTo: this.selectedShipTo,
       });
     },
     // clear search
@@ -632,9 +634,28 @@ export default {
         })
         .catch(() => {});
     },
-    // getShipTo() {
-
-    // },
+    getShipTo() {
+      GetPartnerListByDealer({
+        dealer_code: this.selectedDealer.dealerCode,
+        type: "SH",
+      })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data || [];
+            this.allShipToList = [];
+            this.allShipToList = this.allShipToList.concat(Items);
+            console.log("allShipToList", this.allShipToList);
+            if (this.allShipToList.length > 0) {
+              this.selectedShipTo = this.allShipToList[0];
+              console.log("selectedShipTo", this.selectedShipTo);
+            }
+              this.initData();
+              this.getCartCountNumber();
+          }
+        })
+        .catch(() => {});
+    },
   },
 };
 </script>

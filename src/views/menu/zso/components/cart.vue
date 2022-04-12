@@ -259,8 +259,10 @@ export default {
     };
   },
   created() {
-    this.getDataSelect();
     this.selectedLocation = this.zsoselectedLocation.selectedLocation;
+    this.selectedDealer=this.zsoselectedLocation.selectedDealer
+    this.selectedShipTo=this.zsoselectedLocation.selectedShipTo
+    this.getDataSelect();
     console.log(
       this.zsoselectedLocation.selectedLocation,
       "zsoselectedLocation"
@@ -500,10 +502,10 @@ export default {
           if (success) {
             var Items = data || [];
             this.allDealerList = this.allDealerList.concat(Items);
-            if (this.allDealerList.length > 0) {
-              this.selectedDealer = this.allDealerList[0];
+            // if (this.allDealerList.length > 0) {
+            //   this.selectedDealer = this.allDealerList[0];
               this.getShipTo();
-            }
+            // }
           }
         })
         .catch(() => {});
@@ -521,10 +523,10 @@ export default {
             this.allShipToList = [];
             this.allShipToList = this.allShipToList.concat(Items);
             console.log("allShipToList", this.allShipToList);
-            if (this.allShipToList.length > 0) {
-              this.selectedShipTo = this.allShipToList[0];
-              console.log("selectedShipTo", this.selectedShipTo);
-            }
+            // if (this.allShipToList.length > 0) {
+            //   this.selectedShipTo = this.allShipToList[0];
+            //   console.log("selectedShipTo", this.selectedShipTo);
+            // }
             this.getDataListCart();
           }
         })
