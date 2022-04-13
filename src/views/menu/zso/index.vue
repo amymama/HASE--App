@@ -153,15 +153,15 @@
                 <h3>{{ item.productModel }}</h3>
                 <div style="display: flex">
                   <p class="textBox">
-                    {{ item.productNumber }}{{ item.storageLocation }}
+                    {{ item.productNumber }}
                   </p>
-                  <p class="textBox" style="padding-left: 0.4rem">
+                  <p class="textBox" style="padding-left: 0.3rem">
                     {{ item.storageLocation }}
                   </p>
                   <!-- <div class="stockBoxNumber"> -->
                   <p
                     class="textBox"
-                    style="font-weight: 700; padding-left: 0.4rem"
+                    style="font-weight: 700; padding-left: 0.2rem"
                   >
                     {{ $t("Stock") + " " }}
                   </p>
