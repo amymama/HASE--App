@@ -348,7 +348,7 @@
     >
       <van-picker
         show-toolbar
-        :columns="allShipToList"
+        :columns="allBillToList"
         @cancel="onShipToCancel"
         @confirm="onShipToConfirm"
         value-key="text"
@@ -365,7 +365,7 @@
     >
       <van-picker
         show-toolbar
-        :columns="allShipToList"
+        :columns="allPayerList"
         @cancel="onPayerCancel"
         @confirm="onPayerConfirm"
         value-key="text"
@@ -476,6 +476,8 @@ export default {
       ShipToShow: false,
       payerShow: false,
       allShipToList: [], //下拉选项
+      allBillToList: [], //下拉选项
+      allPayerList: [], //下拉选项
 
       totalNetPrice: 0,
       totalTaxPrice: 0,
@@ -587,7 +589,7 @@ export default {
       //下拉框数据
       GetPartnerListByDealer({
         dealer_code: this.selectedDealer.dealerCode,
-        type: "SH",
+        type: "BP",
       })
         .then((res) => {
           const { success, data } = res;
@@ -598,30 +600,15 @@ export default {
             // this.allShipToList = this.allShipToList.concat(Items);
             console.log("allShipToList", this.allShipToList);
             Items.forEach((item) => {
-              this.allShipToList.push({
+              this.allBillToList.push({
                 text: item.partnerName,
                 value: item.partnerCode,
                 id: item.partnerId,
               });
               //Dealer有值默认为Dealer,无值默认为第一个
-              this.formData.billToName = this.formData.dealerName
-                ? this.formData.dealerName
-                : this.allShipToList[0].text;
-              this.formData.billToCode = this.formData.dealerName
-                ? this.formData.dealerName
-                : this.allShipToList[0].value;
-              this.formData.billToId = this.formData.dealerName
-                ? this.formData.dealerName
-                : this.allShipToList[0].id;
-              this.formData.payerName = this.formData.dealerName
-                ? this.formData.dealerName
-                : this.allShipToList[0].text;
-              this.formData.payerCode = this.formData.dealerName
-                ? this.formData.dealerName
-                : this.allShipToList[0].value;
-              this.formData.payerId = this.formData.dealerName
-                ? this.formData.dealerName
-                : this.allShipToList[0].id;
+              this.formData.billToName = this.allBillToList[0].text;
+              this.formData.billToCode = this.allBillToList[0].value;
+              this.formData.billToId =  this.allBillToList[0].id;
             });
           } else {
             this.$toast.clear();
@@ -632,6 +619,40 @@ export default {
           this.$toast.clear();
           this.checkoutLoading=false
         });
+
+      GetPartnerListByDealer({
+        dealer_code: this.selectedDealer.dealerCode,
+        type: "PY",
+      })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+          this.$toast.clear();
+          this.checkoutLoading=false
+            var Items = data || [];
+            // this.allShipToList = this.allShipToList.concat(Items);
+            console.log("allShipToList", this.allShipToList);
+            Items.forEach((item) => {
+              this.allPayerList.push({
+                text: item.partnerName,
+                value: item.partnerCode,
+                id: item.partnerId,
+              });
+              //值默认为第一个
+               this.formData.payerName =  this.allPayerList[0].text;
+              this.formData.payerCode = this.allPayerList[0].value;
+              this.formData.payerId =  this.allPayerList[0].id;
+            });
+          } else {
+            this.$toast.clear();
+          this.checkoutLoading=false
+          }
+        })
+        .catch(() => {
+          this.$toast.clear();
+          this.checkoutLoading=false
+        });
+         
       //下拉框数据
       GetLogisticsList()
         .then((res) => {
