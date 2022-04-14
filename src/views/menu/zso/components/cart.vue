@@ -61,7 +61,8 @@
                 @click="radioBoxItemClick(item, index)"
               ></van-checkbox>
             </div>
-            <div class="listBox" @click="detailShowModel(item)">
+            <!-- @click="detailShowModel(item)" -->
+            <div class="listBox" >
               <div class="listImage">
                 <van-image
                   width="2.2rem"
@@ -411,17 +412,15 @@ export default {
     },
     //查看shangpin详情
     detailShowModel(val) {
-      console.log(
-        this.selectedLocation,
-        "this.selectedLocationthis.selectedLocationthis.selectedLocation"
-      );
+      const obj = {locationCode:val.new_storage_location,locationName:val.new_storage_location}
       this.$router.push("/zsoDetail");
       this.$store.commit("order/productDetail", {
         productId: val.new_product_id,
         orderType: "ZSO",
         selectedDealer: this.selectedDealer,
         selectedShipTo: this.selectedShipTo,
-        selectedLocation: this.selectedLocation,
+        // selectedLocation: this.selectedLocation,
+        selectedLocation:obj
       });
     },
     handleshipToOk(val) {
@@ -504,11 +503,18 @@ export default {
             this.allDealerList = this.allDealerList.concat(Items);
             // if (this.allDealerList.length > 0) {
             //   this.selectedDealer = this.allDealerList[0];
+             if(this.allDealerList.length==0){
+              this.$toast.fail('Dealer Name not found')
+            }
               this.getShipTo();
             // }
+          }else{
+            this.$toast.fail('Dealer Name not found')
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail('Network error')
+        });
     },
     getShipTo() {
       // this.$toast.loading({ message: "Loading...", duration: 0 });

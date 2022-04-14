@@ -115,16 +115,16 @@
                     <div>{{ item.deliveryStatus }}aa</div>
                     <div>{{ item.rejectReason }}bb</div>
                   </div> -->
-                  <div style="padding-top: 0.3rem" v-show="item.deliveryStatus">
-                    Delivery Status
-                    <span style="padding-left: 0.2rem"
-                      >{{ item.deliveryStatus }}</span
+                  <div style="padding-top: 0.3rem;width:100%;display:flex;justify-content: space-between;" v-show="item.deliveryStatus">
+                    <div style="width:35%">{{$t('Delivery Status')}}</div>
+                    <div style="width:65%;padding-left:0.2rem;"
+                      >{{ item.deliveryStatus }}</div
                     >
                   </div>
-                  <div style="padding-top: 0.3rem" v-show="item.rejectReason">
-                    Reject Reason
-                    <span style="padding-left: 0.2rem"
-                      >{{ item.rejectReason }}</span
+                  <div style="padding-top: 0.3rem;width:100%;display:flex;justify-content: space-between;" v-show="item.rejectReason">
+                    <div style="width:35%">{{$t('Reject Reason')}}</div>
+                    <div style="width:65%;padding-left:0.2rem;"
+                      >{{ item.rejectReason }}</div
                     >
                   </div>
                 </div>

@@ -823,6 +823,9 @@ export default {
     'Please selecet Logistic vendor': 'Please selecet Logistic vendor',
     'Please selecet Bill To': 'Please selecet Bill To',
     'Please selecet Payer': 'Please selecet Payer',
-
+     'Delivery Status':'Delivery Status',
+     'Reject Reason':'Reject Reason',
+     'Storage Location not found':'Storage Location not found',
+     'Dealer Name not found':'Dealer Name not found'
 
 }

@@ -371,13 +371,14 @@ export default {
     },
     //查看shangpin详情
     detailShowModel(val) {
+      const obj = {locationCode:val.storageLocation,locationName:val.storageLocation}
       this.$router.push("/zsoDetail");
       this.$store.commit("order/productDetail", {
         productId: val.productId,
         orderType: "ZSO",
         selectedDealer: this.selectedDealer,
         selectedShipTo: this.selectedShipTo,
-        selectedLocation: this.selectedLocation,
+        selectedLocation: obj,
         cartParams: val,
       });
       // this.detailShow = true;
@@ -596,10 +597,16 @@ export default {
               this.selectedDealer = this.allDealerList[0];
               // this.getShipTo();
             }
+            if(this.allDealerList.length==0){
+              this.$toast.fail('Dealer Name not found')
+            }
           } else {
+            this.$toast.fail('Dealer Name not found')
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail('Network error')
+        });
      await GetStorageLocationList()
         .then((res) => {
           const { success, data } = res;
@@ -609,9 +616,16 @@ export default {
             if (this.allStorageList.length > 0) {
               this.selectedLocation = this.allStorageList[0];
             }
+            if(this.allStorageList.length==0){
+              this.$toast.fail('Storage Location not found')
+            }
+          }else{
+              this.$toast.fail('Storage Location not found')
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$toast.fail('Network error')
+        });
 
       await GetPartnerListByDealer({
         dealer_code: this.selectedDealer.dealerCode,
@@ -630,9 +644,12 @@ export default {
             }
               this.initData();
               this.getCartCountNumber();
+          }else{
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          
+        });
     },
     getShipTo() {
       GetPartnerListByDealer({

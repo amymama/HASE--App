@@ -14,9 +14,9 @@
             :placeholder="$t('Please input keywords')"
             background="none"
             shape="round"
+            show-action
             @search="onSearchOrderList"
             @cancel="onCancelOrderList"
-            clearable
           />
         </div>
       </div>
@@ -62,7 +62,8 @@
                     >
                       <h3 class="text">{{ orderItem.new_product_model }}</h3>
                       <div class="text">
-                        {{ orderItem.new_product_number }} invoice
+                        {{ orderItem.new_product_number }} 
+                        <span style="padding-left: 0.2rem">invoice</span>
                         <span style="color: #5151ff; padding-left: 0.2rem"
                           >{{ $t("SAR") }}.{{ orderItem.new_sales_price }}</span
                         >
@@ -80,7 +81,7 @@
         <van-tab :title="$t('Pending')">
           <!-- list2-->
           <div class="shop-status-list">
-            <van-empty v-if="noRes" :description="$t('NoMoreData')" />
+            <van-empty v-if="noRes" :description="$t('shopCommon.NoData')" />
             <van-list
               v-else
               v-model="loading"
@@ -114,7 +115,8 @@
                     >
                       <h3 class="text">{{ orderItem.new_product_model }}</h3>
                       <div class="text">
-                        {{ orderItem.new_product_number }} invoice
+                        {{ orderItem.new_product_number }} 
+                        <span style="padding-left: 0.2rem">invoice</span>
                         <span style="color: #5151ff; padding-left: 0.2rem"
                           >{{ $t("SAR") }}.{{ orderItem.new_sales_price }}</span
                         >
