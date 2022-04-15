@@ -524,7 +524,7 @@ export default {
       SubmitOrder(this.formData)
         .then((res) => {
           if (res.success) {
-            this.$toast.success(res.success);
+            this.$toast.success(res.message);
             this.checkoutLoading = false;
             this.$router.push({ name: "Order" });
           } else {

@@ -28,7 +28,7 @@
                 $t("All")
               }}</van-checkbox>
             </div>
-            <van-cell title="" is-link @click="goBack">
+            <van-cell title="" is-link @click="goLeft">
               {{ $t("Continue to Purchase") }}
             </van-cell>
           </div>
