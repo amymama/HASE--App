@@ -1,6 +1,6 @@
 <template>
   <div class="carBox">
-    <van-nav-bar @click-left="goLeft" left-arrow :title="$t('Cart')" />
+    <van-nav-bar @click-left="goBack" left-arrow :title="$t('Cart')" />
     <!-- nav Bar -->
     <div class="topBox">
       <div class="standardBox">{{ $t("Standard") }}</div>
@@ -288,6 +288,7 @@ export default {
         if (item.radio) {
           this.productGoodsList.push(item);
         }
+        console.log(item,'item')
       });
       if (this.productGoodsList.length == 0) {
         this.$toast.fail("No commodity is chosen!");
@@ -404,6 +405,8 @@ export default {
             this.$toast.success("success");
             // this.getDataListCart();
             this.initData();
+          }else{
+            this.$toast.fail("Network error");
           }
         })
         .catch((e) => {

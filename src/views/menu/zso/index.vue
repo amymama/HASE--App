@@ -414,7 +414,7 @@ export default {
         new_product_model: this.cartParams.productModel,
         new_product_counts: this.num, //加入购物车商品的数量
         new_order_type: "ZSO",
-        new_storage_location: this.selectedLocation.locationCode,
+        new_storage_location: this.cartParams.storageLocation,
       })
         .then((res) => {
           console.log("加入购物车", res, res.success);
@@ -561,11 +561,13 @@ export default {
       // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.selectedShipTo = val;
       this.initData();
+      this.getCartCountNumber();
     },
     handlestorageLoctionOk(val) {
       // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
       this.selectedLocation = val;
       this.initData();
+      // this.getCartCountNumber();
     },
   async getData() {
       // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });

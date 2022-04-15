@@ -202,7 +202,6 @@
                 @fileUploadOk="handleFileUploadOk"
                 @fileDelete="handleFileDelete"
               />
-              <!-- @fileDelete="handleFileDelete" -->
             </div>
           </div>
         </div>

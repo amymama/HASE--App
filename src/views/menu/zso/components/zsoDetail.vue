@@ -221,6 +221,8 @@ export default {
       this.$router.push("/zso/cart");
       this.$store.commit("order/zsoselectedLocation", {
         selectedLocation: this.selectedLocation,
+         selectedDealer: this.productDetail.selectedDealer,
+        selectedShipTo: this.productDetail.selectedShipTo,
       });
 
     },
