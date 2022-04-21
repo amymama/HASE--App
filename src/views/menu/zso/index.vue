@@ -272,6 +272,7 @@ import StorageLoction from "./components/storageLoction.vue";
 import ZsoDetail from "./components/zsoDetail.vue";
 // import isAll from "@/assets/images/icon/isAll.png";
 import All from "@/assets/images/icon/All.png";
+import { mapState } from "vuex";
 import {
   GetCartCount,
   zsoGetProductList,
@@ -352,8 +353,29 @@ export default {
       finished: false,
       noRes: false,
       addLoading: false,
+      fromUrl:''
     };
   },
+   computed: {
+    ...mapState({
+      productDetail: (state) => state.order.productDetail,
+    }),
+  },
+  beforeRouteEnter(to,from,next){
+     console.log(to,'to')
+     console.log(from,'from',from.name)
+    next(vm=>{
+      vm.fromUrl='1'
+      if(from.name=='zsoDetail'){
+        vm.fromUrl='2'
+        vm.filterParams.searchValue=vm.productDetail.searchValue
+       vm.selectedCategory.categoryId=vm.productDetail.categoryId
+       vm.selectedCategory.catalogueType=vm.productDetail.catalogueType
+    // vm.getData();
+      }
+       console.log(vm.fromUrl,'vm.fromUrl')
+    })
+    },
   created() {
     this.getData();
     console.log(document.body.scrollTop, "aaaaaaaaa");
@@ -371,6 +393,7 @@ export default {
     },
     //查看shangpin详情
     detailShowModel(val) {
+      console.log(val,'valzzz')
       const obj = {locationCode:val.storageLocation,locationName:val.storageLocation}
       this.$router.push("/zsoDetail");
       this.$store.commit("order/productDetail", {
@@ -379,7 +402,11 @@ export default {
         selectedDealer: this.selectedDealer,
         selectedShipTo: this.selectedShipTo,
         selectedLocation: obj,
+        selectedLocationSearch: this.selectedLocation,//保留之前选择的库存位置
         cartParams: val,
+        searchValue:this.filterParams.searchValue,//保留之前选择的关键字查询
+        categoryId:this.selectedCategory.categoryId,//保留之前选择的类型
+        catalogueType:this.selectedCategory.catalogueType//保留之前选择的类型
       });
       // this.detailShow = true;
       // this.productDetail = {
@@ -569,7 +596,9 @@ export default {
       this.initData();
       // this.getCartCountNumber();
     },
+
   async getData() {
+    console.log(this.fromUrl,'fromUrl')
       // this.$toast.loading({ duration: 0, forbidClick: true, mask: true });
     await GetCategoryList({ userId: this.$store.getters.userInfo.id }).then(
         (res) => {
@@ -596,7 +625,7 @@ export default {
             var Items = data || [];
             this.allDealerList = this.allDealerList.concat(Items);
             if (this.allDealerList.length > 0) {
-              this.selectedDealer = this.allDealerList[0];
+              this.selectedDealer =this.fromUrl=='2'?this.productDetail.selectedDealer:this.allDealerList[0];
               // this.getShipTo();
             }
             if(this.allDealerList.length==0){
@@ -616,7 +645,7 @@ export default {
             var Items = data || [];
             this.allStorageList = this.allStorageList.concat(Items);
             if (this.allStorageList.length > 0) {
-              this.selectedLocation = this.allStorageList[0];
+              this.selectedLocation =this.fromUrl=='2'?this.productDetail.selectedLocationSearch: this.allStorageList[0];
             }
             if(this.allStorageList.length==0){
               this.$toast.fail('Storage Location not found')
@@ -641,7 +670,7 @@ export default {
             this.allShipToList = this.allShipToList.concat(Items);
             console.log("allShipToList", this.allShipToList);
             if (this.allShipToList.length > 0) {
-              this.selectedShipTo = this.allShipToList[0];
+              this.selectedShipTo = this.fromUrl=='2'?this.productDetail.selectedShipTo:this.allShipToList[0];
               console.log("selectedShipTo", this.selectedShipTo);
             }
               this.initData();

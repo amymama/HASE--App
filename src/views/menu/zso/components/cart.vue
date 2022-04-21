@@ -325,13 +325,13 @@ export default {
         if (item.radio) {
           totalNetPrice += item.netPrice * item.new_product_counts;
           totalTaxPrice += item.taxPrice * item.new_product_counts;
-          totalPrice += item.retailprice * item.new_product_counts;
+          // totalPrice += item.retailprice * item.new_product_counts;
           arrRadio++;
         }
       });
       this.totalNetPrice = totalNetPrice;
       this.totalTaxPrice = totalTaxPrice;
-      this.totalPrice = totalPrice;
+      this.totalPrice =totalNetPrice+ totalTaxPrice;
       this.confirmDisabled = arrRadio > 0 ? false : true; //是否有选择商品
       this.radio = arrRadio == arr.length ? true : false; //是否全选
     },
@@ -491,9 +491,27 @@ export default {
     // 确认dealer
     handleDealerOk(val) {
       this.selectedDealer = val;
-      this.getShipTo();
+      // this.getShipTo();
       this.selectedShipTo = {};
-      this.initData();
+      GetPartnerListByDealer({
+        dealer_code: this.selectedDealer.dealerCode,
+        type: "SH",
+      })
+        .then((res) => {
+          const { success, data } = res;
+          if (success) {
+            var Items = data || [];
+            this.allShipToList = [];
+            this.allShipToList = this.allShipToList.concat(Items);
+            console.log("allShipToList", this.allShipToList);
+            if (this.allShipToList.length > 0) {
+              this.selectedShipTo = this.allShipToList[0];
+              console.log("selectedShipTo", this.selectedShipTo);
+            }
+           this.initData();
+          }
+        })
+        .catch(() => {});
     },
     //dealer Name
     getDataSelect() {

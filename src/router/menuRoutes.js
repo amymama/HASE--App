@@ -10,7 +10,7 @@ export default [
     path: '/zso',
     name: 'Zso',
     component: () => import('@/views/menu/zso'),
-    meta: { title: 'ZSO', module: 'Basic', keepAlive: false }
+    meta: { title: 'ZSO', module: 'Basic', keepAlive: true }
   },
   {
     path: '/zso/cart',
@@ -34,7 +34,7 @@ export default [
     path: '/zsoDetail',
     name: 'zsoDetail',
     component: () => import('@/views/menu/zso/components/zsoDetail'),
-    meta: { title: '', module: 'Basic', keepAlive: false }
+    meta: { title: '', module: 'Basic', keepAlive: true }
   },
   {
     path: '/orderDetail',

@@ -208,7 +208,7 @@ export default {
             this.resubmitLoading = false;
             this.initDataOrderList();
           } else {
-            this.$toast.fail("Network error");
+            this.$toast.fail(res.message);
             this.resubmitLoading = false;
           }
         })

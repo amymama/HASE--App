@@ -108,7 +108,7 @@
                   <div style="padding-top: 0.3rem">
                     Invoice
                     <span style="color: #100aff; padding-left: 0.2rem"
-                      >RS.THB {{ item.invoice }}</span
+                      >RS {{ item.invoice }}</span
                     >
                   </div>
                   <!-- <div style="padding-top: 0.3rem;display:flex;justify-content: space-between;">

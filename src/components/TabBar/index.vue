@@ -43,7 +43,7 @@ export default {
           replace: true,
         },
         {
-          title: "MENU",
+          title: "ORDER",
           path: "/menu",
           icon: "icon-pmt",
           permission: "tabBar:MENU",
